@@ -105,17 +105,43 @@ export const Layout = ({ children }) => {
               Welcome, {user.name}
             </h2>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setQuickAddOpen(true)}
+              className="hidden sm:flex items-center gap-2 bg-surface-container-high hover:bg-surface-container-highest text-primary font-semibold px-4 py-2 rounded-xl text-xs transition-colors"
+              title="Quick Add Task"
+            >
+              <span className="material-symbols-outlined text-base">add_task</span>
+              <span>New Task</span>
+            </button>
+            <button
+              onClick={() => {
+                const nextTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+                if (nextTheme === 'dark') {
+                  document.documentElement.classList.add('dark');
+                  localStorage.setItem('studysync_theme', 'dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                  localStorage.setItem('studysync_theme', 'light');
+                }
+              }}
+              className="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full cursor-pointer transition-colors"
+              title="Toggle Dark/Light Mode"
+            >
+              <span className="material-symbols-outlined text-xl">dark_mode</span>
+            </button>
             <div className="relative">
               <span className="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full cursor-pointer transition-colors">
                 notifications
               </span>
+              <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-ping"></span>
               <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
             </div>
             <button
               onClick={() => navigate('/pomodoro')}
-              className="bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-xs tracking-wider uppercase hover:scale-95 transition-transform shadow-sm"
+              className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-xs tracking-wider uppercase hover:scale-95 transition-transform shadow-sm flex items-center gap-1.5"
             >
+              <span className="material-symbols-outlined text-sm">bolt</span>
               Study Now
             </button>
           </div>
