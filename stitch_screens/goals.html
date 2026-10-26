@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Goal Planner | StudySync</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .study-progress-track {
+            background: #f0ecf9;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .study-progress-fill {
+            background: linear-gradient(90deg, #3525cd 0%, #8792fe 100%);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ai-insight-border {
+            border-left: 4px solid #4ae176;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dcd8e5",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-variant": "#e4e1ee",
+                        "surface-container": "#f0ecf9",
+                        "secondary-fixed-dim": "#bdc2ff",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#dad7ff",
+                        "tertiary": "#005523",
+                        "surface-container-low": "#f5f2ff",
+                        "on-tertiary-container": "#63f889",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary-fixed": "#002109",
+                        "primary-container": "#4f46e5",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#e0e0ff",
+                        "on-surface-variant": "#464555",
+                        "tertiary-container": "#007030",
+                        "on-secondary-container": "#17228f",
+                        "outline-variant": "#c7c4d8",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3effc",
+                        "surface": "#fcf8ff",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#fcf8ff",
+                        "on-secondary-fixed-variant": "#2f3aa3",
+                        "tertiary-fixed": "#6bff8f",
+                        "inverse-surface": "#302f39",
+                        "on-secondary-fixed": "#000767",
+                        "secondary": "#4953bc",
+                        "secondary-container": "#8792fe",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1b24",
+                        "on-tertiary-fixed-variant": "#005321",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-high": "#eae6f4",
+                        "primary": "#3525cd",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-bright": "#fcf8ff",
+                        "outline": "#777587",
+                        "surface-container-highest": "#e4e1ee",
+                        "tertiary-fixed-dim": "#4ae176",
+                        "on-surface": "#1b1b24",
+                        "surface-tint": "#4d44e3",
+                        "primary-fixed": "#e2dfff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "container-max": "1280px",
+                        "xl": "64px",
+                        "gutter": "24px",
+                        "md": "24px",
+                        "sm": "16px",
+                        "base": "4px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "title-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg text-body-lg antialiased">
+<!-- Navigation Shell -->
+<aside class="bg-surface-container backdrop-blur-xl border-r border-white/10 flex flex-col h-screen fixed left-0 top-0 py-lg w-72 z-50">
+<div class="px-gutter mb-lg">
+<h1 class="font-headline-lg text-headline-lg font-extrabold text-primary tracking-tight">StudySync</h1>
+</div>
+<div class="px-4 mb-lg">
+<div class="flex items-center gap-3 p-3 bg-white/40 rounded-xl">
+<div class="w-10 h-10 rounded-full bg-primary-fixed overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio headshot of a young scholar with a focused expression, set against a soft lavender and indigo studio background. The lighting is crisp and modern, reflecting a high-end academic lifestyle brand aesthetic. The individual wears professional attire, and the overall mood is ambitious and intellectual." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUisF3utkaPVY-YGULwItaBXoXzeAeQwWEw752V-d5Hy2s6NB10Ig8uQhlVuVG1LGYOREQUgdr0fc_4Rlsf8-86nKE4Vpkt1vq0EBMBvLVBaBrfnN_omQsnVWSyWJsP7yL_HMb2-OP3xfAS49kgOC8jZ22E2P0PL7aS7D4TjNa-iY8Xdv-g043iVVgoEi0bcD-62LEIlZO4aPTWt_BrVH4zW7iFb_Vj8qI3bU6apC_MPTmGaf2xmSPAxwsPNkbIp5ibpccIgpKMbQR"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-surface">Alex Rivers</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Level 24 Scholar</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active State Logic: Goal Planner is active -->
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-sm text-body-sm">Habit Tracker</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">timer</span>
+<span class="font-body-sm text-body-sm">Pomodoro</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-body-sm text-body-sm">Analytics</span>
+</a>
+<a class="bg-primary text-on-primary rounded-xl mx-4 my-1 flex items-center gap-3 px-4 py-3 translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">target</span>
+<span class="font-body-sm text-body-sm">Goal Planner</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-body-sm text-body-sm">Calendar</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-body-sm text-body-sm">Achievements</span>
+</a>
+</nav>
+<div class="mt-auto px-4 space-y-4">
+<button class="w-full bg-primary-container text-on-primary-container font-label-caps text-label-caps py-4 rounded-xl shadow-sm hover:scale-[1.02] transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+                Start Focus Session
+            </button>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-sm text-body-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-72 min-h-screen p-lg">
+<!-- Header Section -->
+<header class="flex justify-between items-end mb-lg">
+<div>
+<nav class="flex gap-2 text-on-surface-variant font-label-caps text-label-caps mb-xs">
+<span>STUDYSYNC</span>
+<span>/</span>
+<span class="text-primary">GOAL PLANNER</span>
+</nav>
+<h2 class="font-display-lg text-display-lg text-on-background tracking-tight">Academic Ambitions</h2>
+</div>
+<div class="flex items-center gap-md">
+<!-- Toggle Group -->
+<div class="bg-surface-container-high p-1 rounded-xl flex gap-1">
+<button class="bg-white text-primary px-4 py-2 rounded-lg font-label-caps text-label-caps shadow-sm" id="active-toggle">Active</button>
+<button class="text-on-surface-variant px-4 py-2 rounded-lg font-label-caps text-label-caps hover:bg-white/50" id="completed-toggle">Completed</button>
+</div>
+<!-- Action Button -->
+<button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-title-md text-title-md flex items-center gap-2 shadow-lg hover:shadow-primary/20 transition-all hover:-translate-y-0.5">
+<span class="material-symbols-outlined">add_circle</span>
+                    Add Goal
+                </button>
+</div>
+</header>
+<!-- Stats Overview (Asymmetric) -->
+<section class="grid grid-cols-12 gap-md mb-lg">
+<div class="col-span-8 glass-card rounded-2xl p-lg relative overflow-hidden flex items-center">
+<div class="relative z-10">
+<h3 class="font-title-md text-title-md text-on-surface mb-xs">Term Progress</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-md max-w-md">You've completed 65% of your semester goals. You're 12% ahead of schedule!</p>
+<div class="study-progress-track w-full max-w-sm">
+<div class="study-progress-fill w-[65%]"></div>
+</div>
+</div>
+<div class="absolute right-[-20px] bottom-[-20px] opacity-10">
+<span class="material-symbols-outlined text-[240px]">trending_up</span>
+</div>
+</div>
+<div class="col-span-4 bg-primary text-on-primary rounded-2xl p-lg flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-[48px] mb-xs">workspace_premium</span>
+<h3 class="font-headline-lg text-headline-lg">14</h3>
+<p class="font-label-caps text-label-caps opacity-80">Milestones Reached</p>
+</div>
+<p class="font-body-sm text-body-sm border-t border-white/20 pt-sm mt-md">Next: Master Calculus (3/5 Milestones)</p>
+</div>
+</section>
+<!-- Goals Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-md">
+<!-- Goal Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md shadow-sm hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-md">
+<div class="bg-primary-container/10 p-3 rounded-xl">
+<span class="material-symbols-outlined text-primary">functions</span>
+</div>
+<div class="bg-surface-container text-on-surface-variant px-3 py-1 rounded-full font-label-caps text-[10px]">IN PROGRESS</div>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mb-xs group-hover:text-primary transition-colors">Master Calculus</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-lg">Pass Advanced Integration & Differentiation exams with distinction.</p>
+<div class="space-y-md">
+<div>
+<div class="flex justify-between text-body-sm mb-base">
+<span class="font-label-caps text-label-caps">PROGRESS</span>
+<span class="font-body-sm">60%</span>
+</div>
+<div class="study-progress-track">
+<div class="study-progress-fill w-[60%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full bg-emerald-100 border-2 border-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-emerald-600" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-emerald-100 border-2 border-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-emerald-600" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border-2 border-white flex items-center justify-center text-[10px] font-bold text-on-surface-variant">3/5</div>
+</div>
+<span class="font-body-sm text-on-surface-variant">3 Milestones</span>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+<span class="font-label-caps text-label-caps">MAY 15, 2024</span>
+</div>
+<button class="text-primary hover:underline font-label-caps text-label-caps">EDIT</button>
+</div>
+</div>
+<!-- Goal Card 2 (AI Insight Hybrid) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md shadow-sm hover:shadow-md transition-all group flex flex-col ai-insight-border">
+<div class="flex justify-between items-start mb-md">
+<div class="bg-tertiary-container/10 p-3 rounded-xl">
+<span class="material-symbols-outlined text-tertiary">menu_book</span>
+</div>
+<div class="bg-surface-container text-on-surface-variant px-3 py-1 rounded-full font-label-caps text-[10px]">DAILY</div>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mb-xs group-hover:text-tertiary transition-colors">Daily Reading</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-lg">Read at least 50 pages of academic literature every day.</p>
+<div class="flex-1 space-y-md">
+<div class="bg-surface-container-low p-sm rounded-xl">
+<p class="font-label-caps text-[10px] text-tertiary mb-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                            SMART INSIGHT
+                        </p>
+<p class="font-body-sm text-body-sm italic">"Alex, you've completed this goal for 12 days straight. Consistency is high!"</p>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span class="font-label-caps text-label-caps">12 DAY STREAK</span>
+</div>
+<button class="text-tertiary hover:underline font-label-caps text-label-caps">LOG</button>
+</div>
+</div>
+<!-- Goal Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md shadow-sm hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-md">
+<div class="bg-secondary-container/20 p-3 rounded-xl">
+<span class="material-symbols-outlined text-secondary">code</span>
+</div>
+<div class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-caps text-[10px]">AT RISK</div>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mb-xs group-hover:text-secondary transition-colors">Project: StudyBot</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-lg">Build a Python-based automation tool for lecture transcription.</p>
+<div class="space-y-md">
+<div>
+<div class="flex justify-between text-body-sm mb-base">
+<span class="font-label-caps text-label-caps">PROGRESS</span>
+<span class="font-body-sm text-error">15%</span>
+</div>
+<div class="study-progress-track">
+<div class="study-progress-fill w-[15%] bg-error"></div>
+</div>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-xs text-error">
+<span class="material-symbols-outlined text-[18px]">priority_high</span>
+<span class="font-label-caps text-label-caps">DUE IN 4 DAYS</span>
+</div>
+<button class="text-secondary hover:underline font-label-caps text-label-caps">VIEW</button>
+</div>
+</div>
+<!-- Goal Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md shadow-sm hover:shadow-md transition-all group">
+<div class="flex justify-between items-start mb-md">
+<div class="bg-primary-container/10 p-3 rounded-xl">
+<span class="material-symbols-outlined text-primary">translate</span>
+</div>
+<div class="bg-surface-container text-on-surface-variant px-3 py-1 rounded-full font-label-caps text-[10px]">ON TRACK</div>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mb-xs group-hover:text-primary transition-colors">JLPT N2 Certification</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-lg">Reach intermediate fluency in Japanese by December 2024.</p>
+<div class="space-y-md">
+<div>
+<div class="flex justify-between text-body-sm mb-base">
+<span class="font-label-caps text-label-caps">PROGRESS</span>
+<span class="font-body-sm">42%</span>
+</div>
+<div class="study-progress-track">
+<div class="study-progress-fill w-[42%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-lg pt-md border-t border-outline-variant flex justify-between items-center">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">event</span>
+<span class="font-label-caps text-label-caps">DEC 20, 2024</span>
+</div>
+<button class="text-primary hover:underline font-label-caps text-label-caps">DETAILS</button>
+</div>
+</div>
+<!-- New Goal Skeleton -->
+<button class="border-2 border-dashed border-outline-variant rounded-2xl p-md flex flex-col items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all bg-surface/50">
+<span class="material-symbols-outlined text-[48px] mb-xs">add_circle</span>
+<span class="font-title-md text-title-md">Set New Goal</span>
+<p class="font-body-sm text-body-sm mt-xs opacity-60">Dream big, plan smart.</p>
+</button>
+</div>
+</main>
+<!-- Footer -->
+<footer class="ml-72 bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter py-lg max-w-container-max mx-auto">
+<div class="mb-md md:mb-0">
+<h5 class="font-title-md text-title-md font-bold text-on-background">StudySync AI</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 StudySync AI. All rights reserved.</p>
+</div>
+<nav class="flex gap-lg">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Help Center</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">API Documentation</a>
+</nav>
+</div>
+</footer>
+<script>
+        // Micro-interaction for Toggles
+        const activeBtn = document.getElementById('active-toggle');
+        const completedBtn = document.getElementById('completed-toggle');
+
+        activeBtn.addEventListener('click', () => {
+            activeBtn.classList.add('bg-white', 'text-primary', 'shadow-sm');
+            activeBtn.classList.remove('text-on-surface-variant', 'hover:bg-white/50');
+            completedBtn.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+            completedBtn.classList.add('text-on-surface-variant', 'hover:bg-white/50');
+        });
+
+        completedBtn.addEventListener('click', () => {
+            completedBtn.classList.add('bg-white', 'text-primary', 'shadow-sm');
+            completedBtn.classList.remove('text-on-surface-variant', 'hover:bg-white/50');
+            activeBtn.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+            activeBtn.classList.add('text-on-surface-variant', 'hover:bg-white/50');
+        });
+
+        // Hover animation for cards
+        const cards = document.querySelectorAll('.group');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const fill = card.querySelector('.study-progress-fill');
+                if(fill) {
+                    fill.style.transform = 'scaleY(1.2)';
+                    setTimeout(() => {
+                        fill.style.transform = 'scaleY(1)';
+                    }, 200);
+                }
+            });
+        });
+    </script>
+</body></html>

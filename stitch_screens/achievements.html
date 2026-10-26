@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Achievements | StudySync</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#dcd8e5",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#0f0069",
+                    "surface-variant": "#e4e1ee",
+                    "surface-container": "#f0ecf9",
+                    "secondary-fixed-dim": "#bdc2ff",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#dad7ff",
+                    "tertiary": "#005523",
+                    "surface-container-low": "#f5f2ff",
+                    "on-tertiary-container": "#63f889",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-tertiary-fixed": "#002109",
+                    "primary-container": "#4f46e5",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#e0e0ff",
+                    "on-surface-variant": "#464555",
+                    "tertiary-container": "#007030",
+                    "on-secondary-container": "#17228f",
+                    "outline-variant": "#c7c4d8",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f3effc",
+                    "surface": "#fcf8ff",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#fcf8ff",
+                    "on-secondary-fixed-variant": "#2f3aa3",
+                    "tertiary-fixed": "#6bff8f",
+                    "inverse-surface": "#302f39",
+                    "on-secondary-fixed": "#000767",
+                    "secondary": "#4953bc",
+                    "secondary-container": "#8792fe",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1b1b24",
+                    "on-tertiary-fixed-variant": "#005321",
+                    "inverse-primary": "#c3c0ff",
+                    "surface-container-high": "#eae6f4",
+                    "primary": "#3525cd",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "surface-bright": "#fcf8ff",
+                    "outline": "#777587",
+                    "surface-container-highest": "#e4e1ee",
+                    "tertiary-fixed-dim": "#4ae176",
+                    "on-surface": "#1b1b24",
+                    "surface-tint": "#4d44e3",
+                    "primary-fixed": "#e2dfff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "8px",
+                    "container-max": "1280px",
+                    "xl": "64px",
+                    "gutter": "24px",
+                    "md": "24px",
+                    "sm": "16px",
+                    "base": "4px",
+                    "lg": "40px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "title-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .progress-gradient {
+            background: linear-gradient(90deg, #3525cd 0%, #8792fe 100%);
+        }
+        .ai-glow {
+            box-shadow: -4px 0 0 0 #007030;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen">
+<!-- SideNavBar (Shared Component) -->
+<aside class="bg-surface-container dark:bg-inverse-surface backdrop-blur-xl border-r border-white/10 shadow-md flex flex-col h-screen fixed left-0 top-0 py-lg w-72 hidden md:flex z-50">
+<div class="px-gutter mb-lg">
+<h1 class="font-headline-lg text-headline-lg font-extrabold text-primary dark:text-inverse-primary tracking-tight">StudySync</h1>
+</div>
+<div class="flex items-center gap-3 px-gutter mb-xl">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a young academic person with friendly eyes, set against a soft lavender background. The lighting is crisp and modern, reflecting a high-performance educational environment. The overall aesthetic is clean, minimalist, and authoritative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-CAern-dUWEgnqabk1Z5VdKgF2Lz42hRYMKF6xHMl30T5QLb87aHhidEg6TSxKDlQSPbi1gvkeXIl5HMm_1sj9puLfPjDg55gUPPlZpTTP47rLpkLDjRKHflfAYak-aVUiGOq3fAbzW-ykoNqxFyHgRhRndDtMX--70epW77ICDuE4qnLh0aP6xTFud3SqI4jITsx5DDiuGvix6zS4xa6QRpn4UGF9UfyRKmgNxfMEANIe6n9UGetEA4MBjeRvl2FEiCLWtKtjh8w"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-surface">Alex Rivers</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Level 24 Scholar</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-sm text-body-sm">Habit Tracker</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">timer</span>
+<span class="font-body-sm text-body-sm">Pomodoro</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-body-sm text-body-sm">Analytics</span>
+</a>
+<a class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container rounded-xl mx-4 my-1 flex items-center gap-3 px-4 py-3 translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-body-sm text-body-sm font-bold">Achievements</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<button class="w-full bg-primary text-on-primary py-3 rounded-xl font-label-caps text-label-caps hover:shadow-lg transition-all active:scale-95">
+                Start Focus Session
+            </button>
+<a class="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 rounded-xl mt-4" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-sm text-body-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="md:ml-72 min-h-screen pb-xl">
+<!-- Header / TopNavBar (Unified Desktop/Mobile) -->
+<header class="bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-xl sticky top-0 z-40 border-b border-outline-variant shadow-sm h-20 flex items-center justify-between px-gutter">
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary">Achievements</h2>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex flex-col items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Current Rank</span>
+<span class="font-title-md text-title-md text-secondary font-bold">Elite Scholar</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+</header>
+<section class="max-w-container-max mx-auto px-gutter py-lg">
+<!-- Level & Progress Section -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md mb-lg shadow-sm">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="flex-1">
+<div class="flex items-center justify-between mb-xs">
+<span class="font-title-md text-title-md font-bold text-on-background">Level 24 Scholar</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">2,450 / 3,000 XP</span>
+</div>
+<div class="w-full h-3 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full progress-gradient w-[82%] rounded-full relative">
+<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="px-6 py-3 bg-surface-container rounded-xl border border-outline-variant text-center min-w-[120px]">
+<p class="font-label-caps text-label-caps text-on-surface-variant">Streak</p>
+<p class="font-title-md text-title-md font-bold text-primary">14 Days</p>
+</div>
+<div class="px-6 py-3 bg-surface-container rounded-xl border border-outline-variant text-center min-w-[120px]">
+<p class="font-label-caps text-label-caps text-on-surface-variant">Awards</p>
+<p class="font-title-md text-title-md font-bold text-secondary">32 Total</p>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Insight Banner -->
+<div class="ai-glow glass-card p-sm rounded-xl mb-lg flex items-center gap-4">
+<span class="material-symbols-outlined text-tertiary">bolt</span>
+<p class="font-body-lg text-body-lg text-on-surface">
+<span class="font-bold">Smart Insight:</span> You're only <span class="text-primary font-bold">5 Pomodoros</span> away from unlocking the "Focus Titan" badge!
+                </p>
+</div>
+<!-- Achievements Sections -->
+<div class="space-y-xl">
+<!-- Recently Unlocked -->
+<div>
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-title-md text-title-md text-on-background">Recently Unlocked</h3>
+<button class="text-primary font-label-caps text-label-caps hover:underline">View All History</button>
+</div>
+<div class="achievement-grid">
+<!-- Unlocked Card 1 -->
+<div class="bg-white border border-outline-variant rounded-xl p-md shadow-sm hover:shadow-md transition-all group overflow-hidden relative">
+<div class="absolute -right-4 -top-4 w-20 h-20 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-2xl glass-card flex items-center justify-center text-primary shadow-lg border-primary/20">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+</div>
+<div class="flex-1">
+<h4 class="font-title-md text-on-background">Streak Master</h4>
+<p class="font-body-sm text-on-surface-variant mb-3">Maintain a 7-day study streak without interruption.</p>
+<div class="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">check_circle</span> Unlocked
+                                    </div>
+</div>
+</div>
+</div>
+<!-- Unlocked Card 2 -->
+<div class="bg-white border border-outline-variant rounded-xl p-md shadow-sm hover:shadow-md transition-all group overflow-hidden relative">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-2xl glass-card flex items-center justify-center text-secondary shadow-lg border-secondary/20">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+<div class="flex-1">
+<h4 class="font-title-md text-on-background">Early Bird</h4>
+<p class="font-body-sm text-on-surface-variant mb-3">Complete 5 study sessions before 8:00 AM.</p>
+<div class="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">check_circle</span> Unlocked
+                                    </div>
+</div>
+</div>
+</div>
+<!-- Unlocked Card 3 -->
+<div class="bg-white border border-outline-variant rounded-xl p-md shadow-sm hover:shadow-md transition-all group overflow-hidden relative">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-2xl glass-card flex items-center justify-center text-tertiary shadow-lg border-tertiary/20">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">library_books</span>
+</div>
+<div class="flex-1">
+<h4 class="font-title-md text-on-background">Bookworm</h4>
+<p class="font-body-sm text-on-surface-variant mb-3">Finish 10 comprehensive course modules.</p>
+<div class="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">check_circle</span> Unlocked
+                                    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Locked Challenges -->
+<div>
+<h3 class="font-title-md text-title-md text-on-background mb-md">Locked Challenges</h3>
+<div class="achievement-grid">
+<!-- Locked Card 1 -->
+<div class="bg-surface-container-low border border-outline-variant border-dashed rounded-xl p-md opacity-80 hover:opacity-100 transition-all">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-2xl bg-surface-dim/30 flex items-center justify-center text-outline grayscale">
+<span class="material-symbols-outlined text-4xl">dark_mode</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-title-md text-on-surface">Night Owl</h4>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mb-4">Study for 2 hours between midnight and 4:00 AM.</p>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden mb-1">
+<div class="bg-outline h-full w-[40%]"></div>
+</div>
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest text-right">Progress: 40%</p>
+</div>
+</div>
+</div>
+<!-- Locked Card 2 -->
+<div class="bg-surface-container-low border border-outline-variant border-dashed rounded-xl p-md opacity-80 hover:opacity-100 transition-all">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-2xl bg-surface-dim/30 flex items-center justify-center text-outline grayscale">
+<span class="material-symbols-outlined text-4xl">groups</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-title-md text-on-surface">Co-Learner</h4>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mb-4">Participate in 10 group study sessions.</p>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden mb-1">
+<div class="bg-outline h-full w-[10%]"></div>
+</div>
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest text-right">Progress: 1/10</p>
+</div>
+</div>
+</div>
+<!-- Locked Card 3 -->
+<div class="bg-surface-container-low border border-outline-variant border-dashed rounded-xl p-md opacity-80 hover:opacity-100 transition-all">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-2xl bg-surface-dim/30 flex items-center justify-center text-outline grayscale">
+<span class="material-symbols-outlined text-4xl">rocket_launch</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-title-md text-on-surface">Focus Titan</h4>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mb-4">Complete 50 Pomodoro sessions in a month.</p>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden mb-1">
+<div class="bg-outline h-full w-[90%]"></div>
+</div>
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest text-right">Progress: 45/50</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Collections / Specialty Badges -->
+<div class="bg-surface-container-high rounded-3xl p-lg">
+<div class="flex items-end justify-between mb-lg">
+<div>
+<span class="font-label-caps text-label-caps text-primary uppercase">Special Collections</span>
+<h3 class="font-display-lg text-3xl font-bold text-on-background">Milestone Shields</h3>
+</div>
+<div class="hidden sm:block">
+<p class="font-body-sm text-on-surface-variant max-w-xs text-right">Collect all specialty shields to earn the "Polymath" honorary title.</p>
+</div>
+</div>
+<div class="flex flex-wrap gap-8 justify-center items-center">
+<!-- Shield 1 -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="w-24 h-24 rounded-full border-4 border-primary/20 flex items-center justify-center relative transition-transform group-hover:scale-110 duration-300">
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20"></div>
+<span class="material-symbols-outlined text-5xl text-primary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<div class="absolute -bottom-2 -right-2 bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">Lvl 3</div>
+</div>
+<span class="font-label-caps text-label-caps mt-4 text-on-background">Logic Guardian</span>
+</div>
+<!-- Shield 2 -->
+<div class="flex flex-col items-center group cursor-pointer">
+<div class="w-24 h-24 rounded-full border-4 border-secondary/20 flex items-center justify-center relative transition-transform group-hover:scale-110 duration-300">
+<div class="absolute inset-0 bg-secondary/10 rounded-full blur-xl group-hover:bg-secondary/20"></div>
+<span class="material-symbols-outlined text-5xl text-secondary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<div class="absolute -bottom-2 -right-2 bg-secondary text-white text-[10px] px-2 py-0.5 rounded-full font-bold">Lvl 1</div>
+</div>
+<span class="font-label-caps text-label-caps mt-4 text-on-background">Creative Soul</span>
+</div>
+<!-- Shield 3 (Locked) -->
+<div class="flex flex-col items-center opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-help">
+<div class="w-24 h-24 rounded-full border-4 border-outline-variant/20 flex items-center justify-center relative">
+<span class="material-symbols-outlined text-5xl text-outline">language</span>
+</div>
+<span class="font-label-caps text-label-caps mt-4 text-on-surface-variant">Linguist Master</span>
+</div>
+<!-- Shield 4 (Locked) -->
+<div class="flex flex-col items-center opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-help">
+<div class="w-24 h-24 rounded-full border-4 border-outline-variant/20 flex items-center justify-center relative">
+<span class="material-symbols-outlined text-5xl text-outline">architecture</span>
+</div>
+<span class="font-label-caps text-label-caps mt-4 text-on-surface-variant">Systems Architect</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t border-outline-variant mt-xl">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter py-lg max-w-container-max mx-auto">
+<div class="mb-6 md:mb-0">
+<span class="font-title-md text-title-md font-bold text-on-background">StudySync</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">© 2024 StudySync AI. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap gap-md justify-center">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Help Center</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+</main>
+<!-- Mobile BottomNavBar (Shared Component Filter Applied) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-outline-variant h-16 flex items-center justify-around px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+<span class="text-[10px] font-label-caps">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-2xl">timer</span>
+<span class="text-[10px] font-label-caps">Focus</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="text-[10px] font-label-caps">Awards</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-[10px] font-label-caps">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for achievement unlocking simulation
+        document.querySelectorAll('.achievement-grid > div').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

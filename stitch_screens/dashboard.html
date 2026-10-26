@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StudySync Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dcd8e5",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-variant": "#e4e1ee",
+                        "surface-container": "#f0ecf9",
+                        "secondary-fixed-dim": "#bdc2ff",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#dad7ff",
+                        "tertiary": "#005523",
+                        "surface-container-low": "#f5f2ff",
+                        "on-tertiary-container": "#63f889",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary-fixed": "#002109",
+                        "primary-container": "#4f46e5",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#e0e0ff",
+                        "on-surface-variant": "#464555",
+                        "tertiary-container": "#007030",
+                        "on-secondary-container": "#17228f",
+                        "outline-variant": "#c7c4d8",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3effc",
+                        "surface": "#fcf8ff",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#fcf8ff",
+                        "on-secondary-fixed-variant": "#2f3aa3",
+                        "tertiary-fixed": "#6bff8f",
+                        "inverse-surface": "#302f39",
+                        "on-secondary-fixed": "#000767",
+                        "secondary": "#4953bc",
+                        "secondary-container": "#8792fe",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1b24",
+                        "on-tertiary-fixed-variant": "#005321",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-bright": "#fcf8ff",
+                        "outline": "#777587",
+                        "surface-container-highest": "#e4e1ee",
+                        "tertiary-fixed-dim": "#4ae176",
+                        "on-surface": "#1b1b24",
+                        "surface-tint": "#4d44e3",
+                        "primary-fixed": "#e2dfff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "container-max": "1280px",
+                        "xl": "64px",
+                        "gutter": "24px",
+                        "md": "24px",
+                        "sm": "16px",
+                        "base": "4px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "title-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .ai-glow-left {
+            border-left: 4px solid #10b981; /* Emerald-500 equivalent */
+            box-shadow: -10px 0 20px -10px rgba(16, 185, 129, 0.2);
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(79, 70, 229, 0.05);
+        }
+        .custom-shadow:hover {
+            box-shadow: 0px 12px 32px rgba(79, 70, 229, 0.1);
+        }
+        .study-progress-bar-fill {
+            background: linear-gradient(90deg, #3525cd 0%, #8792fe 100%);
+        }
+        body {
+            background-color: #fcf8ff;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="text-on-background">
+<!-- Sidebar Navigation Shell -->
+<aside class="hidden md:flex flex-col h-screen fixed left-0 top-0 py-lg bg-surface-container dark:bg-inverse-surface backdrop-blur-xl border-r border-white/10 w-72 z-50">
+<div class="px-gutter mb-xl">
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-inverse-primary tracking-tight">StudySync</h1>
+</div>
+<div class="px-4 mb-lg flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a young student with a friendly expression. The lighting is soft and natural, emphasizing a light-mode academic aesthetic. The background is a blurred minimalist study space with neutral tones, perfectly matching the StudySync UI color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfeYA_Cu27eWkqJhbmGKvCLw4Byv6KF3XSJRxvWircelqQKIgqPl_FmvVc9sGvWQ1yIEIg1ttJ5JVrc-Bsx1t8AQERaklvd5y2KlPTz1IsOtveNgfx621ZZusbM-4kg5LVBwNVqZTndhyu_C027AP2ZLGREPXNIw579STqHaRlZjZU-vXaDZ1Mo_NawvV7wFmj7nx6IH8z86VYn-h5ZeWrX4bh_YKZkM2cLKyITIY5_ldbPETBHCz5Bvh_UtnNgk7nhSINmvu6azAI"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary font-bold">Alex Rivers</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Level 24 Scholar</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<!-- Dashboard is Active -->
+<a class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container rounded-xl mx-4 my-1 flex items-center gap-3 px-4 py-3 transition-all duration-200 translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-sm text-body-sm">Habit Tracker</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+<span class="font-body-sm text-body-sm">Pomodoro</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-body-sm text-body-sm">Analytics</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="target">target</span>
+<span class="font-body-sm text-body-sm">Goal Planner</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-body-sm text-body-sm">Calendar</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-body-sm text-body-sm">Achievements</span>
+</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary-container text-on-primary-container py-3 rounded-xl font-bold flex items-center justify-center gap-2 mb-4 hover:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+                Start Focus Session
+            </button>
+<a class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-sm text-body-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-72 min-h-screen pb-xl">
+<!-- Header -->
+<header class="h-20 px-gutter flex justify-between items-center bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-xl sticky top-0 z-40 border-b border-outline-variant/30">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Welcome, Alex Rivers</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full cursor-pointer transition-colors" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-bold font-label-caps text-label-caps hover:scale-95 transition-transform shadow-sm">
+                    Study Now
+                </button>
+</div>
+</header>
+<!-- Layout Grid -->
+<div class="px-gutter pt-8 max-w-container-max mx-auto grid grid-cols-12 gap-gutter">
+<!-- Left/Center Column -->
+<div class="col-span-12 lg:col-span-8 space-y-gutter">
+<!-- Quick Stats Bento -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-gutter">
+<div class="bg-white p-6 rounded-[20px] custom-shadow border border-outline-variant/20 flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary p-2 bg-surface-container rounded-lg" data-icon="flag">flag</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Daily Goal</span>
+</div>
+<div>
+<p class="font-display-lg text-[32px] font-bold text-on-background">8h <span class="text-body-sm font-normal text-on-surface-variant">/ day</span></p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-[20px] custom-shadow border border-outline-variant/20 flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary p-2 bg-tertiary-fixed rounded-lg" data-icon="local_fire_department">local_fire_department</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Streak</span>
+</div>
+<div>
+<p class="font-display-lg text-[32px] font-bold text-on-background">14 <span class="text-body-sm font-normal text-on-surface-variant">days</span></p>
+</div>
+</div>
+<div class="bg-white p-6 rounded-[20px] custom-shadow border border-outline-variant/20 flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-secondary p-2 bg-secondary-fixed rounded-lg" data-icon="history">history</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Today</span>
+</div>
+<div>
+<p class="font-display-lg text-[32px] font-bold text-on-background">4h <span class="text-body-sm font-normal text-on-surface-variant">studied</span></p>
+</div>
+</div>
+</div>
+<!-- Main Progress Section -->
+<div class="bg-white p-8 rounded-[20px] custom-shadow border border-outline-variant/20">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-title-md text-title-md text-on-background">Weekly Progress</h3>
+<div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="trending_up">trending_up</span>
+<span class="font-label-caps text-label-caps text-primary">75% Complete</span>
+</div>
+</div>
+<div class="space-y-6">
+<div class="h-8 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full study-progress-bar-fill rounded-full" style="width: 75%"></div>
+</div>
+<div class="grid grid-cols-7 gap-2">
+<div class="flex flex-col items-center gap-2">
+<div class="w-full h-24 bg-surface-container rounded-lg relative overflow-hidden">
+<div class="absolute bottom-0 w-full bg-primary/40 h-[60%]"></div>
+</div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">MON</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-full h-24 bg-surface-container rounded-lg relative overflow-hidden">
+<div class="absolute bottom-0 w-full bg-primary/40 h-[80%]"></div>
+</div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">TUE</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-full h-24 bg-surface-container rounded-lg relative overflow-hidden">
+<div class="absolute bottom-0 w-full bg-primary/40 h-[45%]"></div>
+</div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">WED</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-full h-24 bg-surface-container rounded-lg relative overflow-hidden">
+<div class="absolute bottom-0 w-full bg-primary h-[90%]"></div>
+</div>
+<span class="font-label-caps text-[10px] text-primary font-bold">THU</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-full h-24 bg-surface-container rounded-lg"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">FRI</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-full h-24 bg-surface-container rounded-lg"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">SAT</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-full h-24 bg-surface-container rounded-lg"></div>
+<span class="font-label-caps text-[10px] text-on-surface-variant">SUN</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Tasks & Deadlines -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Quick Add Task -->
+<div class="bg-white p-6 rounded-[20px] custom-shadow border border-outline-variant/20">
+<h3 class="font-title-md text-title-md mb-6">Quick Add Task</h3>
+<div class="space-y-4">
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary focus:ring-4 focus:ring-primary/5 rounded-xl px-4 py-3 font-body-sm transition-all outline-none" placeholder="What needs study?" type="text"/>
+<button class="absolute right-2 top-2 p-1.5 bg-primary text-on-primary rounded-lg">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-label-caps text-[10px] cursor-pointer hover:bg-primary-container hover:text-on-primary-container transition-colors">Revision</span>
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-label-caps text-[10px] cursor-pointer hover:bg-primary-container hover:text-on-primary-container transition-colors">Reading</span>
+<span class="px-3 py-1 bg-surface-container rounded-full text-on-surface-variant font-label-caps text-[10px] cursor-pointer hover:bg-primary-container hover:text-on-primary-container transition-colors">Assignment</span>
+</div>
+</div>
+</div>
+<!-- Upcoming Deadlines -->
+<div class="bg-white p-6 rounded-[20px] custom-shadow border border-outline-variant/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md">Upcoming</h3>
+<a class="text-primary font-label-caps text-label-caps hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-3 bg-surface-container-low rounded-xl border border-transparent hover:border-primary/20 transition-all cursor-pointer">
+<div class="w-10 h-10 bg-error-container text-error rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+</div>
+<div class="flex-1">
+<p class="font-body-lg text-body-lg font-bold text-on-background">Math Exam</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">In 2 days</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 bg-surface-container-low rounded-xl border border-transparent hover:border-primary/20 transition-all cursor-pointer">
+<div class="w-10 h-10 bg-secondary-fixed text-secondary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+</div>
+<div class="flex-1">
+<p class="font-body-lg text-body-lg font-bold text-on-background">Physics Lab</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">In 5 days</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel -->
+<div class="col-span-12 lg:col-span-4 space-y-gutter">
+<!-- Today's Schedule -->
+<div class="bg-white p-6 rounded-[20px] custom-shadow border border-outline-variant/20">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md">Today's Schedule</h3>
+<span class="text-on-surface-variant font-label-caps text-label-caps">Oct 24</span>
+</div>
+<div class="space-y-0 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant/30">
+<div class="flex gap-4 pb-6 relative">
+<div class="w-6 h-6 rounded-full bg-primary ring-4 ring-white z-10 flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-primary font-bold">09:00 - 11:00</p>
+<p class="font-body-lg text-body-lg font-bold text-on-background">Deep Work: Algebra</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Library Level 2</p>
+</div>
+</div>
+<div class="flex gap-4 pb-6 relative">
+<div class="w-6 h-6 rounded-full bg-outline-variant ring-4 ring-white z-10 flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-bold">13:00 - 14:30</p>
+<p class="font-body-lg text-body-lg font-bold text-on-background">History Lecture</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hall B</p>
+</div>
+</div>
+<div class="flex gap-4 pb-6 relative">
+<div class="w-6 h-6 rounded-full bg-outline-variant ring-4 ring-white z-10 flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-bold">16:00 - 18:00</p>
+<p class="font-body-lg text-body-lg font-bold text-on-background">Study Group: Physics</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Student Union</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 border border-outline-variant text-on-surface-variant py-3 rounded-xl font-label-caps text-label-caps hover:bg-surface-container transition-colors">
+                        Edit Schedule
+                    </button>
+</div>
+<!-- AI Study Tip -->
+<div class="glass-panel ai-glow-left p-6 rounded-[20px] custom-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="font-title-md text-title-md text-on-background">Study Tip</h3>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6 italic">
+                        "Try the Feynman Technique: Explain your Physics Lab concepts to a fictional audience. If you can't simplify it, you don't understand it yet."
+                    </p>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] text-tertiary uppercase tracking-wider">AI Insight</span>
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+</button>
+</div>
+</div>
+<!-- Quick Insight Image/Card -->
+<div class="rounded-[20px] overflow-hidden relative h-48 custom-shadow group">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A serene, minimalist top-down shot of a clean study desk with a sleek laptop, an open leather-bound notebook, a fine-point pen, and a small green succulent plant. The desk is white marble, bathed in soft, bright morning sunlight coming from a nearby window. The color palette is composed of soft purples, clean whites, and deep indigos, mirroring the StudySync design system." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwAPK5uHFiHqEZ-hPGt3fsimZ2-UFDi0JK9I75WrZhLEuDGaodGRSXM8WNCjybLvI1QYSWBpATtlNz_6zWFpyt7SLAX0HjX-MaNzXTER41wVzAIzW3pekyjkD18StvlaX2DExR91j_SpH2p6FIvS_cGj8junX6IoQNNPNlxYK1_zvGVCRxddogGMV-BVxOFZ-sH0UQNr-rmU69StbTNImK1qb6UH-Ed3SGqLOcYSlcF3DJGYZh2rM5KmrCtdsLyWmI8ozjnuz6vshg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end p-6">
+<p class="font-title-md text-title-md text-white">Focus Mode Mastery</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/90 backdrop-blur-md flex justify-around items-center px-4 z-50 border-t border-outline-variant/10">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-[10px]">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+<span class="font-label-caps text-[10px]">Focus</span>
+</button>
+<button class="w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center -translate-y-4 shadow-lg">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-label-caps text-[10px]">Stats</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-[10px]">Profile</span>
+</button>
+</nav>
+<script>
+        // Simple micro-interaction for task input
+        const taskInput = document.querySelector('input[type="text"]');
+        const taskAddBtn = taskInput?.nextElementSibling;
+        
+        taskAddBtn?.addEventListener('click', () => {
+            if(taskInput.value.trim() !== "") {
+                const btnContent = taskAddBtn.innerHTML;
+                taskAddBtn.innerHTML = '<span class="material-symbols-outlined">check</span>';
+                taskAddBtn.classList.replace('bg-primary', 'bg-tertiary');
+                
+                setTimeout(() => {
+                    taskInput.value = "";
+                    taskAddBtn.innerHTML = btnContent;
+                    taskAddBtn.classList.replace('bg-tertiary', 'bg-primary');
+                }, 1500);
+            }
+        });
+
+        // Greeting interaction based on time
+        window.onload = () => {
+            const greeting = document.querySelector('h2');
+            const hours = new Date().getHours();
+            let text = "Welcome";
+            if (hours < 12) text = "Good Morning";
+            else if (hours < 18) text = "Good Afternoon";
+            else text = "Good Evening";
+            
+            if(greeting) greeting.innerHTML = `${text}, Alex Rivers`;
+        };
+    </script>
+</body></html>

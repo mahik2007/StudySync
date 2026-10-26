@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Register | StudySync AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .ai-insight-border {
+            position: relative;
+        }
+        .ai-insight-border::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10%;
+            height: 80%;
+            width: 3px;
+            background: #10b981; /* Emerald */
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-dim": "#dcd8e5",
+                "error": "#ba1a1a",
+                "on-primary-fixed": "#0f0069",
+                "surface-variant": "#e4e1ee",
+                "surface-container": "#f0ecf9",
+                "secondary-fixed-dim": "#bdc2ff",
+                "on-primary": "#ffffff",
+                "on-primary-container": "#dad7ff",
+                "tertiary": "#005523",
+                "surface-container-low": "#f5f2ff",
+                "on-tertiary-container": "#63f889",
+                "primary-fixed-dim": "#c3c0ff",
+                "on-tertiary-fixed": "#002109",
+                "primary-container": "#4f46e5",
+                "on-error-container": "#93000a",
+                "secondary-fixed": "#e0e0ff",
+                "on-surface-variant": "#464555",
+                "tertiary-container": "#007030",
+                "on-secondary-container": "#17228f",
+                "outline-variant": "#c7c4d8",
+                "on-tertiary": "#ffffff",
+                "inverse-on-surface": "#f3effc",
+                "surface": "#fcf8ff",
+                "surface-container-lowest": "#ffffff",
+                "background": "#fcf8ff",
+                "on-secondary-fixed-variant": "#2f3aa3",
+                "tertiary-fixed": "#6bff8f",
+                "inverse-surface": "#302f39",
+                "on-secondary-fixed": "#000767",
+                "secondary": "#4953bc",
+                "secondary-container": "#8792fe",
+                "error-container": "#ffdad6",
+                "on-error": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-background": "#1b1b24",
+                "on-tertiary-fixed-variant": "#005321",
+                "inverse-primary": "#c3c0ff",
+                "surface-container-high": "#eae6f4",
+                "primary": "#3525cd",
+                "on-primary-fixed-variant": "#3323cc",
+                "surface-bright": "#fcf8ff",
+                "outline": "#777587",
+                "surface-container-highest": "#e4e1ee",
+                "tertiary-fixed-dim": "#4ae176",
+                "on-surface": "#1b1b24",
+                "surface-tint": "#4d44e3",
+                "primary-fixed": "#e2dfff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xs": "8px",
+                "container-max": "1280px",
+                "xl": "64px",
+                "gutter": "24px",
+                "md": "24px",
+                "sm": "16px",
+                "base": "4px",
+                "lg": "40px"
+            },
+            "fontFamily": {
+                "label-caps": ["Inter"],
+                "body-sm": ["Inter"],
+                "headline-lg": ["Inter"],
+                "headline-lg-mobile": ["Inter"],
+                "display-lg": ["Inter"],
+                "body-lg": ["Inter"],
+                "title-md": ["Inter"]
+            },
+            "fontSize": {
+                "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col">
+<!-- Header / Brand Anchor -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-outline-variant/30 h-20">
+<div class="max-w-container-max mx-auto px-gutter h-full flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-display-lg text-headline-lg font-bold text-primary tracking-tight">StudySync</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Features</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Pricing</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+</div>
+<div>
+<a class="font-label-caps text-label-caps text-primary border border-primary px-6 py-2 rounded-xl hover:bg-primary-container/10 transition-all" href="#">Sign In</a>
+</div>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center pt-28 pb-12 px-6">
+<div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left Side: Onboarding Content (Marketing/Inspiration) -->
+<div class="hidden lg:flex flex-col lg:col-span-6 space-y-8">
+<div class="space-y-4">
+<h1 class="font-display-lg text-display-lg leading-tight text-on-background">Elevate your <span class="text-primary">academic journey</span> with AI.</h1>
+<p class="text-on-surface-variant text-body-lg max-w-md">Join over 50,000 scholars using StudySync to master complex subjects and optimize their focus sessions.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/20 hover:shadow-lg transition-shadow group">
+<span class="material-symbols-outlined text-primary mb-3 block text-3xl group-hover:scale-110 transition-transform">bolt</span>
+<h3 class="font-title-md text-title-md mb-2">Smart Summaries</h3>
+<p class="text-body-sm text-on-surface-variant">Turn 50-page readings into 5-minute actionable briefs.</p>
+</div>
+<div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/20 hover:shadow-lg transition-shadow group">
+<span class="material-symbols-outlined text-primary mb-3 block text-3xl group-hover:scale-110 transition-transform">schedule</span>
+<h3 class="font-title-md text-title-md mb-2">Focus Flow</h3>
+<p class="text-body-sm text-on-surface-variant">Dynamic Pomodoro sessions that adapt to your fatigue levels.</p>
+</div>
+</div>
+<div class="ai-insight-border glass-panel p-6 rounded-2xl">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a young female PhD student, smiling warmly, in a modern university library setting. The lighting is soft and natural, with hints of academic books in a blurred background. The style is clean, high-resolution, and premium, fitting a high-end educational platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_eYISo7la9At6DyGd0qYY4BHaVniSWOsCw9_05j1B_edR-RSY7BcvBZnID27vx_xGtBxpHlPnq-yNwTS0csg9U11DbMoN94HzjNAgEgJRx7IjpT5555I9k4XlMqR5vdVdkgCMmw-T6bWA99HsxixSuNzbHXKhbee4DxVznYuuVD_cw3yFKH7EMIUYkmY1xx6YL573GZOofQKb7SYK89lBd47yKXh2X8UFFcEvyUmvPYJF_s0TPf4uysHAsl46OBWptSHNxF3LWrPx"/>
+</div>
+<div>
+<p class="text-on-surface-variant font-body-sm italic">"StudySync transformed how I approach my research. The AI-driven habit tracker kept me consistent during my most challenging semester."</p>
+<p class="font-label-caps text-label-caps text-on-background mt-2">Sarah Chen • Stanford University</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Registration Form -->
+<div class="lg:col-span-6 w-full max-w-md mx-auto">
+<div class="bg-white p-10 rounded-[32px] shadow-[0px_4px_20px_rgba(79,70,229,0.05)] border border-outline-variant/30">
+<div class="mb-8 text-center lg:text-left">
+<h2 class="font-headline-lg text-headline-lg text-on-background mb-2">Create Account</h2>
+<p class="text-on-surface-variant font-body-lg">Get started with your 14-day free trial.</p>
+</div>
+<form class="space-y-5" onsubmit="return false;">
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant ml-1">Full Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">person</span>
+<input class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-outline-variant rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-outline/60" placeholder="Alex Rivers" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant ml-1">Email Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">mail</span>
+<input class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-outline-variant rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-outline/60" placeholder="alex@study.ai" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant ml-1">Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock</span>
+<input class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-outline-variant rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-outline/60" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant ml-1">Confirm</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">lock_clock</span>
+<input class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border border-outline-variant rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-outline/60" placeholder="••••••••" type="password"/>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 pt-2">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
+<label class="text-body-sm text-on-surface-variant" for="terms">I agree to the <a class="text-primary font-semibold hover:underline" href="#">Terms of Service</a> and <a class="text-primary font-semibold hover:underline" href="#">Privacy Policy</a>.</label>
+</div>
+<button class="w-full bg-primary text-on-primary font-title-md py-4 rounded-xl shadow-lg hover:shadow-primary/30 active:scale-[0.98] transition-all flex justify-center items-center gap-2 group mt-4">
+                            Create Account
+                            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<div class="relative py-4">
+<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-outline-variant"></div></div>
+<div class="relative flex justify-center text-xs uppercase"><span class="bg-white px-4 text-on-surface-variant font-label-caps">Or continue with</span></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-3 border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-label-caps text-label-caps text-on-surface-variant">
+<svg class="w-5 h-5" viewbox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"></path><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor"></path><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="currentColor"></path><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="currentColor"></path></svg>
+                                Google
+                            </button>
+<button class="flex items-center justify-center gap-3 py-3 border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-label-caps text-label-caps text-on-surface-variant">
+<svg class="w-5 h-5" viewbox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.419 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.341-3.369-1.341-.454-1.152-1.11-1.459-1.11-1.459-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75.1 .798-.222 1.653-.333 2.503-.337.85.004 1.705.115 2.504.337 1.909-1.369 2.748-1.1 2.748-1.1.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z" fill="currentColor"></path></svg>
+                                GitHub
+                            </button>
+</div>
+</form>
+<p class="text-center mt-8 text-on-surface-variant text-body-sm">
+                        Already have an account? 
+                        <a class="text-primary font-bold hover:underline ml-1" href="#">Sign in</a>
+</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant py-10">
+<div class="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col items-center md:items-start gap-2">
+<div class="flex items-center gap-2 opacity-80">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-title-md text-title-md font-bold text-on-background">StudySync AI</span>
+</div>
+<p class="text-on-surface-variant font-body-sm">© 2024 StudySync AI. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Help Center</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">API</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+        // Simple input focus effects beyond Tailwind's built-in focus
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('.material-symbols-outlined').style.color = '#3525cd'; // primary
+                input.parentElement.querySelector('.material-symbols-outlined').style.transition = 'color 0.2s ease';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('.material-symbols-outlined').style.color = ''; // default outline
+            });
+        });
+
+        // Form submission simulated success
+        const btn = document.querySelector('button.bg-primary');
+        btn.addEventListener('click', () => {
+            btn.innerHTML = '<span class="animate-spin material-symbols-outlined">progress_activity</span> Processing...';
+            setTimeout(() => {
+                btn.innerHTML = 'Account Created! <span class="material-symbols-outlined">check_circle</span>';
+                btn.classList.replace('bg-primary', 'bg-tertiary-container');
+                btn.classList.add('text-on-tertiary-container');
+            }, 1500);
+        });
+    </script>
+</body></html>

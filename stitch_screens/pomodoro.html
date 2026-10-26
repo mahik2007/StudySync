@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StudySync - Pomodoro Timer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .timer-glow {
+            box-shadow: 0 0 60px rgba(79, 70, 229, 0.15);
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.98); }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 3s ease-in-out infinite;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dcd8e5",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-variant": "#e4e1ee",
+                        "surface-container": "#f0ecf9",
+                        "secondary-fixed-dim": "#bdc2ff",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#dad7ff",
+                        "tertiary": "#005523",
+                        "surface-container-low": "#f5f2ff",
+                        "on-tertiary-container": "#63f889",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-tertiary-fixed": "#002109",
+                        "primary-container": "#4f46e5",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#e0e0ff",
+                        "on-surface-variant": "#464555",
+                        "tertiary-container": "#007030",
+                        "on-secondary-container": "#17228f",
+                        "outline-variant": "#c7c4d8",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3effc",
+                        "surface": "#fcf8ff",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#fcf8ff",
+                        "on-secondary-fixed-variant": "#2f3aa3",
+                        "tertiary-fixed": "#6bff8f",
+                        "inverse-surface": "#302f39",
+                        "on-secondary-fixed": "#000767",
+                        "secondary": "#4953bc",
+                        "secondary-container": "#8792fe",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1b24",
+                        "on-tertiary-fixed-variant": "#005321",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-container-high": "#eae6f4",
+                        "primary": "#3525cd",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-bright": "#fcf8ff",
+                        "outline": "#777587",
+                        "surface-container-highest": "#e4e1ee",
+                        "tertiary-fixed-dim": "#4ae176",
+                        "on-surface": "#1b1b24",
+                        "surface-tint": "#4d44e3",
+                        "primary-fixed": "#e2dfff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "container-max": "1280px",
+                        "xl": "64px",
+                        "gutter": "24px",
+                        "md": "24px",
+                        "sm": "16px",
+                        "base": "4px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "title-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg overflow-x-hidden min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="bg-surface-container backdrop-blur-xl border-r border-white/10 shadow-md flex flex-col h-screen fixed left-0 top-0 py-lg w-72 hidden md:flex z-50">
+<div class="px-gutter mb-lg">
+<h1 class="font-headline-lg text-headline-lg font-extrabold text-primary tracking-tight">StudySync</h1>
+</div>
+<div class="px-gutter mb-8">
+<div class="flex items-center gap-3 p-2">
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up studio portrait of a young professional academic with a friendly expression, soft lighting highlighting clean features, against a minimalist neutral grey background, high-end photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHXQMHxKFqmWM15NC1Iyk7Cbke_Lai8E3hpG9qomTXcC8iM4t75mDI6FkjewPk1_Vxgd4URKLCjQYy8gJcx2Cen1KDvMtrHnjTx_QRy-DctN3NLRmcGgi5Ch5hDCFkQhgO4AJ96sxaqu9Rw_2GT-2ljP3HdiK0uf-WPfpfBPLMx510SdPfXM-5ZNEY3cQiNuI1ftDEml-hVZe2jtSm6fuY3BZvDnxGlqJXTdEthqXO361d5VdO_2Z1Jout9Syq4TiE_cifWY5pEc96"/>
+</div>
+<div>
+<p class="font-title-md text-title-md leading-none text-on-surface">Alex Rivers</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Level 24 Scholar</p>
+</div>
+</div>
+</div>
+<nav class="flex-grow space-y-1">
+<!-- Nav Item: Dashboard -->
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+<!-- Nav Item: Habit Tracker -->
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-sm text-body-sm">Habit Tracker</span>
+</a>
+<!-- Nav Item: Pomodoro (ACTIVE) -->
+<a class="bg-primary text-on-primary rounded-xl mx-4 my-1 flex items-center gap-3 px-4 py-3 shadow-sm translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">timer</span>
+<span class="font-body-sm text-body-sm">Pomodoro</span>
+</a>
+<!-- Nav Item: Analytics -->
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-body-sm text-body-sm">Analytics</span>
+</a>
+<!-- Nav Item: Goal Planner -->
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">target</span>
+<span class="font-body-sm text-body-sm">Goal Planner</span>
+</a>
+<!-- Nav Item: Calendar -->
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-body-sm text-body-sm">Calendar</span>
+</a>
+<!-- Nav Item: Achievements -->
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-body-sm text-body-sm">Achievements</span>
+</a>
+<!-- Nav Item: Settings -->
+<a class="text-on-surface-variant hover:bg-surface-container-high mx-4 my-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+</nav>
+<div class="px-gutter mt-auto pt-lg">
+<button class="w-full bg-primary text-on-primary py-3 px-4 rounded-xl font-body-sm text-body-sm shadow-md hover:opacity-90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">bolt</span>
+                Start Focus Session
+            </button>
+<div class="mt-6 border-t border-outline-variant/30 pt-4">
+<a class="text-on-surface-variant hover:text-error flex items-center gap-3 px-4 py-3 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-sm text-body-sm">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-72 min-h-screen relative overflow-hidden">
+<!-- Subtle Ambient Background -->
+
+<div class="max-w-container-max mx-auto px-gutter py-lg">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Focus Mode</h2>
+<p class="text-on-surface-variant font-body-lg">Elevate your academic productivity through precision timing.</p>
+</div>
+<div class="flex items-center gap-sm">
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-label-caps text-primary uppercase">Deep Work Mode</span>
+<div class="flex items-center gap-2 text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-body-sm">Active Now</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Main Timer Circle (Glassmorphism) -->
+<div class="md:col-span-8 flex flex-col items-center justify-center p-xl rounded-[40px] bg-white/40 backdrop-blur-2xl border border-white/60 shadow-xl relative overflow-hidden">
+<!-- Subtle AI Insight Highlight -->
+<div class="absolute left-0 top-1/4 bottom-1/4 w-1 bg-tertiary/60 rounded-r-full blur-sm"></div>
+<div class="relative w-80 h-80 md:w-[400px] md:h-[400px] flex items-center justify-center">
+<!-- Progress Ring -->
+<svg class="absolute top-0 left-0 w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-container-highest" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary transition-all duration-1000 ease-linear" cx="50" cy="50" fill="transparent" r="45" stroke="currentColor" stroke-dasharray="283" stroke-dashoffset="70" stroke-linecap="round" stroke-width="6" style="transform: rotate(-90deg); transform-origin: 50% 50%;"></circle>
+</svg>
+<!-- Center Glass Content -->
+<div class="z-10 text-center animate-pulse-soft">
+<h3 class="font-display-lg text-[80px] md:text-[100px] font-bold text-primary tracking-tighter leading-none" id="timer-display">25:00</h3>
+<p class="font-label-caps text-label-caps text-on-surface-variant tracking-[0.2em] mt-2">MINUTES REMAINING</p>
+</div>
+<!-- Secondary Glass Glow -->
+<div class="absolute inset-0 rounded-full border-[12px] border-white/20 shadow-inner"></div>
+</div>
+<!-- Timer Controls -->
+<div class="mt-xl flex items-center gap-md">
+<button class="w-14 h-14 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">refresh</span>
+</button>
+<button class="px-xl py-4 rounded-full bg-primary text-on-primary font-title-md flex items-center gap-3 shadow-lg hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                            Start Session
+                        </button>
+<button class="w-14 h-14 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary">pause</span>
+</button>
+</div>
+</div>
+<!-- Right Side Stats Panel -->
+<div class="md:col-span-4 space-y-gutter">
+<!-- Current Session Card -->
+<div class="p-md rounded-3xl bg-white border border-outline-variant shadow-sm hover:shadow-md transition-all">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-xl bg-primary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">psychology</span>
+</div>
+<span class="font-label-caps text-label-caps text-primary">CURRENT SESSION</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mb-1">Deep Work: Psychology Thesis</h4>
+<p class="text-on-surface-variant font-body-sm">Block 3 of 4 in today's deep work schedule.</p>
+<div class="mt-4 pt-4 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="font-body-sm text-tertiary font-bold">Focus Level: High</span>
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+</div>
+</div>
+<!-- Progress Bento -->
+<div class="grid grid-cols-2 gap-gutter">
+<div class="p-md rounded-3xl bg-white border border-outline-variant shadow-sm text-center">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-2">TODAY'S FOCUS</p>
+<p class="font-headline-lg text-headline-lg text-primary">4.5h</p>
+</div>
+<div class="p-md rounded-3xl bg-white border border-outline-variant shadow-sm text-center">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-2">COMPLETED</p>
+<p class="font-headline-lg text-headline-lg text-primary">9</p>
+</div>
+</div>
+<!-- AI Smart Insight Glass Card -->
+<div class="p-md rounded-3xl bg-tertiary-container/10 backdrop-blur-md border-l-4 border-tertiary relative overflow-hidden">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-tertiary-container text-sm">auto_awesome</span>
+<span class="font-label-caps text-label-caps text-tertiary-container uppercase">StudySync AI Insight</span>
+</div>
+<p class="font-body-sm text-on-tertiary-fixed-variant leading-relaxed">
+                            Based on your last session, you're 15% more productive when listening to "Lo-fi Academic Beats". Should we start the playlist?
+                        </p>
+<button class="mt-4 font-body-sm text-tertiary font-bold hover:underline">Accept Suggestion</button>
+</div>
+<!-- Session Calendar Visual -->
+<div class="p-md rounded-3xl bg-white border border-outline-variant shadow-sm overflow-hidden">
+<div class="flex justify-between items-center mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Weekly Consistency</span>
+<span class="text-tertiary font-bold text-xs">+12% vs LY</span>
+</div>
+<div class="flex gap-2 items-end h-24">
+<div class="flex-1 bg-surface-container-highest rounded-t-lg h-[40%]"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t-lg h-[60%]"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t-lg h-[30%]"></div>
+<div class="flex-1 bg-primary rounded-t-lg h-[80%]"></div>
+<div class="flex-1 bg-primary rounded-t-lg h-[95%]"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t-lg h-[20%]"></div>
+<div class="flex-1 bg-surface-container-highest rounded-t-lg h-[10%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Context Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mt-xl">
+<div class="flex items-center gap-4 p-sm glass-panel rounded-2xl">
+<div class="p-2 bg-white rounded-xl shadow-sm">
+<span class="material-symbols-outlined text-primary">coffee</span>
+</div>
+<div>
+<p class="font-title-md text-on-surface text-base">Short Break</p>
+<p class="font-body-sm text-on-surface-variant">5 Minutes</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-sm glass-panel rounded-2xl opacity-50">
+<div class="p-2 bg-white rounded-xl shadow-sm">
+<span class="material-symbols-outlined text-primary">bedtime</span>
+</div>
+<div>
+<p class="font-title-md text-on-surface text-base">Long Break</p>
+<p class="font-body-sm text-on-surface-variant">15 Minutes</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-sm glass-panel rounded-2xl opacity-50">
+<div class="p-2 bg-white rounded-xl shadow-sm">
+<span class="material-symbols-outlined text-primary">settings_backup_restore</span>
+</div>
+<div>
+<p class="font-title-md text-on-surface text-base">Custom Block</p>
+<p class="font-body-sm text-on-surface-variant">Set Timer</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="md:ml-72 bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter py-lg max-w-container-max mx-auto">
+<div class="mb-4 md:mb-0">
+<p class="font-title-md text-title-md font-bold text-on-background">StudySync AI</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">© 2024 StudySync AI. All rights reserved.</p>
+</div>
+<div class="flex gap-lg">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">Help Center</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+<!-- Simple Timer Logic -->
+<script>
+        let timeLeft = 25 * 60;
+        let timerId = null;
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timer-display').innerText = display;
+        }
+
+        // Add micro-interactions for hover states
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.classList.add('scale-105');
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.classList.remove('scale-105');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StudySync | Study Smarter, Stay Consistent</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#dcd8e5",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#0f0069",
+                    "surface-variant": "#e4e1ee",
+                    "surface-container": "#f0ecf9",
+                    "secondary-fixed-dim": "#bdc2ff",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#dad7ff",
+                    "tertiary": "#005523",
+                    "surface-container-low": "#f5f2ff",
+                    "on-tertiary-container": "#63f889",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-tertiary-fixed": "#002109",
+                    "primary-container": "#4f46e5",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#e0e0ff",
+                    "on-surface-variant": "#464555",
+                    "tertiary-container": "#007030",
+                    "on-secondary-container": "#17228f",
+                    "outline-variant": "#c7c4d8",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f3effc",
+                    "surface": "#fcf8ff",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#fcf8ff",
+                    "on-secondary-fixed-variant": "#2f3aa3",
+                    "tertiary-fixed": "#6bff8f",
+                    "inverse-surface": "#302f39",
+                    "on-secondary-fixed": "#000767",
+                    "secondary": "#4953bc",
+                    "secondary-container": "#8792fe",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1b1b24",
+                    "on-tertiary-fixed-variant": "#005321",
+                    "inverse-primary": "#c3c0ff",
+                    "surface-bright": "#fcf8ff",
+                    "outline": "#777587",
+                    "surface-container-highest": "#e4e1ee",
+                    "tertiary-fixed-dim": "#4ae176",
+                    "on-surface": "#1b1b24",
+                    "surface-tint": "#4d44e3",
+                    "primary-fixed": "#e2dfff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "8px",
+                    "container-max": "1280px",
+                    "xl": "64px",
+                    "gutter": "24px",
+                    "md": "24px",
+                    "sm": "16px",
+                    "base": "4px",
+                    "lg": "40px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "title-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fcf8ff; color: #1b1b24; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .hero-gradient { background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.08), transparent), radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.05), transparent); }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0px 12px 32px rgba(79, 70, 229, 0.1); }
+        .ai-glow { position: relative; }
+        .ai-glow::before { content: ''; position: absolute; left: 0; top: 10%; bottom: 10%; width: 3px; background: #007030; filter: blur(2px); border-radius: 99px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+    </style>
+</head>
+<body class="overflow-x-hidden selection:bg-primary-container selection:text-white">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-sm h-20">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-full">
+<div class="font-display-lg text-[28px] lg:text-display-lg font-bold text-primary dark:text-inverse-primary tracking-tight">
+                StudySync
+            </div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-primary dark:text-inverse-primary font-bold border-b-2 border-primary py-2 font-label-caps text-label-caps" href="#">Features</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200 font-label-caps text-label-caps" href="#">Methodology</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200 font-label-caps text-label-caps" href="#">Pricing</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors duration-200 font-label-caps text-label-caps" href="#">About</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-primary font-label-caps text-label-caps hover:bg-surface-container-low px-4 py-2 rounded-xl transition-all duration-200">Sign In</button>
+<button class="bg-primary text-white font-label-caps text-label-caps px-6 py-3 rounded-xl shadow-md hover:scale-95 active:scale-90 transition-transform duration-150">Get Started</button>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center justify-center px-gutter hero-gradient overflow-hidden">
+<div class="max-w-container-max mx-auto grid lg:grid-cols-2 gap-16 items-center z-10">
+<div class="text-center lg:text-left">
+<div class="inline-flex items-center gap-2 bg-primary-container/10 text-primary px-4 py-1.5 rounded-full mb-6 animate-pulse">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-caps text-[10px] uppercase tracking-widest">New: AI Study Planner 2.0</span>
+</div>
+<h1 class="font-display-lg text-[42px] md:text-display-lg leading-[1.1] mb-6 text-on-background">
+                        Study <span class="text-primary italic">Smarter</span>,<br/>Stay Consistent.
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl mb-10 mx-auto lg:mx-0">
+                        Harness the power of AI-driven habit tracking, focused Pomodoro sessions, and deep analytics to master your academic journey without the burnout.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+<button class="bg-primary text-white font-label-caps text-label-caps px-8 py-4 rounded-xl shadow-lg hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
+                            Get Started Free
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="bg-surface-container text-primary font-label-caps text-label-caps px-8 py-4 rounded-xl hover:bg-surface-container-high transition-all duration-300">
+                            View Dashboard
+                        </button>
+</div>
+<div class="mt-12 flex items-center justify-center lg:justify-start gap-4">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-white bg-surface-dim" data-alt="Close-up portrait of a diverse female college student with glasses, smiling warmly in a bright, modern library setting. Soft natural lighting emphasizes a professional and focused academic atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCGtD7ewxHoQnj9zCbBRKKKuzQW3fTsHPYm3lXN5LrYqLgl-Vb74l02pIiF24zatmk2M8EHGMjEFhffqdNYO0EI3D9kX223iLVuiUsFJe2mmyzvlq2qsdO2NPtgVYe1VwZfFVsLncHJnuTIMkXIhCTwSSILs_JDGtdVCMMlcAvW5MzdPtyiPQIsq1pxln6jLAotXz7WqesDUIKXsuPRC9b5nrsfk13VwHoyLLd02i_qPM3q8SI4rMQKLdHJk1dmNhifbMpSqM_uGnID')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-surface-dim" data-alt="A focused young man of East Asian descent studying intensely with noise-canceling headphones in a minimalist, sunlit home office. The aesthetic is clean, academic, and calm with cool blue and white tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBrTHPTiivjiV7YXKW_I3GDaXasM2CO_8mK19W3bkLxjob4GBCFzfJ3WZ5l49HELlgynXSBFoojvVbgY9oQs5nuf4fwGB4SxiyF50uKL8vp3Ag5Cr8rJlXDvNE-wgvuIz6ibHctK8OV-GuW4tRqloEX3dkDwMr_GsC2DO7_HGYTU0sy2pBzSIizQlJ2G7VI8V-2oDfJiuttx9lLhsZGU0muRkH314J9fgZsVatevz1HPgunwt8-n0nJaDe_LT7nisePqhaRPqCoXBrk')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-surface-dim" data-alt="A smiling postgraduate student with a beard, wearing a casual sweater, sitting in a modern co-working space. The background is softly blurred with warm lighting and greenery, suggesting a productive study environment." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDTWJsfHhGTT3iW7BszGfvTsx7gtlfoVCdL8iVuIDBjX1NyOZ1CU1hal9hgpAnAeBz2Dou0nVYnjqJUsOMcw8C1iP6lWr4n42cb9Qlk-1ZDuJQwCtR1Q92niLoOzA8Ghz9HOEuC6nFthj_jiF9l-k58jE2TGILnU7x2SCoTUCrFLLW5LCVhhr3hw-b7k7ZdF7o6me5j1CaERy32iCHngHqFrJR6bk6tWOrPSkfwnHhfC6IdkIqUzHjaZH0CLKa8KGBJHT3esbA3bPgy')"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                            Joined by <span class="font-bold text-primary">12,000+</span> scholars this month.
+                        </p>
+</div>
+</div>
+<div class="relative animate-float">
+<div class="relative z-10 rounded-[2rem] overflow-hidden border border-white/20 shadow-2xl">
+<img class="w-full h-auto" data-alt="A high-resolution, ultra-modern UI dashboard screenshot for a study app. It features clean Bento-style cards showing a circular progress bar for study hours, a sleek Pomodoro timer, and a colorful habit tracking calendar. The design is minimalist with a soft white and indigo palette, exuding a premium academic feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRzWybOFVZm4K8wX3ziJQwJpZXy-S97locixBk8IirnUX6oG5qICZfLIUDfjwywSKUzWFerIWBwAPsVj3jZdWo05IghOe1OdJsSY9OmNZGX6qhSJ9xkn6Y1kngB66a68CmP9LpM-K9OFgIHJt8xD5O2DAcWVX19Zj7PLjDDd9ylmA5VGqad1MDs1xRQyUqeB2rcragOI-L-5TIzHtsn8Nwq47WA5f9OIUtp_2wT2KrR9IRisPf0IskN8FmEGia978_bM8Ob5GjwZiV"/>
+</div>
+<div class="absolute -top-6 -right-6 bg-white p-6 rounded-2xl shadow-xl border border-outline-variant/30 hidden md:block">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-emerald-600">check_circle</span>
+<span class="font-title-md text-title-md">Daily Goal Met!</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">4 hours of focused study logged.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="py-xl px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg mb-4">Precision Tools for Modern Scholars</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Everything you need to optimize your study routine, powered by behavioral science and artificial intelligence.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-6 gap-6">
+<!-- Habit Tracker -->
+<div class="md:col-span-3 lg:col-span-2 bg-white p-8 rounded-[20px] border border-outline-variant card-hover">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[28px]">calendar_today</span>
+</div>
+<h3 class="font-title-md text-title-md mb-3">Habit Tracker</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Build unstoppable momentum with streak tracking and visual progress heatmaps.</p>
+<div class="h-12 bg-surface-container rounded-lg w-full flex items-center px-4 gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<div class="w-3 h-3 rounded-full bg-primary/20"></div>
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+</div>
+</div>
+<!-- Pomodoro -->
+<div class="md:col-span-3 lg:col-span-2 bg-white p-8 rounded-[20px] border border-outline-variant card-hover">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[28px]">timer</span>
+</div>
+<h3 class="font-title-md text-title-md mb-3">Pomodoro Pro</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Deep focus sessions with integrated break management and ambient soundscapes.</p>
+<div class="text-center">
+<span class="font-display-lg text-[32px] text-primary">25:00</span>
+</div>
+</div>
+<!-- AI Insights -->
+<div class="md:col-span-6 lg:col-span-2 bg-white p-8 rounded-[20px] border border-outline-variant card-hover ai-glow">
+<div class="w-12 h-12 bg-tertiary/10 text-tertiary rounded-xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[28px]">auto_awesome</span>
+</div>
+<h3 class="font-title-md text-title-md mb-3">AI Insights</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Our AI analyzes your performance to predict burnout and suggest optimal study times.</p>
+<div class="text-xs font-label-caps text-tertiary bg-tertiary/10 px-3 py-1 rounded-full w-fit">Smart Suggestion Active</div>
+</div>
+<!-- Analytics -->
+<div class="md:col-span-4 bg-white p-8 rounded-[20px] border border-outline-variant card-hover flex flex-col md:flex-row gap-8 items-center">
+<div class="flex-1">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[28px]">insights</span>
+</div>
+<h3 class="font-title-md text-title-md mb-3">Deep Analytics</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Visualize your growth with granular data on focus intensity and subject mastery.</p>
+</div>
+<div class="w-full md:w-64 h-32 bg-surface-container rounded-xl overflow-hidden flex items-end justify-between px-4 pb-4">
+<div class="w-6 bg-primary h-[40%] rounded-t-sm"></div>
+<div class="w-6 bg-primary h-[65%] rounded-t-sm"></div>
+<div class="w-6 bg-primary h-[50%] rounded-t-sm"></div>
+<div class="w-6 bg-primary h-[90%] rounded-t-sm"></div>
+<div class="w-6 bg-primary h-[75%] rounded-t-sm"></div>
+</div>
+</div>
+<!-- Goal Planner -->
+<div class="md:col-span-2 bg-white p-8 rounded-[20px] border border-outline-variant card-hover">
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[28px]">target</span>
+</div>
+<h3 class="font-title-md text-title-md mb-3">Goal Planner</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Break large projects into manageable milestones with automatic deadline tracking.</p>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="bg-surface-container py-xl">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg mb-4">Loved by Top Scholars</h2>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Testimonial 1 -->
+<div class="bg-white p-8 rounded-[20px] shadow-sm border border-outline-variant/30">
+<div class="flex gap-1 text-primary mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface mb-6">"StudySync transformed how I handle my med school workload. The AI insights are scary accurate!"</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-dim" data-alt="A headshot of a confident young female medical student wearing scrubs, with a bright and clean university hallway in the background. Her expression is one of success and relief, fitting the testimonial context." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCuWrFOpVdOwkwNI6aL1gSaf7RG21dyxus7HyHKC4cB7GXlIu5vBIoFtuHokzhWzAZSlLx2pxYJD0WBl_y8JXxfAiyWzACVcKpBBWiOebU6C2gKvavbXa7Rq15a9Tc8WgkX-KWNIw1PVmd7hpL1PH_eR5_1vgwcdRPDNwzPxO4JshsQpoPnbwj2CZ2GlFGJR-AyDnc-9zgDQQdthTfHPdtFnDa0E9wIHbeLyAOy1zqhF9SAso4kIe-iclSofGkYmaqu-jbLrykBJTtV')"></div>
+<div>
+<h4 class="font-title-md text-title-md text-[16px]">Sarah Jenkins</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Medical Student, Johns Hopkins</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="bg-white p-8 rounded-[20px] shadow-sm border border-outline-variant/30">
+<div class="flex gap-1 text-primary mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface mb-6">"Finally, a Pomodoro timer that actually understands my flow. The habit tracker keeps me honest."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-dim" data-alt="A portrait of a young male professional developer in a stylish, minimalist home office. He looks relaxed yet productive, with soft evening lighting through a window behind him." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBR86mDm0uNSjV7ltybENlk1pr-acDdmnGzIj0wy0_o-xLGosF0fTWksv0Vw1NdWhgHWEVxOui-eZkA72XuZyXvEcagtc0srXt9jLCpKN7i8pdj14V1zm2Pkf2meOpu0Zf4Qq87TMnc0lr5vuvAWUDeMC6GF_zGIVvd0XUSFP9wmYargjaqb6r_Kg41AcYE_0iz9LZlb9I9K93gyzKn6iDAR4ve59adWmKJdkx8i8SVHJxa13pBibd2kWGWJOjz-b_ut4HbgHdVl3ck')"></div>
+<div>
+<h4 class="font-title-md text-title-md text-[16px]">Marcus Chen</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Computer Science Senior</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="bg-white p-8 rounded-[20px] shadow-sm border border-outline-variant/30">
+<div class="flex gap-1 text-primary mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface mb-6">"The Goal Planner is a game-changer for my research projects. Cleanest UI I've ever used."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-dim" data-alt="A close-up shot of a PhD candidate with a bright, welcoming smile, sitting in a modern academic office filled with books. The lighting is soft and airy, conveying a sense of organized brilliance." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAOIl8kTniS0Bqd84NqURJU8zuFGmguULmVhfphupQ8eReu2Z_Rw2o3cOOe9pd1Iq1scDCaEB-gQ-PB63c7WQ754yomIAsJhvnonoFISxyYOT0sNYkTZ4JeIRheMl91P5n48Rq2jBefMchg7q_ZGUsxsIxaF7uSf-UniH9UuocjZjqDvuBeSA9ghr6jwW8kowhhCpnX_Xr1q2xiosiZb0t2dkDjWYAkWOOICObbMF7SH-HYH6fVV5XVbvvpSW0TlBgJn0W8Qk8nzywR')"></div>
+<div>
+<h4 class="font-title-md text-title-md text-[16px]">Dr. Elena Rodriguez</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">PhD Candidate, Stanford</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-xl px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg mb-4">Simple, Transparent Pricing</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Invest in your academic success today.</p>
+</div>
+<div class="grid md:grid-cols-2 max-w-4xl mx-auto gap-8">
+<!-- Free Plan -->
+<div class="bg-white p-10 rounded-[24px] border border-outline-variant flex flex-col h-full">
+<h3 class="font-title-md text-title-md mb-2">Free Scholar</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Perfect for students starting out.</p>
+<div class="mb-8">
+<span class="font-display-lg text-[40px] font-bold text-on-background">$0</span>
+<span class="font-body-sm text-on-surface-variant">/month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-1">
+<li class="flex items-center gap-3 font-body-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+                            Standard Habit Tracking
+                        </li>
+<li class="flex items-center gap-3 font-body-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+                            Basic Pomodoro Timer
+                        </li>
+<li class="flex items-center gap-3 font-body-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">check</span>
+                            Weekly Analytics Email
+                        </li>
+<li class="flex items-center gap-3 font-body-sm text-on-surface-variant opacity-50">
+<span class="material-symbols-outlined text-[20px]">close</span>
+                            AI Performance Prediction
+                        </li>
+</ul>
+<button class="w-full py-4 rounded-xl border border-primary text-primary font-label-caps text-label-caps hover:bg-surface-container-low transition-colors">Start Free</button>
+</div>
+<!-- Pro Plan -->
+<div class="bg-primary text-white p-10 rounded-[24px] shadow-2xl relative overflow-hidden flex flex-col h-full">
+<div class="absolute top-0 right-0 bg-secondary px-6 py-2 rounded-bl-2xl font-label-caps text-[10px] tracking-widest uppercase">Popular</div>
+<h3 class="font-title-md text-title-md mb-2">Sync Pro</h3>
+<p class="font-body-sm text-primary-container mb-6">Unlock the full power of AI study habits.</p>
+<div class="mb-8">
+<span class="font-display-lg text-[40px] font-bold">$9</span>
+<span class="font-body-sm text-primary-container">/month</span>
+</div>
+<ul class="space-y-4 mb-10 flex-1">
+<li class="flex items-center gap-3 font-body-sm">
+<span class="material-symbols-outlined text-[20px]">check</span>
+                            Unlimited Habit Logs
+                        </li>
+<li class="flex items-center gap-3 font-body-sm">
+<span class="material-symbols-outlined text-[20px]">check</span>
+                            AI Study Planner &amp; Insights
+                        </li>
+<li class="flex items-center gap-3 font-body-sm">
+<span class="material-symbols-outlined text-[20px]">check</span>
+                            Real-time Master Analytics
+                        </li>
+<li class="flex items-center gap-3 font-body-sm">
+<span class="material-symbols-outlined text-[20px]">check</span>
+                            Cloud Sync Across Devices
+                        </li>
+</ul>
+<button class="w-full py-4 rounded-xl bg-white text-primary font-label-caps text-label-caps shadow-lg hover:scale-105 active:scale-95 transition-transform">Go Pro Now</button>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-xl px-gutter">
+<div class="max-w-4xl mx-auto bg-surface-container-highest rounded-[32px] p-12 text-center border border-outline-variant/50">
+<h2 class="font-display-lg text-[32px] md:text-headline-lg mb-6">Ready to transform your study flow?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-lg mx-auto">Join thousands of students who have reclaimed their focus and achieved academic excellence.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-primary text-white font-label-caps text-label-caps px-10 py-4 rounded-xl shadow-lg hover:scale-95 transition-all">Get Started for Free</button>
+<button class="bg-white text-on-background font-label-caps text-label-caps px-10 py-4 rounded-xl border border-outline-variant hover:bg-surface transition-all">Schedule a Demo</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant mt-20">
+<div class="flex flex-col md:flex-row justify-between items-center px-gutter py-lg max-w-container-max mx-auto gap-8">
+<div class="flex flex-col items-center md:items-start gap-4">
+<div class="font-title-md text-title-md font-bold text-on-background">StudySync</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs text-center md:text-left">The intelligent operating system for your academic life.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-x-12 gap-y-6">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-all hover:underline" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-all hover:underline" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-all hover:underline" href="#">Help Center</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-all hover:underline" href="#">API Documentation</a>
+</div>
+</div>
+<div class="border-t border-outline-variant/20 py-8 text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-80">© 2024 StudySync AI. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple scroll reveal interaction
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('opacity-0', 'translate-y-8');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.card-hover').forEach(card => {
+                card.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-700');
+                observer.observe(card);
+            });
+        });
+
+        // Mobile menu toggle (simple version)
+        const mobileToggle = document.createElement('button');
+        mobileToggle.className = 'md:hidden text-primary';
+        mobileToggle.innerHTML = '<span class="material-symbols-outlined">menu</span>';
+        document.querySelector('nav .flex').appendChild(mobileToggle);
+    </script>
+</body></html>
