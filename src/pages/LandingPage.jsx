@@ -14,31 +14,36 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="overflow-x-hidden bg-[#fcf8ff] text-[#1b1b24] selection:bg-primary-container selection:text-white min-h-screen">
+    <div className="overflow-x-hidden bg-background text-[#1b1b24] selection:bg-primary selection:text-white min-h-screen">
       {/* Top Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-outline-variant/20 shadow-sm h-20">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-surface-container/90 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm h-20">
         <div className="flex justify-between items-center w-full px-6 max-w-7-xl mx-auto h-full">
-          <div className="text-2xl font-bold text-primary tracking-tight">
-            StudySync
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/25">
+              <span className="material-symbols-outlined text-2xl">school</span>
+            </div>
+            <div className="text-2xl font-extrabold text-primary tracking-tight">
+              StudySync
+            </div>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a className="text-primary font-bold border-b-2 border-primary py-2 text-xs uppercase tracking-wider font-semibold" href="#features">Features</a>
-            <a className="text-on-surface-variant hover:text-primary transition-colors duration-200 text-xs uppercase tracking-wider font-semibold" href="#methodology">Methodology</a>
-            <a className="text-on-surface-variant hover:text-primary transition-colors duration-200 text-xs uppercase tracking-wider font-semibold" href="#testimonials">Reviews</a>
-            <a className="text-on-surface-variant hover:text-primary transition-colors duration-200 text-xs uppercase tracking-wider font-semibold" href="#faq">FAQ</a>
+            <a className="text-primary font-extrabold border-b-2 border-primary py-2 text-xs uppercase tracking-wider" href="#features">Features</a>
+            <a className="text-[#3b3852] hover:text-primary transition-colors duration-200 text-xs uppercase tracking-wider font-bold" href="#methodology">Methodology</a>
+            <a className="text-[#3b3852] hover:text-primary transition-colors duration-200 text-xs uppercase tracking-wider font-bold" href="#testimonials">Reviews</a>
+            <a className="text-[#3b3852] hover:text-primary transition-colors duration-200 text-xs uppercase tracking-wider font-bold" href="#faq">FAQ</a>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {!user ? (
               <>
                 <button 
                   onClick={() => navigate('/login')}
-                  className="hidden sm:block text-primary font-bold text-xs uppercase tracking-wider hover:bg-surface-container-low px-4 py-2 rounded-xl transition-all duration-200"
+                  className="hidden sm:block text-primary font-bold text-xs uppercase tracking-wider hover:bg-surface-container-low px-4 py-2.5 rounded-xl transition-all"
                 >
                   Sign In
                 </button>
                 <button 
                   onClick={() => navigate('/register')}
-                  className="bg-primary text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl shadow-md hover:scale-95 active:scale-90 transition-transform duration-150"
+                  className="bg-primary hover:bg-primary-container text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl shadow-md hover:scale-95 transition-all"
                 >
                   Get Started
                 </button>
@@ -46,7 +51,7 @@ export default function LandingPage() {
             ) : (
               <button 
                 onClick={() => navigate('/dashboard')}
-                className="bg-primary text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl shadow-md hover:scale-95 active:scale-90 transition-transform duration-150"
+                className="bg-primary hover:bg-primary-container text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl shadow-md hover:scale-95 transition-all"
               >
                 Go to Dashboard
               </button>
@@ -57,193 +62,190 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="pt-20">
-        <section className="relative min-h-[80vh] flex items-center justify-center px-6 bg-gradient-to-tr from-primary/5 via-transparent to-primary/10 overflow-hidden py-12">
+        <section className="relative min-h-[85vh] flex items-center justify-center px-6 bg-gradient-to-tr from-primary-fixed/40 via-surface-container-low to-primary-fixed-dim/30 overflow-hidden py-16">
           <div className="max-w-7-xl mx-auto grid lg:grid-cols-2 gap-16 items-center z-10 w-full">
-            <div className="text-center lg:text-left motion-page">
-              <div className="inline-flex items-center gap-2 bg-primary-container/10 text-primary px-4 py-1.5 rounded-full mb-6">
-                <span className="material-symbols-outlined text-[18px] fill-current">auto_awesome</span>
-                <span className="text-[10px] uppercase tracking-widest font-bold">New: AI Study Planner 2.0</span>
+            <div className="text-center lg:text-left motion-page space-y-6">
+              <div className="inline-flex items-center gap-2 bg-primary-fixed text-primary px-4 py-1.5 rounded-full shadow-sm">
+                <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+                <span className="text-[10px] uppercase tracking-widest font-extrabold">New: Smart Study Planner</span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold leading-[1.1] mb-6 text-on-background">
+              <h1 className="text-4xl md:text-6xl font-black leading-[1.15] text-[#1b1b24] tracking-tight">
                 Study <span className="text-primary italic">Smarter</span>,<br />Stay Consistent.
               </h1>
-              <p className="text-lg text-on-surface-variant max-w-xl mb-10 mx-auto lg:mx-0">
-                Harness the power of AI-driven habit tracking, focused Pomodoro sessions, and deep analytics to master your academic journey without the burnout.
+              <p className="text-base md:text-lg text-[#3b3852] max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                Harness habit tracking, precision Pomodoro intervals, and academic planning to conquer coursework without the burnout.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
                 <button 
                   onClick={handleCTA}
-                  className="bg-primary text-white text-xs uppercase tracking-wider font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2"
+                  className="bg-primary hover:bg-primary-container text-white text-xs uppercase tracking-wider font-extrabold px-8 py-4 rounded-xl shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
                 >
                   Get Started Free
                   <span className="material-symbols-outlined text-sm">arrow_forward</span>
                 </button>
                 <button 
                   onClick={() => navigate(user ? '/dashboard' : '/login')}
-                  className="bg-surface-container text-primary text-xs uppercase tracking-wider font-bold px-8 py-4 rounded-xl hover:bg-surface-container-high transition-all duration-300"
+                  className="bg-white text-primary border border-primary/20 text-xs uppercase tracking-wider font-extrabold px-8 py-4 rounded-xl hover:bg-surface-container-low transition-all shadow-sm"
                 >
-                  View Dashboard
+                  Open Dashboard
                 </button>
               </div>
-              <div className="mt-12 flex items-center justify-center lg:justify-start gap-4">
+              <div className="pt-4 flex items-center justify-center lg:justify-start gap-4">
                 <div className="flex -space-x-3">
                   <div className="w-10 h-10 rounded-full border-2 border-white bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100')" }}></div>
                   <div className="w-10 h-10 rounded-full border-2 border-white bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100')" }}></div>
                   <div className="w-10 h-10 rounded-full border-2 border-white bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100')" }}></div>
                 </div>
-                <p className="text-sm text-on-surface-variant">
-                  Joined by <span className="font-bold text-primary">12,000+</span> scholars this month.
+                <p className="text-xs font-bold text-[#3b3852]">
+                  Joined by <span className="font-extrabold text-primary">12,000+</span> scholars this semester.
                 </p>
               </div>
             </div>
             <div className="relative flex justify-center">
-              <div className="relative z-10 rounded-[2rem] overflow-hidden border border-white/20 shadow-2xl max-w-lg">
-                <img className="w-full h-auto" src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=600" alt="Student Studying" />
+              <div className="relative z-10 rounded-[2rem] overflow-hidden border border-outline-variant/30 shadow-2xl max-w-lg bg-white">
+                <img className="w-full h-auto" src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=600" alt="Student Studying with StudySync" />
               </div>
-              <div className="absolute -top-6 -right-6 bg-white dark:bg-inverse-surface p-6 rounded-2xl shadow-xl border border-outline-variant/30 hidden md:block ambient-float">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="material-symbols-outlined text-emerald-600">check_circle</span>
-                  <span className="font-bold text-sm">Daily Goal Met!</span>
+              <div className="absolute -top-6 -right-6 bg-white p-5 rounded-2xl shadow-xl border border-outline-variant/30 hidden md:block ambient-float z-20">
+                <div className="flex items-center gap-3 mb-1.5">
+                  <span className="material-symbols-outlined text-tertiary text-xl font-bold">check_circle</span>
+                  <span className="font-bold text-sm text-[#1b1b24]">Daily Goal Met!</span>
                 </div>
-                <p className="text-xs text-on-surface-variant">4 hours of focused study logged.</p>
+                <p className="text-xs font-semibold text-[#5e5b79]">4 hours of focused study logged.</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Features Bento Grid */}
-        <section id="features" className="py-20 px-6 max-w-7-xl mx-auto w-full">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Precision Tools for Modern Scholars</h2>
-            <p className="text-base text-on-surface-variant max-w-2xl mx-auto">Everything you need to optimize your study routine, powered by behavioral science and artificial intelligence.</p>
+        <section id="features" className="py-20 px-6 max-w-7-xl mx-auto w-full space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-primary text-xs font-bold uppercase tracking-wider">
+              Productivity Engine
+            </div>
+            <h2 className="text-3xl font-extrabold text-[#1b1b24] tracking-tight">Precision Tools for Modern Scholars</h2>
+            <p className="text-sm font-medium text-[#4b4863]">
+              Everything you need to optimize your daily routine, powered by cognitive science and behavioral habit loops.
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
             {/* Habit Tracker */}
-            <div className="md:col-span-3 lg:col-span-2 bg-white p-8 rounded-[20px] border border-outline-variant/30 shadow-sm hover:scale-[1.02] transition-transform duration-300">
-              <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
+            <div className="md:col-span-3 lg:col-span-2 bg-white p-7 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
+              <div className="w-12 h-12 bg-primary-fixed text-primary rounded-2xl flex items-center justify-center">
                 <span className="material-symbols-outlined text-2xl">calendar_today</span>
               </div>
-              <h3 className="text-lg font-bold mb-3">Habit Tracker</h3>
-              <p className="text-sm text-on-surface-variant mb-6">Build unstoppable momentum with streak tracking and visual progress heatmaps.</p>
-              <div className="h-12 bg-surface-container rounded-lg w-full flex items-center px-4 gap-2 justify-center">
+              <h3 className="text-lg font-bold text-[#1b1b24]">Habit Tracker</h3>
+              <p className="text-xs text-[#5e5b79] leading-relaxed">Build unbreakable streaks with 15-week completion heatmaps and category tags.</p>
+              <div className="h-10 bg-surface-container rounded-xl w-full flex items-center px-4 gap-2 justify-center">
                 <div className="w-3 h-3 rounded-full bg-primary"></div>
                 <div className="w-3 h-3 rounded-full bg-primary"></div>
-                <div className="w-3 h-3 rounded-full bg-primary/20"></div>
+                <div className="w-3 h-3 rounded-full bg-primary/25"></div>
                 <div className="w-3 h-3 rounded-full bg-primary"></div>
                 <div className="w-3 h-3 rounded-full bg-primary"></div>
               </div>
             </div>
+
             {/* Pomodoro */}
-            <div className="md:col-span-3 lg:col-span-2 bg-white p-8 rounded-[20px] border border-outline-variant/30 shadow-sm hover:scale-[1.02] transition-transform duration-300">
-              <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
+            <div className="md:col-span-3 lg:col-span-2 bg-white p-7 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
+              <div className="w-12 h-12 bg-primary-fixed text-primary rounded-2xl flex items-center justify-center">
                 <span className="material-symbols-outlined text-2xl">timer</span>
               </div>
-              <h3 className="text-lg font-bold mb-3">Pomodoro Pro</h3>
-              <p className="text-sm text-on-surface-variant mb-6">Deep focus sessions with integrated break management and ambient soundscapes.</p>
-              <div className="text-center">
-                <span className="text-3xl font-bold text-primary">25:00</span>
+              <h3 className="text-lg font-bold text-[#1b1b24]">Pomodoro Focus Timer</h3>
+              <p className="text-xs text-[#5e5b79] leading-relaxed">Deep focus cycles with customizable break intervals, audio chimes, and XP rewards.</p>
+              <div className="text-center py-1 bg-surface-container rounded-xl">
+                <span className="text-2xl font-black text-primary">25:00</span>
               </div>
             </div>
-            {/* AI Insights */}
-            <div className="md:col-span-6 lg:col-span-2 bg-white p-8 rounded-[20px] border border-outline-variant/30 shadow-sm hover:scale-[1.02] transition-transform duration-300 border-l-4 border-l-emerald-500">
-              <div className="w-12 h-12 bg-emerald-50 text-emerald-700 rounded-xl flex items-center justify-center mb-6">
+
+            {/* Smart Plan */}
+            <div className="md:col-span-6 lg:col-span-2 bg-white p-7 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4 border-l-4 border-l-primary">
+              <div className="w-12 h-12 bg-primary-fixed text-primary rounded-2xl flex items-center justify-center">
                 <span className="material-symbols-outlined text-2xl">auto_awesome</span>
               </div>
-              <h3 className="text-lg font-bold mb-3">AI Insights</h3>
-              <p className="text-sm text-on-surface-variant mb-6">Our AI analyzes your performance to predict burnout and suggest optimal study times.</p>
-              <div className="text-xs font-semibold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full w-fit">Smart Suggestion Active</div>
-            </div>
-            {/* Analytics */}
-            <div className="md:col-span-4 bg-white p-8 rounded-[20px] border border-outline-variant/30 shadow-sm hover:scale-[1.02] transition-transform duration-300 flex flex-col md:flex-row gap-8 items-center">
-              <div className="flex-1">
-                <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
-                  <span className="material-symbols-outlined text-2xl">insights</span>
-                </div>
-                <h3 className="text-lg font-bold mb-3">Deep Analytics</h3>
-                <p className="text-sm text-on-surface-variant">Visualize your growth with granular data on focus intensity and subject mastery.</p>
+              <h3 className="text-lg font-bold text-[#1b1b24]">StudySync Smart Plan</h3>
+              <p className="text-xs text-[#5e5b79] leading-relaxed">
+                "I have 30 minutes. What should I study?" Instant prioritization based on energy and deadlines.
+              </p>
+              <div className="text-[10px] font-extrabold text-primary bg-primary-fixed/40 px-3 py-1 rounded-full w-fit uppercase">
+                Instant Scheduling
               </div>
-              <div className="w-full md:w-64 h-32 bg-surface-container rounded-xl overflow-hidden flex items-end justify-between px-4 pb-4 gap-2">
-                <div className="w-6 bg-primary h-[40%] rounded-t"></div>
-                <div className="w-6 bg-primary h-[65%] rounded-t"></div>
-                <div className="w-6 bg-primary h-[50%] rounded-t"></div>
-                <div className="w-6 bg-primary h-[90%] rounded-t"></div>
-                <div className="w-6 bg-primary h-[75%] rounded-t"></div>
-              </div>
-            </div>
-            {/* Goal Planner */}
-            <div className="md:col-span-2 bg-white p-8 rounded-[20px] border border-outline-variant/30 shadow-sm hover:scale-[1.02] transition-transform duration-300">
-              <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
-                <span className="material-symbols-outlined text-2xl">target</span>
-              </div>
-              <h3 className="text-lg font-bold mb-3">Goal Planner</h3>
-              <p className="text-sm text-on-surface-variant">Break large projects into manageable milestones with automatic deadline tracking.</p>
             </div>
           </div>
         </section>
 
         {/* Methodology */}
-        <section id="methodology" className="bg-surface-container py-20 px-6">
+        <section id="methodology" className="bg-surface-container py-20 px-6 border-y border-outline-variant/20">
           <div className="max-w-7-xl mx-auto grid md:grid-cols-2 gap-12 items-center w-full">
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Scientifically Backed Academic System</h2>
-              <p className="text-base text-on-surface-variant mb-6 leading-relaxed">
-                StudySync blends the Pomodoro Technique, Habit Building Theories from James Clear's Atomic Habits, and Spaced Repetition frameworks to maximize focus retention and consistency.
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-primary text-xs font-bold uppercase tracking-wider">
+                Evidence-Based
+              </div>
+              <h2 className="text-3xl font-extrabold text-[#1b1b24] tracking-tight">Scientifically Backed Academic System</h2>
+              <p className="text-sm text-[#4b4863] leading-relaxed">
+                StudySync synthesizes the Pomodoro Technique, James Clear's habit friction models, and spaced repetition intervals to maximize long-term retention.
               </p>
-              <ul className="space-y-4">
+              <ul className="space-y-3 pt-2">
                 <li className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-primary">check_circle</span>
-                  <span className="text-sm font-semibold">Micro-dosing focus: 25-minute Pomodoro intervals.</span>
+                  <span className="material-symbols-outlined text-primary text-lg">check_circle</span>
+                  <span className="text-xs font-bold text-[#1b1b24]">Precision sprints: 25-minute Pomodoro intervals.</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-primary">check_circle</span>
-                  <span className="text-sm font-semibold">Visual Heatmaps to trigger dopamine for consistency.</span>
+                  <span className="material-symbols-outlined text-primary text-lg">check_circle</span>
+                  <span className="text-xs font-bold text-[#1b1b24]">Visual heatmaps to trigger daily dopamine momentum.</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-primary">check_circle</span>
-                  <span className="text-sm font-semibold">Gamification with XP points, levels, and badges.</span>
+                  <span className="material-symbols-outlined text-primary text-lg">check_circle</span>
+                  <span className="text-xs font-bold text-[#1b1b24]">Gamification with scholar XP levels and unlockable badges.</span>
                 </li>
               </ul>
             </div>
-            <div className="rounded-2xl overflow-hidden shadow-lg border border-outline-variant/20">
-              <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=600" alt="Methodology" />
+            <div className="rounded-2xl overflow-hidden shadow-lg border border-outline-variant/30">
+              <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=600" alt="StudySync Methodology" />
             </div>
           </div>
         </section>
 
         {/* Testimonials */}
-        <section id="testimonials" className="py-20 px-6 max-w-7-xl mx-auto w-full">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Loved by Students Worldwide</h2>
-            <p className="text-base text-on-surface-variant">Read stories of consistency and academic excellence.</p>
+        <section id="testimonials" className="py-20 px-6 max-w-7-xl mx-auto w-full space-y-12">
+          <div className="text-center max-w-xl mx-auto space-y-3">
+            <h2 className="text-3xl font-extrabold text-[#1b1b24] tracking-tight">Loved by Students Worldwide</h2>
+            <p className="text-sm font-medium text-[#5e5b79]">Read verified reviews from students elevating their academic grades.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30">
-              <p className="italic text-on-surface-variant mb-6">"My GPA increased from 3.1 to 3.8 after using StudySync. The streak tracker keeps me accountable every single day."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-200"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30 space-y-4">
+              <p className="italic text-xs text-[#3b3852] leading-relaxed">
+                "My GPA increased from 3.1 to 3.8 after using StudySync. The streak tracker keeps me accountable every single day."
+              </p>
+              <div className="flex items-center gap-3 pt-2 border-t border-outline-variant/20">
+                <div className="w-9 h-9 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center text-xs">EW</div>
                 <div>
-                  <h4 className="font-bold text-sm">Emily Watson</h4>
-                  <p className="text-xs text-on-surface-variant">Medical Student, Stanford</p>
+                  <h4 className="font-bold text-xs text-[#1b1b24]">Emily Watson</h4>
+                  <p className="text-[10px] text-[#5e5b79] font-medium">Medical Scholar</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30">
-              <p className="italic text-on-surface-variant mb-6">"The AI Study Tips are scarily accurate. It recommended I study Calculus at 9 AM instead of late nights, and it works!"</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-200"></div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30 space-y-4">
+              <p className="italic text-xs text-[#3b3852] leading-relaxed">
+                "The Smart Plan feature is a lifesaver. Whenever I have only 30 or 45 minutes between classes, it tells me exactly what to study."
+              </p>
+              <div className="flex items-center gap-3 pt-2 border-t border-outline-variant/20">
+                <div className="w-9 h-9 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center text-xs">RK</div>
                 <div>
-                  <h4 className="font-bold text-sm">Ryan Kim</h4>
-                  <p className="text-xs text-on-surface-variant">Computer Science, MIT</p>
+                  <h4 className="font-bold text-xs text-[#1b1b24]">Ryan Kim</h4>
+                  <p className="text-[10px] text-[#5e5b79] font-medium">Computer Science</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30">
-              <p className="italic text-on-surface-variant mb-6">"I complete daily writing tasks with ease. The gamified XP and badges make studying feel like an actual game."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-200"></div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30 space-y-4">
+              <p className="italic text-xs text-[#3b3852] leading-relaxed">
+                "I complete daily writing tasks with ease. The gamified XP and badges make studying feel rewarding rather than exhausting."
+              </p>
+              <div className="flex items-center gap-3 pt-2 border-t border-outline-variant/20">
+                <div className="w-9 h-9 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center text-xs">MA</div>
                 <div>
-                  <h4 className="font-bold text-sm">Marcus Aurel</h4>
-                  <p className="text-xs text-on-surface-variant">Literature Major, Oxford</p>
+                  <h4 className="font-bold text-xs text-[#1b1b24]">Marcus Aurel</h4>
+                  <p className="text-[10px] text-[#5e5b79] font-medium">Engineering Student</p>
                 </div>
               </div>
             </div>
@@ -251,21 +253,21 @@ export default function LandingPage() {
         </section>
 
         {/* FAQ */}
-        <section id="faq" className="bg-surface-container py-20 px-6">
-          <div className="max-w-3xl mx-auto w-full">
-            <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
-            <div className="space-y-6">
-              <div className="bg-white p-6 rounded-xl border border-outline-variant/30">
-                <h4 className="font-bold mb-2">Is StudySync free to use?</h4>
-                <p className="text-sm text-on-surface-variant">Yes! StudySync is completely free to use locally. We store all data in your browser's local storage so you can access it offline.</p>
+        <section id="faq" className="bg-surface-container py-20 px-6 border-t border-outline-variant/20">
+          <div className="max-w-3xl mx-auto w-full space-y-8">
+            <h2 className="text-3xl font-extrabold text-[#1b1b24] tracking-tight text-center">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              <div className="bg-white p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-1.5">
+                <h4 className="font-bold text-sm text-[#1b1b24]">Is StudySync free to use?</h4>
+                <p className="text-xs text-[#4b4863] leading-relaxed">Yes! StudySync is completely free to use. All progress, tasks, and streaks are safely saved in local storage.</p>
               </div>
-              <div className="bg-white p-6 rounded-xl border border-outline-variant/30">
-                <h4 className="font-bold mb-2">How does the AI insights feature work?</h4>
-                <p className="text-sm text-on-surface-variant">Our built-in logic reviews your completed tasks, daily habits, and Pomodoro logs to generate optimized suggestions tailored to your schedule.</p>
+              <div className="bg-white p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-1.5">
+                <h4 className="font-bold text-sm text-[#1b1b24]">How does the StudySync Smart Plan work?</h4>
+                <p className="text-xs text-[#4b4863] leading-relaxed">It calculates task priority scores against deadlines, estimated durations, and your current energy level to allocate exact focus blocks and rest intervals.</p>
               </div>
-              <div className="bg-white p-6 rounded-xl border border-outline-variant/30">
-                <h4 className="font-bold mb-2">Can I sync my data across devices?</h4>
-                <p className="text-sm text-on-surface-variant">Currently, StudySync saves data locally. You can export your profile details and import them into another device via the settings panel.</p>
+              <div className="bg-white p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-1.5">
+                <h4 className="font-bold text-sm text-[#1b1b24]">Can I customize my Pomodoro and break durations?</h4>
+                <p className="text-xs text-[#4b4863] leading-relaxed">Yes, you can choose from presets (15m, 25m, 30m, 45m, 60m) or custom durations with audio chimes directly on the Focus page.</p>
               </div>
             </div>
           </div>
@@ -273,10 +275,13 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-outline-variant/30 py-12 px-6">
-        <div className="max-w-7-xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-xl font-bold text-primary">StudySync</div>
-          <p className="text-xs text-on-surface-variant">© {new Date().getFullYear()} StudySync. Crafted for modern scholars.</p>
+      <footer className="bg-white border-t border-outline-variant/30 py-8 px-6">
+        <div className="max-w-7-xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-xl">school</span>
+            <span className="text-lg font-extrabold text-primary">StudySync</span>
+          </div>
+          <p className="text-xs text-[#5e5b79] font-medium">© {new Date().getFullYear()} StudySync. Crafted for modern scholars.</p>
         </div>
       </footer>
     </div>
