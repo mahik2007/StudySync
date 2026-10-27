@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStudy } from '../context/useStudy';
+import Logo from '../components/Logo';
 
 export default function SmartPlan() {
   const { tasks, addTask, setActiveFocusTask } = useStudy();
@@ -162,10 +163,15 @@ export default function SmartPlan() {
             <span className="material-symbols-outlined text-sm">auto_awesome</span>
             Intelligent Schedule Builder
           </div>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#1b1b24] dark:text-white tracking-tight">
-            StudySync Smart Plan
-          </h2>
-          <p className="text-sm font-medium text-[#4b4863] dark:text-[#bbb8d0]">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 flex items-center justify-center p-1 shadow-sm shrink-0">
+              <Logo className="w-full h-full" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#1b1b24] dark:text-white tracking-tight">
+              StudySync Smart Plan
+            </h2>
+          </div>
+          <p className="text-sm font-medium text-[#4b4863] dark:text-[#bbb8d0] mt-1">
             Turn limited available time into an achievable, science-backed study schedule.
           </p>
         </div>

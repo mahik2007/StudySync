@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useStudy } from '../context/useStudy';
+import Logo from '../components/Logo';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -51,14 +52,19 @@ export default function Register() {
         <div className="relative z-10 w-full max-w-lg aspect-square">
           {/* Top Floating Card */}
           <div className="absolute top-0 right-0 w-48 h-64 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 flex flex-col items-start gap-4 shadow-2xl">
-            <span className="material-symbols-outlined text-white text-4xl">auto_awesome</span>
+            <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md p-2 flex items-center justify-center shadow-inner">
+              <Logo className="w-full h-full" />
+            </div>
             <div className="h-2 w-1/2 bg-white/30 rounded-full"></div>
             <div className="h-2 w-full bg-white/25 rounded-full"></div>
             <div className="h-2 w-3/4 bg-white/20 rounded-full"></div>
           </div>
           {/* Center Brand */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-gradient-to-br from-white/30 to-white/5 border border-white/20 backdrop-blur-2xl flex items-center justify-center shadow-2xl">
-            <div className="text-center">
+            <div className="text-center flex flex-col items-center">
+              <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md p-3 mb-3 flex items-center justify-center shadow-inner">
+                <Logo className="w-full h-full" />
+              </div>
               <h1 className="text-4xl font-bold text-white tracking-tight">StudySync</h1>
               <p className="text-white/80 mt-2">Elevate your academic workflow</p>
             </div>
@@ -81,7 +87,10 @@ export default function Register() {
 
       {/* Right Side: Form */}
       <section className="w-full md:w-1/2 h-full flex items-center justify-center p-6 relative overflow-y-auto">
-        <div className="absolute top-6 left-6 md:hidden">
+        <div className="absolute top-6 left-6 md:hidden flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center p-1">
+            <Logo className="w-full h-full" />
+          </div>
           <span className="text-xl font-bold text-primary tracking-tight">StudySync</span>
         </div>
         <div className="w-full max-w-[400px] space-y-6 my-8">

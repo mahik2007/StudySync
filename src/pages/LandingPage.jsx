@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useStudy } from '../context/useStudy';
+import Logo from '../components/Logo';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -18,9 +19,9 @@ export default function LandingPage() {
       {/* Top Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-surface-container/90 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm h-20">
         <div className="flex justify-between items-center w-full px-6 max-w-7-xl mx-auto h-full">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/25">
-              <span className="material-symbols-outlined text-2xl">school</span>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 flex items-center justify-center p-1.5 shadow-sm">
+              <Logo className="w-full h-full" />
             </div>
             <div className="text-2xl font-extrabold text-primary tracking-tight">
               StudySync
@@ -277,8 +278,8 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-white border-t border-outline-variant/30 py-8 px-6">
         <div className="max-w-7-xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-xl">school</span>
+          <div className="flex items-center gap-2.5">
+            <Logo className="w-6 h-6" />
             <span className="text-lg font-extrabold text-primary">StudySync</span>
           </div>
           <p className="text-xs text-[#5e5b79] font-medium">© {new Date().getFullYear()} StudySync. Crafted for modern scholars.</p>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useStudy } from '../context/useStudy';
+import Logo from './Logo';
 
 export const Layout = ({ children }) => {
   const { user, logout, addTask, theme, setTheme } = useStudy();
@@ -43,9 +44,9 @@ export const Layout = ({ children }) => {
       {/* Sidebar Navigation Shell */}
       <aside className="hidden md:flex flex-col h-screen fixed left-0 top-0 py-6 bg-surface-container border-r border-outline-variant/30 w-72 z-50">
         <div className="px-6 mb-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/25">
-              <span className="material-symbols-outlined text-2xl">school</span>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 flex items-center justify-center p-1.5 shadow-sm">
+              <Logo className="w-full h-full" />
             </div>
             <div>
               <h1 className="font-display-lg text-2xl font-extrabold text-primary tracking-tight">StudySync</h1>
@@ -109,10 +110,15 @@ export const Layout = ({ children }) => {
       <div className="flex-1 md:ml-72 min-h-screen pb-20 md:pb-6 flex flex-col">
         {/* Header */}
         <header className="h-20 px-6 md:px-8 flex justify-between items-center bg-white/90 dark:bg-surface/90 backdrop-blur-xl sticky top-0 z-40 border-b border-outline-variant/30">
-          <div>
-            <h2 className="font-headline-lg text-xl md:text-2xl text-primary font-semibold">
-              Welcome, {user.name}
-            </h2>
+          <div className="flex items-center gap-3">
+            <div className="md:hidden w-9 h-9 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 flex items-center justify-center p-1.5 shadow-sm">
+              <Logo className="w-full h-full" />
+            </div>
+            <div>
+              <h2 className="font-headline-lg text-lg md:text-2xl text-primary font-semibold">
+                Welcome, {user.name}
+              </h2>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <button
