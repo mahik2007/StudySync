@@ -98,7 +98,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="alex@rivers.com"
-                className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-on-background"
+                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
               />
             </div>
 
@@ -113,7 +113,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-on-background"
+                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
               />
             </div>
 
@@ -144,7 +144,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="w-full py-3 bg-white border border-outline-variant/50 flex items-center justify-center gap-3 rounded-xl text-sm font-semibold text-on-background hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]"
+                className="w-full py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 flex items-center justify-center gap-3 rounded-xl text-sm font-semibold text-[#1b1b24] dark:text-white hover:bg-surface-container-low transition-all duration-200 active:scale-[0.98]"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>

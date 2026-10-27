@@ -105,7 +105,7 @@ export default function Register() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Alex Rivers"
-                className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-on-background"
+                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
               />
             </div>
 
@@ -117,7 +117,7 @@ export default function Register() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="alex@rivers.com"
-                className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-on-background"
+                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
               />
             </div>
 
@@ -129,7 +129,7 @@ export default function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Min. 6 characters"
-                className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-on-background"
+                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
               />
             </div>
 
@@ -141,7 +141,7 @@ export default function Register() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 bg-white border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-on-background"
+                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
               />
             </div>
 
