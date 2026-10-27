@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useStudy } from '../context/useStudy';
 
 export const Layout = ({ children }) => {
-  const { user, logout, addTask } = useStudy();
+  const { user, logout, addTask, theme, setTheme } = useStudy();
   const navigate = useNavigate();
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
@@ -125,19 +125,16 @@ export const Layout = ({ children }) => {
             </button>
             <button
               onClick={() => {
-                const nextTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-                if (nextTheme === 'dark') {
-                  document.documentElement.classList.add('dark');
-                  localStorage.setItem('studysync_theme', 'dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                  localStorage.setItem('studysync_theme', 'light');
-                }
+                const next = theme === 'dark' ? 'light' : 'dark';
+                setTheme(next);
               }}
-              className="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full cursor-pointer transition-colors"
-              title="Toggle Dark/Light Mode"
+              className="p-2 text-[#3b3852] dark:text-[#f4f2fc] hover:bg-surface-container-low rounded-full cursor-pointer transition-colors"
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              aria-label="Toggle theme mode"
             >
-              <span className="material-symbols-outlined text-xl">dark_mode</span>
+              <span className="material-symbols-outlined text-xl">
+                {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+              </span>
             </button>
             <div className="relative">
               <span className="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full cursor-pointer transition-colors">
