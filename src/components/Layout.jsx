@@ -23,6 +23,7 @@ export const Layout = ({ children }) => {
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
+    { name: 'Smart Plan', path: '/smart-plan', icon: 'auto_awesome' },
     { name: 'Habit Tracker', path: '/habits', icon: 'calendar_today' },
     { name: 'Task Manager', path: '/tasks', icon: 'format_list_bulleted' },
     { name: 'Pomodoro', path: '/pomodoro', icon: 'timer' },
@@ -41,57 +42,65 @@ export const Layout = ({ children }) => {
     <div className="min-h-screen bg-background text-on-background font-sans flex flex-col md:flex-row">
       {/* Sidebar Navigation Shell */}
       <aside className="hidden md:flex flex-col h-screen fixed left-0 top-0 py-6 bg-surface-container dark:bg-inverse-surface border-r border-outline-variant/30 w-72 z-50">
-        <div className="px-6 mb-8">
-          <h1 className="font-display-lg text-3xl font-bold text-primary dark:text-inverse-primary tracking-tight">StudySync</h1>
+        <div className="px-6 mb-6">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/25">
+              <span className="material-symbols-outlined text-2xl">school</span>
+            </div>
+            <div>
+              <h1 className="font-display-lg text-2xl font-extrabold text-primary tracking-tight">StudySync</h1>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-[#5e5b79] dark:text-[#a5a2bf]">Smart Academic Hub</p>
+            </div>
+          </div>
         </div>
 
         {/* User Stats Card */}
-        <div className="px-4 mb-6 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary/20 bg-primary-fixed flex items-center justify-center font-bold text-primary">
+        <div className="mx-4 mb-5 p-3 rounded-2xl bg-white/80 dark:bg-surface-container-high/60 border border-outline-variant/25 shadow-sm flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-full border-2 border-primary/25 bg-primary-fixed flex items-center justify-center font-bold text-primary text-sm shadow-inner shrink-0">
             {user.name.split(' ').map(n => n[0]).join('')}
           </div>
-          <div>
-            <p className="font-title-md text-base text-primary font-bold">{user.name}</p>
-            <p className="font-body-sm text-xs text-on-surface-variant">Level {user.level} Scholar ({user.xp} XP)</p>
+          <div className="min-w-0 flex-1">
+            <p className="font-bold text-sm text-[#1b1b24] dark:text-white truncate">{user.name}</p>
+            <p className="text-xs font-medium text-[#5e5b79] dark:text-[#b4b1ca]">Level {user.level} Scholar • <span className="text-primary dark:text-primary-fixed font-bold">{user.xp} XP</span></p>
           </div>
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 overflow-y-auto space-y-1">
+        <nav className="flex-1 overflow-y-auto px-2 space-y-1">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `rounded-xl mx-4 flex items-center gap-3 px-4 py-3 transition-all duration-200 ${
+                `rounded-xl mx-2 flex items-center gap-3 px-3.5 py-2.5 transition-all duration-200 text-sm font-semibold ${
                   isActive
-                    ? 'bg-primary text-white dark:bg-primary-container dark:text-on-primary-container shadow-md translate-x-1'
-                    : 'text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high'
+                    ? 'bg-primary text-white shadow-md shadow-primary/25 translate-x-1'
+                    : 'text-[#3c3954] dark:text-[#d3d0e8] hover:text-primary dark:hover:text-white hover:bg-surface-container-high/70'
                 }`
               }
             >
-              <span className="material-symbols-outlined">{item.icon}</span>
-              <span className="font-body-sm text-sm font-medium">{item.name}</span>
+              <span className="material-symbols-outlined text-xl">{item.icon}</span>
+              <span className="truncate">{item.name}</span>
             </NavLink>
           ))}
         </nav>
 
-        {/* Start Focus Session Button */}
-        <div className="px-4 mt-auto">
+        {/* Start Focus Session Button & Logout */}
+        <div className="px-4 pt-3 mt-auto border-t border-outline-variant/20">
           <button
             onClick={() => navigate('/pomodoro')}
-            className="w-full bg-primary-container text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 mb-4 hover:scale-95 transition-transform"
+            className="w-full bg-primary hover:bg-primary-container text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 mb-2 shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
           >
-            <span className="material-symbols-outlined">bolt</span>
+            <span className="material-symbols-outlined text-lg">bolt</span>
             Start Focus Session
           </button>
           
           <button
             onClick={logout}
-            className="w-full text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left"
+            className="w-full text-[#524f6d] dark:text-[#c4c1dc] hover:text-error hover:bg-error/10 flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 text-left font-semibold text-xs"
           >
-            <span className="material-symbols-outlined">logout</span>
-            <span className="font-body-sm text-sm">Logout</span>
+            <span className="material-symbols-outlined text-lg">logout</span>
+            <span>Sign Out</span>
           </button>
         </div>
       </aside>
@@ -154,53 +163,54 @@ export const Layout = ({ children }) => {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/90 dark:bg-inverse-surface/90 backdrop-blur-md flex justify-around items-center px-4 z-50 border-t border-outline-variant/20">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-surface-container/95 backdrop-blur-md flex justify-around items-center px-4 z-50 border-t border-outline-variant/30 shadow-lg">
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 ${isActive ? 'text-primary' : 'text-on-surface-variant'}`
+            `flex flex-col items-center gap-1 ${isActive ? 'text-primary font-bold' : 'text-[#4b4863] dark:text-[#c4c1dc]'}`
           }
         >
-          <span className="material-symbols-outlined">dashboard</span>
-          <span className="font-label-caps text-[9px]">Home</span>
+          <span className="material-symbols-outlined text-xl">dashboard</span>
+          <span className="text-[10px] font-semibold">Home</span>
         </NavLink>
         
         <NavLink
-          to="/pomodoro"
+          to="/smart-plan"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 ${isActive ? 'text-primary' : 'text-on-surface-variant'}`
+            `flex flex-col items-center gap-1 ${isActive ? 'text-primary font-bold' : 'text-[#4b4863] dark:text-[#c4c1dc]'}`
           }
         >
-          <span className="material-symbols-outlined">timer</span>
-          <span className="font-label-caps text-[9px]">Focus</span>
+          <span className="material-symbols-outlined text-xl">auto_awesome</span>
+          <span className="text-[10px] font-semibold">Plan</span>
         </NavLink>
         
         {/* Quick Add Action Button */}
         <button
           onClick={() => setQuickAddOpen(true)}
-          className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center -translate-y-4 shadow-lg active:scale-90 transition-transform"
+          className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center -translate-y-4 shadow-lg shadow-primary/30 active:scale-90 transition-transform"
+          aria-label="Quick Add Task"
         >
-          <span className="material-symbols-outlined">add</span>
+          <span className="material-symbols-outlined text-2xl">add</span>
         </button>
 
         <NavLink
-          to="/analytics"
+          to="/pomodoro"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 ${isActive ? 'text-primary' : 'text-on-surface-variant'}`
+            `flex flex-col items-center gap-1 ${isActive ? 'text-primary font-bold' : 'text-[#4b4863] dark:text-[#c4c1dc]'}`
           }
         >
-          <span className="material-symbols-outlined">insights</span>
-          <span className="font-label-caps text-[9px]">Stats</span>
+          <span className="material-symbols-outlined text-xl">timer</span>
+          <span className="text-[10px] font-semibold">Focus</span>
         </NavLink>
 
         <NavLink
-          to="/settings"
+          to="/tasks"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 ${isActive ? 'text-primary' : 'text-on-surface-variant'}`
+            `flex flex-col items-center gap-1 ${isActive ? 'text-primary font-bold' : 'text-[#4b4863] dark:text-[#c4c1dc]'}`
           }
         >
-          <span className="material-symbols-outlined">person</span>
-          <span className="font-label-caps text-[9px]">Profile</span>
+          <span className="material-symbols-outlined text-xl">format_list_bulleted</span>
+          <span className="text-[10px] font-semibold">Tasks</span>
         </NavLink>
       </nav>
 

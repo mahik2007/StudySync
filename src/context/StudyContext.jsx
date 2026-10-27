@@ -255,18 +255,28 @@ export const StudyProvider = ({ children }) => {
     }));
   };
 
+  const [activeFocusTask, setActiveFocusTask] = useState(() => readStorage('studysync_active_focus_task', null));
+
+  useEffect(() => {
+    localStorage.setItem('studysync_active_focus_task', JSON.stringify(activeFocusTask));
+  }, [activeFocusTask]);
+
   // Tasks Operations
-  const addTask = (title, priority, subject, deadline) => {
+  const addTask = (title, priority = 'medium', subject = 'General', deadline = null, estimatedDuration = 25) => {
+    const finalDeadline = deadline || new Date().toISOString().split('T')[0];
     const newTask = {
       id: Date.now().toString(),
       title,
       priority,
       subject,
-      deadline,
-      completed: false
+      deadline: finalDeadline,
+      estimatedDuration: Number(estimatedDuration) || 25,
+      completed: false,
+      createdAt: new Date().toISOString()
     };
     setTasks(prev => [newTask, ...prev]);
     addXp(10);
+    return newTask;
   };
 
   const editTask = (id, updatedTask) => {
@@ -394,7 +404,9 @@ export const StudyProvider = ({ children }) => {
       deleteGoal,
       toggleGoal,
       addPomodoroSession,
-      updateProfile
+      updateProfile,
+      activeFocusTask,
+      setActiveFocusTask
     }}>
       {children}
     </StudyContext.Provider>
