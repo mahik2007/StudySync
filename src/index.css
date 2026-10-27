@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #3525cd;
   --color-primary-container: #4f46e5;
@@ -60,24 +62,23 @@
     --color-surface-container-high: #eae6f4;
     --color-surface-container-low: #f8f5fd;
     --color-surface-variant: #e4e1ee;
-    --color-on-background: #1b1b24;
-    --color-on-surface: #1b1b24;
-    --color-on-surface-variant: #4b4863;
+    --color-on-background: #0f0d1a;
+    --color-on-surface: #0f0d1a;
+    --color-on-surface-variant: #3a3750;
     --color-outline-variant: #c7c4d8;
   }
 
   .dark {
-    /* Sleek, deep Indigo-tinted dark surface preserving original brand hues */
-    --color-background: #0f0e17;
-    --color-surface: #1a1926;
-    --color-surface-container: #222033;
-    --color-surface-container-high: #2d2a42;
-    --color-surface-container-low: #151421;
-    --color-surface-variant: #2d2a42;
-    --color-on-background: #f7f6fd;
-    --color-on-surface: #f7f6fd;
-    --color-on-surface-variant: #c6c3dc;
-    --color-outline-variant: #43405d;
+    --color-background: #0d0c15;
+    --color-surface: #171622;
+    --color-surface-container: #1e1d2c;
+    --color-surface-container-high: #272538;
+    --color-surface-container-low: #13121d;
+    --color-surface-variant: #272538;
+    --color-on-background: #fdfcff;
+    --color-on-surface: #fdfcff;
+    --color-on-surface-variant: #cfccdf;
+    --color-outline-variant: #3d3a54;
   }
 
   body {
@@ -124,7 +125,7 @@
 }
 
 .dark .glassmorphic {
-  background: rgba(26, 25, 38, 0.88);
+  background: rgba(23, 22, 34, 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.1);

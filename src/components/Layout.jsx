@@ -41,7 +41,7 @@ export const Layout = ({ children }) => {
   return (
     <div className="min-h-screen bg-background text-on-background font-sans flex flex-col md:flex-row">
       {/* Sidebar Navigation Shell */}
-      <aside className="hidden md:flex flex-col h-screen fixed left-0 top-0 py-6 bg-surface-container dark:bg-inverse-surface border-r border-outline-variant/30 w-72 z-50">
+      <aside className="hidden md:flex flex-col h-screen fixed left-0 top-0 py-6 bg-surface-container border-r border-outline-variant/30 w-72 z-50">
         <div className="px-6 mb-6">
           <div className="flex items-center gap-2.5">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/25">
@@ -49,19 +49,19 @@ export const Layout = ({ children }) => {
             </div>
             <div>
               <h1 className="font-display-lg text-2xl font-extrabold text-primary tracking-tight">StudySync</h1>
-              <p className="text-[10px] uppercase font-bold tracking-widest text-[#5e5b79] dark:text-[#a5a2bf]">Smart Academic Hub</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-[#4b4863] dark:text-[#a5a2bf]">Smart Academic Hub</p>
             </div>
           </div>
         </div>
 
         {/* User Stats Card */}
-        <div className="mx-4 mb-5 p-3 rounded-2xl bg-white/80 dark:bg-surface-container-high/60 border border-outline-variant/25 shadow-sm flex items-center gap-3.5">
+        <div className="mx-4 mb-5 p-3 rounded-2xl bg-white dark:bg-surface-container-high border border-outline-variant/30 shadow-sm flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-full border-2 border-primary/25 bg-primary-fixed flex items-center justify-center font-bold text-primary text-sm shadow-inner shrink-0">
             {user.name.split(' ').map(n => n[0]).join('')}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-bold text-sm text-[#1b1b24] dark:text-white truncate">{user.name}</p>
-            <p className="text-xs font-medium text-[#5e5b79] dark:text-[#b4b1ca]">Level {user.level} Scholar • <span className="text-primary dark:text-primary-fixed font-bold">{user.xp} XP</span></p>
+            <p className="font-bold text-sm text-[#0f0d1a] dark:text-white truncate">{user.name}</p>
+            <p className="text-xs font-semibold text-[#4b4863] dark:text-[#cfccdf]">Level {user.level} Scholar • <span className="text-primary dark:text-primary-fixed font-bold">{user.xp} XP</span></p>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ export const Layout = ({ children }) => {
                 `rounded-xl mx-2 flex items-center gap-3 px-3.5 py-2.5 transition-all duration-200 text-sm font-semibold ${
                   isActive
                     ? 'bg-primary text-white shadow-md shadow-primary/25 translate-x-1'
-                    : 'text-[#3c3954] dark:text-[#d3d0e8] hover:text-primary dark:hover:text-white hover:bg-surface-container-high/70'
+                    : 'text-[#2b2840] dark:text-[#e4e1f5] hover:text-primary dark:hover:text-white hover:bg-surface-container-high'
                 }`
               }
             >
@@ -97,7 +97,7 @@ export const Layout = ({ children }) => {
           
           <button
             onClick={logout}
-            className="w-full text-[#524f6d] dark:text-[#c4c1dc] hover:text-error hover:bg-error/10 flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 text-left font-semibold text-xs"
+            className="w-full text-[#4b4863] dark:text-[#cfccdf] hover:text-error hover:bg-error/10 flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 text-left font-semibold text-xs"
           >
             <span className="material-symbols-outlined text-lg">logout</span>
             <span>Sign Out</span>
@@ -108,7 +108,7 @@ export const Layout = ({ children }) => {
       {/* Main Content Area */}
       <div className="flex-1 md:ml-72 min-h-screen pb-20 md:pb-6 flex flex-col">
         {/* Header */}
-        <header className="h-20 px-6 md:px-8 flex justify-between items-center bg-white/80 dark:bg-inverse-surface/80 backdrop-blur-xl sticky top-0 z-40 border-b border-outline-variant/30">
+        <header className="h-20 px-6 md:px-8 flex justify-between items-center bg-white/90 dark:bg-surface/90 backdrop-blur-xl sticky top-0 z-40 border-b border-outline-variant/30">
           <div>
             <h2 className="font-headline-lg text-xl md:text-2xl text-primary font-semibold">
               Welcome, {user.name}
