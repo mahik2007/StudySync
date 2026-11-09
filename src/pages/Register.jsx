@@ -11,16 +11,18 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
+    setSuccessMsg('');
 
-    if (!name) {
+    if (!name.trim()) {
       setError('Full name is required.');
       return;
     }
-    if (!email) {
+    if (!email.trim()) {
       setError('Email address is required.');
       return;
     }
@@ -37,137 +39,161 @@ export default function Register() {
       return;
     }
 
-    const success = registerUser(name, email, password);
-    if (success) {
-      navigate('/dashboard');
+    const res = registerUser(name, email, password);
+    if (res.success) {
+      setSuccessMsg('Account created successfully! Redirecting to sign in...');
+      setTimeout(() => {
+        navigate('/login', { state: { registeredEmail: email.trim().toLowerCase() } });
+      }, 1200);
     } else {
-      setError('Registration failed.');
+      setError(res.error || 'Registration failed.');
     }
   };
 
   return (
-    <main className="w-full h-screen flex flex-col md:flex-row overflow-hidden bg-background text-on-background">
-      {/* Left Side: Graphic Panel */}
-      <section className="hidden md:flex md:w-1/2 relative bg-primary-container overflow-hidden items-center justify-center p-12">
-        <div className="relative z-10 w-full max-w-lg aspect-square">
-          {/* Top Floating Card */}
-          <div className="absolute top-0 right-0 w-48 h-64 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 flex flex-col items-start gap-4 shadow-2xl">
-            <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md p-2 flex items-center justify-center shadow-inner">
-              <Logo className="w-full h-full" />
-            </div>
-            <div className="h-2 w-1/2 bg-white/30 rounded-full"></div>
-            <div className="h-2 w-full bg-white/25 rounded-full"></div>
-            <div className="h-2 w-3/4 bg-white/20 rounded-full"></div>
+    <main className="w-full min-h-screen flex flex-col md:flex-row bg-surface text-content font-body antialiased">
+      {/* Left Column: Visual Brand */}
+      <section className="hidden md:flex md:w-1/2 bg-plum text-white relative flex-col justify-between p-10 lg:p-12">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center p-1.5 shadow-2xs">
+            <Logo className="w-full h-full" />
           </div>
-          {/* Center Brand */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-gradient-to-br from-white/30 to-white/5 border border-white/20 backdrop-blur-2xl flex items-center justify-center shadow-2xl">
-            <div className="text-center flex flex-col items-center">
-              <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md p-3 mb-3 flex items-center justify-center shadow-inner">
-                <Logo className="w-full h-full" />
-              </div>
-              <h1 className="text-4xl font-bold text-white tracking-tight">StudySync</h1>
-              <p className="text-white/80 mt-2">Elevate your academic workflow</p>
+          <span className="font-heading text-lg font-bold text-white tracking-tight">StudySync</span>
+        </div>
+
+        <div className="max-w-md space-y-6">
+          <span className="text-[10px] uppercase font-bold tracking-widest text-violet bg-white/10 px-2.5 py-1 rounded-md">
+            Academic Growth
+          </span>
+          <h1 className="font-heading text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+            Start building your focused study routine today.
+          </h1>
+          <p className="text-xs lg:text-sm text-lavender/80 leading-relaxed">
+            Gain immediate access to custom timetable generation, habit consistency heatmaps, and streak tracking.
+          </p>
+
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center gap-2 text-xs text-lavender/90">
+              <span className="material-symbols-outlined text-sm text-success">check_circle</span>
+              <span>Unlimited habit and task management</span>
             </div>
-          </div>
-          {/* Bottom Floating Badge */}
-          <div className="absolute bottom-10 left-0 w-56 h-32 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 flex items-center gap-4 shadow-2xl">
-            <div className="w-12 h-12 rounded-full bg-emerald-400/25 flex items-center justify-center">
-              <span className="material-symbols-outlined text-emerald-400">check_circle</span>
+            <div className="flex items-center gap-2 text-xs text-lavender/90">
+              <span className="material-symbols-outlined text-sm text-success">check_circle</span>
+              <span>Intelligent 30-min to 180-min session planner</span>
             </div>
-            <div>
-              <div className="h-2 w-20 bg-white/30 rounded-full mb-2"></div>
-              <div className="h-2 w-12 bg-white/25 rounded-full"></div>
+            <div className="flex items-center gap-2 text-xs text-lavender/90">
+              <span className="material-symbols-outlined text-sm text-success">check_circle</span>
+              <span>Distraction-free customizable Pomodoro timer</span>
             </div>
           </div>
         </div>
-        <div className="absolute bottom-6 left-6 z-20">
-          <p className="text-xs uppercase tracking-widest text-white/60 font-bold">Trusted by 2M+ Students</p>
+
+        <div className="text-[11px] text-lavender/60">
+          © {new Date().getFullYear()} StudySync • Smart Study Tracker
         </div>
       </section>
 
-      {/* Right Side: Form */}
-      <section className="w-full md:w-1/2 h-full flex items-center justify-center p-6 relative overflow-y-auto">
-        <div className="absolute top-6 left-6 md:hidden flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center p-1">
-            <Logo className="w-full h-full" />
+      {/* Right Column: Register Form */}
+      <section className="w-full md:w-1/2 min-h-screen flex items-center justify-center p-6 md:p-10 overflow-y-auto">
+        <div className="w-full max-w-sm space-y-5 my-6">
+          <div className="flex md:hidden items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-lavender dark:bg-purple/20 border border-purple/20 flex items-center justify-center p-1">
+              <Logo className="w-full h-full" />
+            </div>
+            <span className="font-heading text-base font-bold text-content">StudySync</span>
           </div>
-          <span className="text-xl font-bold text-primary tracking-tight">StudySync</span>
-        </div>
-        <div className="w-full max-w-[400px] space-y-6 my-8">
+
           <div className="space-y-1">
-            <h2 className="text-3xl font-bold text-on-background">Create Account</h2>
-            <p className="text-sm text-on-surface-variant">Start your journey to organized study habits.</p>
+            <h2 className="font-heading text-2xl font-bold text-content">Create account</h2>
+            <p className="text-xs text-content-sub">Start tracking your academic habits.</p>
           </div>
 
           {error && (
-            <div className="p-3 bg-error/10 border border-error/20 text-error rounded-xl text-xs font-semibold">
+            <div className="p-3 bg-danger-soft border border-danger/30 text-danger rounded-xl text-xs font-medium">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {successMsg && (
+            <div className="p-3 bg-success-soft border border-success/30 text-success rounded-xl text-xs font-medium flex items-center gap-2">
+              <span className="material-symbols-outlined text-base">check_circle</span>
+              <span>{successMsg}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-3.5">
             <div className="space-y-1">
-              <label className="text-xs uppercase tracking-wider font-semibold text-on-surface-variant" htmlFor="name">Full Name</label>
+              <label className="text-xs font-medium text-content-sub" htmlFor="name">
+                Full name
+              </label>
               <input
                 id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Alex Rivers"
-                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
+                placeholder="Alex Rivera"
+                className="w-full px-3.5 py-2.5 bg-card border border-edge rounded-xl focus:ring-2 focus:ring-purple/20 focus:border-purple outline-none text-xs text-content placeholder:text-content-dim transition-all"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs uppercase tracking-wider font-semibold text-on-surface-variant" htmlFor="email">Email Address</label>
+              <label className="text-xs font-medium text-content-sub" htmlFor="reg-email">
+                Email address
+              </label>
               <input
-                id="email"
+                id="reg-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="alex@rivers.com"
-                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
+                className="w-full px-3.5 py-2.5 bg-card border border-edge rounded-xl focus:ring-2 focus:ring-purple/20 focus:border-purple outline-none text-xs text-content placeholder:text-content-dim transition-all"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs uppercase tracking-wider font-semibold text-on-surface-variant" htmlFor="password">Password</label>
+              <label className="text-xs font-medium text-content-sub" htmlFor="reg-password">
+                Password
+              </label>
               <input
-                id="password"
+                id="reg-password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min. 6 characters"
-                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
+                placeholder="Minimum 6 characters"
+                className="w-full px-3.5 py-2.5 bg-card border border-edge rounded-xl focus:ring-2 focus:ring-purple/20 focus:border-purple outline-none text-xs text-content placeholder:text-content-dim transition-all"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs uppercase tracking-wider font-semibold text-on-surface-variant" htmlFor="confirm-password">Confirm Password</label>
+              <label className="text-xs font-medium text-content-sub" htmlFor="confirmPassword">
+                Confirm password
+              </label>
               <input
-                id="confirm-password"
+                id="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-4 py-3 bg-white dark:bg-surface-container-high border border-outline-variant/50 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none text-sm text-[#1b1b24] dark:text-white"
+                placeholder="Repeat password"
+                className="w-full px-3.5 py-2.5 bg-card border border-edge rounded-xl focus:ring-2 focus:ring-purple/20 focus:border-purple outline-none text-xs text-content placeholder:text-content-dim transition-all"
               />
             </div>
 
-            <div className="space-y-3 pt-2">
+            <div className="pt-2">
               <button
                 type="submit"
-                className="w-full py-3.5 bg-primary text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] transition-all duration-200"
+                className="w-full py-2.5 bg-purple hover:bg-purple-hover text-white font-semibold rounded-xl shadow-xs transition-all text-xs cursor-pointer"
               >
-                Sign Up
+                Create Account
               </button>
             </div>
           </form>
 
-          <div className="text-center pt-2">
-            <p className="text-xs text-on-surface-variant">
+          <div className="text-center pt-2 border-t border-edge">
+            <p className="text-xs text-content-sub">
               Already have an account?{' '}
-              <Link className="text-primary font-bold hover:underline" to="/login">Sign In</Link>
+              <Link className="text-purple font-semibold hover:underline" to="/login">
+                Sign In
+              </Link>
             </p>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useStudy } from '../context/useStudy';
+import { formatLocalDate } from '../utils/dateUtils';
 
 export default function GoalPlanner() {
   const { goals, addGoal, editGoal, deleteGoal, toggleGoal } = useStudy();
@@ -17,7 +18,7 @@ export default function GoalPlanner() {
   const handleOpenAdd = () => {
     setEditingGoal(null);
     setGoalTitle('');
-    setGoalTargetDate(new Date().toISOString().split('T')[0]);
+    setGoalTargetDate(formatLocalDate());
     setGoalCategory('Academic');
     setGoalProgress(0);
     setModalOpen(true);
@@ -54,95 +55,93 @@ export default function GoalPlanner() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-edge">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-primary text-xs font-bold uppercase tracking-wider mb-2">
-            <span className="material-symbols-outlined text-sm">flag</span>
-            Semester Milestones
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-lavender dark:bg-purple/20 text-purple dark:text-violet text-xs font-semibold mb-1">
+            <span className="material-symbols-outlined text-xs">flag</span>
+            <span>Milestones & Goals</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#1b1b24] dark:text-white tracking-tight">
-            Goal Planner
-          </h2>
-          <p className="text-sm font-medium text-[#4b4863] dark:text-[#bbb8d0]">
-            Track long-term academic targets, certifications, and core skill milestones.
-          </p>
+          <h1 className="font-heading text-xl md:text-2xl font-bold text-content tracking-tight">Goal Planner</h1>
+          <p className="text-xs text-content-sub">Set long-term targets, track progress milestones, and celebrate completions.</p>
         </div>
+
         <button 
           onClick={handleOpenAdd}
-          className="flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl font-bold text-xs uppercase tracking-wider active:scale-95 transition-all shadow-md w-fit"
+          className="flex items-center gap-1.5 px-4 py-2 bg-purple hover:bg-purple-hover text-white rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-[0.99] self-start sm:self-auto cursor-pointer"
         >
-          <span className="material-symbols-outlined text-sm">add</span> Create New Goal
+          <span className="material-symbols-outlined text-base">add</span>
+          <span>New Goal</span>
         </button>
       </div>
 
-      {/* Goals Board */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* Goals Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {goals.length > 0 ? (
           goals.map((goal) => {
             const isCompleted = goal.completed || Number(goal.progress) === 100;
             return (
               <div 
                 key={goal.id} 
-                className="bg-white dark:bg-surface-container p-6 rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col justify-between space-y-4 hover:border-primary/40 transition-all"
+                className="bg-card p-5 rounded-2xl border border-edge shadow-xs flex flex-col justify-between space-y-4 hover:border-purple/30 transition-colors"
               >
                 <div className="flex justify-between items-start gap-3">
                   <div className="min-w-0 flex-1">
-                    <span className="bg-primary-fixed text-primary px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase">
+                    <span className="bg-lavender dark:bg-purple/20 text-purple dark:text-violet px-2.5 py-0.5 rounded-full text-[10px] font-semibold">
                       {goal.category || 'Academic'}
                     </span>
-                    <h3 className={`text-base font-bold mt-2 truncate ${isCompleted ? 'line-through text-[#5e5b79] dark:text-[#a5a2bf]' : 'text-[#1b1b24] dark:text-white'}`}>
+                    <h2 className={`font-heading text-sm font-bold mt-2 truncate ${isCompleted ? 'line-through text-content-dim' : 'text-content'}`}>
                       {goal.title}
-                    </h3>
+                    </h2>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button 
                       onClick={() => handleOpenEdit(goal)}
-                      className="p-1.5 hover:bg-surface-container-high rounded-xl text-[#5e5b79] dark:text-[#bbb8d0] hover:text-primary transition-colors"
+                      className="p-1.5 text-content-dim hover:text-content hover:bg-surface-alt rounded-lg transition-colors cursor-pointer"
                       title="Edit Goal"
                     >
-                      <span className="material-symbols-outlined text-lg">edit</span>
+                      <span className="material-symbols-outlined text-base">edit</span>
                     </button>
                     <button 
                       onClick={() => setDeleteConfirmId(goal.id)}
-                      className="p-1.5 hover:bg-error/10 rounded-xl text-[#5e5b79] dark:text-[#bbb8d0] hover:text-error transition-colors"
+                      className="p-1.5 text-content-dim hover:text-danger hover:bg-danger-soft/40 rounded-lg transition-colors cursor-pointer"
                       title="Delete Goal"
                     >
-                      <span className="material-symbols-outlined text-lg">delete</span>
+                      <span className="material-symbols-outlined text-base">delete</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Progress bar */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs font-bold">
-                    <span className="text-[#5e5b79] dark:text-[#a5a2bf]">Target Date: {goal.targetDate}</span>
-                    <span className="text-primary font-extrabold">{goal.progress}%</span>
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-content-dim">Target: {goal.targetDate}</span>
+                    <span className="font-semibold text-purple">{goal.progress}%</span>
                   </div>
-                  <div className="h-3 w-full bg-surface-container-low rounded-full overflow-hidden border border-outline-variant/20">
+                  <div className="h-2 w-full bg-surface-alt rounded-full overflow-hidden border border-edge">
                     <div 
-                      className={`h-full bg-gradient-to-r ${
-                        isCompleted ? 'from-tertiary to-tertiary-fixed' : 'from-primary to-primary-container'
-                      } rounded-full transition-all duration-500`}
+                      className={`h-full rounded-full transition-all duration-300 ${
+                        isCompleted ? 'bg-success' : 'bg-purple'
+                      }`}
                       style={{ width: `${goal.progress}%` }}
-                    ></div>
+                    />
                   </div>
                 </div>
 
-                {/* Actions bottom */}
-                <div className="flex justify-between items-center pt-2 border-t border-outline-variant/20">
+                {/* Card footer */}
+                <div className="flex justify-between items-center pt-2 border-t border-edge text-xs">
                   <button 
                     onClick={() => toggleGoal(goal.id)}
-                    className={`flex items-center gap-1.5 text-xs font-bold transition-all ${
-                      isCompleted ? 'text-tertiary' : 'text-primary hover:underline'
+                    className={`flex items-center gap-1 font-semibold transition-colors cursor-pointer ${
+                      isCompleted ? 'text-success' : 'text-purple hover:underline'
                     }`}
                   >
                     <span className="material-symbols-outlined text-sm">
                       {isCompleted ? 'check_circle' : 'radio_button_unchecked'}
                     </span>
-                    {isCompleted ? 'Completed Goal' : 'Mark Complete'}
+                    <span>{isCompleted ? 'Completed' : 'Mark Complete'}</span>
                   </button>
 
-                  <span className="text-[11px] font-bold text-[#5e5b79] dark:text-[#a5a2bf]">
+                  <span className="text-[11px] text-content-dim">
                     {isCompleted ? '100% Achieved' : `${100 - goal.progress}% Remaining`}
                   </span>
                 </div>
@@ -150,28 +149,29 @@ export default function GoalPlanner() {
             );
           })
         ) : (
-          <div className="col-span-2 text-center py-16 bg-white dark:bg-surface-container rounded-2xl border border-outline-variant/30 text-xs text-[#5e5b79] dark:text-[#a5a2bf] space-y-2">
-            <span className="material-symbols-outlined text-3xl text-primary">target</span>
-            <p className="font-semibold">No goals planned yet. Add a new goal to start tracking!</p>
+          <div className="col-span-2 text-center py-16 bg-card rounded-2xl border border-edge text-xs text-content-sub space-y-2">
+            <span className="material-symbols-outlined text-3xl text-content-dim">flag</span>
+            <p className="font-semibold text-content">No active goals found.</p>
+            <p className="text-[11px] text-content-dim">Set a new academic target above to track milestones.</p>
           </div>
         )}
       </div>
 
-      {/* Delete Goal Confirmation Modal */}
+      {/* Delete Confirmation Modal */}
       {deleteConfirmId && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-surface-container rounded-2xl p-6 w-full max-w-sm shadow-xl border border-outline-variant/30 space-y-4">
-            <div className="flex items-center gap-3 text-error">
-              <span className="material-symbols-outlined text-2xl">warning</span>
-              <h3 className="text-base font-bold text-[#1b1b24] dark:text-white">Delete Goal?</h3>
+        <div className="fixed inset-0 bg-plum/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-card rounded-2xl p-6 w-full max-w-sm shadow-xl border border-edge space-y-4">
+            <div className="flex items-center gap-2 text-danger">
+              <span className="material-symbols-outlined text-xl">warning</span>
+              <h3 className="font-heading text-sm font-bold text-content">Delete Goal</h3>
             </div>
-            <p className="text-xs text-[#4b4863] dark:text-[#bbb8d0]">
-              Are you sure you want to delete this milestone? This will remove its recorded progress.
+            <p className="text-xs text-content-sub">
+              Are you sure you want to delete this milestone? Its progress will be removed.
             </p>
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex justify-end gap-2 pt-1">
               <button
                 onClick={() => setDeleteConfirmId(null)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] hover:bg-surface-container"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-content-sub hover:bg-surface-alt transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -180,59 +180,65 @@ export default function GoalPlanner() {
                   deleteGoal(deleteConfirmId);
                   setDeleteConfirmId(null);
                 }}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-error text-white hover:opacity-90"
+                className="px-4 py-1.5 rounded-xl text-xs font-semibold bg-danger text-white shadow-xs cursor-pointer"
               >
-                Confirm Delete
+                Delete
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Goal Add/Edit Modal */}
+      {/* Add / Edit Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-surface-container rounded-2xl p-6 w-full max-w-md shadow-xl border border-outline-variant/30">
+        <div className="fixed inset-0 bg-plum/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-card rounded-2xl p-6 w-full max-w-md shadow-xl border border-edge">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-primary">{editingGoal ? 'Edit Goal' : 'New Goal'}</h3>
-              <button onClick={() => setModalOpen(false)} className="text-[#5e5b79] dark:text-[#bbb8d0]">
-                <span className="material-symbols-outlined">close</span>
+              <h3 className="font-heading text-base font-bold text-content">
+                {editingGoal ? 'Edit Goal' : 'New Goal'}
+              </h3>
+              <button 
+                onClick={() => setModalOpen(false)} 
+                className="text-content-dim hover:text-content p-1 rounded-lg hover:bg-surface-alt"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
+
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Goal Title</label>
+                <label className="block text-xs font-medium text-content-sub mb-1">Goal Title</label>
                 <input
                   type="text"
                   required
                   value={goalTitle}
                   onChange={(e) => setGoalTitle(e.target.value)}
                   placeholder="e.g. Master Linear Algebra Chapter 5"
-                  className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none text-[#1b1b24] dark:text-white"
+                  className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3.5 py-2 text-xs text-content placeholder:text-content-dim outline-none"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Category</label>
+                  <label className="block text-xs font-medium text-content-sub mb-1">Category</label>
                   <select
                     value={goalCategory}
                     onChange={(e) => setGoalCategory(e.target.value)}
-                    className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2 text-sm outline-none text-[#1b1b24] dark:text-white cursor-pointer"
+                    className="w-full bg-surface-alt border border-edge focus:border-purple rounded-xl px-3 py-2 text-xs text-content outline-none cursor-pointer"
                   >
-                    {categories.map(c => (
+                    {categories.map((c) => (
                       <option key={c} value={c}>{c}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Target Date</label>
+                  <label className="block text-xs font-medium text-content-sub mb-1">Target Date</label>
                   <input
                     type="date"
                     required
                     value={goalTargetDate}
                     onChange={(e) => setGoalTargetDate(e.target.value)}
-                    className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2 text-sm outline-none text-[#1b1b24] dark:text-white"
+                    className="w-full bg-surface-alt border border-edge focus:border-purple rounded-xl px-3 py-2 text-xs text-content outline-none"
                   />
                 </div>
               </div>
@@ -240,8 +246,8 @@ export default function GoalPlanner() {
               {editingGoal && (
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <label className="text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0]">Current Progress</label>
-                    <span className="text-xs font-extrabold text-primary">{goalProgress}%</span>
+                    <label className="text-xs font-medium text-content-sub">Current Progress</label>
+                    <span className="text-xs font-semibold text-purple">{goalProgress}%</span>
                   </div>
                   <input
                     type="range"
@@ -250,17 +256,26 @@ export default function GoalPlanner() {
                     step="5"
                     value={goalProgress}
                     onChange={(e) => setGoalProgress(Number(e.target.value))}
-                    className="w-full accent-primary cursor-pointer"
+                    className="w-full accent-purple cursor-pointer"
                   />
                 </div>
               )}
 
-              <button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary-container text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md hover:scale-[0.99] transition-transform"
-              >
-                {editingGoal ? 'Save Milestone' : 'Add Academic Goal'}
-              </button>
+              <div className="pt-2 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-4 py-2 text-xs font-medium text-content-sub hover:text-content hover:bg-surface-alt rounded-xl transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-purple hover:bg-purple-hover text-white px-5 py-2 rounded-xl font-semibold text-xs transition-all shadow-xs cursor-pointer"
+                >
+                  {editingGoal ? 'Save Changes' : 'Create Goal'}
+                </button>
+              </div>
             </form>
           </div>
         </div>

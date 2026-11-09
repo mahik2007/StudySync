@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useStudy } from '../context/useStudy';
+import { formatLocalDate } from '../utils/dateUtils';
 import Logo from './Logo';
 
 export const Layout = ({ children }) => {
   const { user, logout, addTask, theme, setTheme } = useStudy();
   const navigate = useNavigate();
   const [quickAddOpen, setQuickAddOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
   const [taskPriority, setTaskPriority] = useState('medium');
   const [taskSubject, setTaskSubject] = useState('General');
@@ -15,7 +17,7 @@ export const Layout = ({ children }) => {
   const handleQuickAddTaskSubmit = (e) => {
     e.preventDefault();
     if (!taskTitle.trim()) return;
-    const deadline = taskDeadline || new Date().toISOString().split('T')[0];
+    const deadline = taskDeadline || formatLocalDate();
     addTask(taskTitle, taskPriority, taskSubject, deadline);
     setTaskTitle('');
     setTaskDeadline('');
@@ -29,168 +31,230 @@ export const Layout = ({ children }) => {
     { name: 'Task Manager', path: '/tasks', icon: 'format_list_bulleted' },
     { name: 'Pomodoro', path: '/pomodoro', icon: 'timer' },
     { name: 'Analytics', path: '/analytics', icon: 'insights' },
-    { name: 'Goal Planner', path: '/goals', icon: 'target' },
+    { name: 'Goal Planner', path: '/goals', icon: 'flag' },
     { name: 'Calendar', path: '/calendar', icon: 'event' },
     { name: 'Achievements', path: '/achievements', icon: 'military_tech' },
     { name: 'Settings', path: '/settings', icon: 'settings' },
   ];
 
   if (!user) {
-    return <div className="min-h-screen">{children}</div>;
+    return <div className="min-h-screen bg-surface">{children}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-background text-on-background font-sans flex flex-col md:flex-row">
-      {/* Sidebar Navigation Shell */}
-      <aside className="hidden md:flex flex-col h-screen fixed left-0 top-0 py-6 bg-surface-container border-r border-outline-variant/30 w-72 z-50">
-        <div className="px-6 mb-6">
+    <div className="min-h-screen bg-surface text-content font-body flex flex-col md:flex-row antialiased">
+      {/* Sidebar Navigation Shell (Desktop) */}
+      <aside className="hidden md:flex flex-col h-screen fixed left-0 top-0 py-5 bg-card border-r border-edge w-72 z-40 transition-colors duration-200">
+        <div className="px-6 mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 flex items-center justify-center p-1.5 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-lavender dark:bg-purple/20 border border-purple/30 flex items-center justify-center p-1.5 shadow-xs">
               <Logo className="w-full h-full" />
             </div>
             <div>
-              <h1 className="font-display-lg text-2xl font-extrabold text-primary tracking-tight">StudySync</h1>
-              <p className="text-[10px] uppercase font-bold tracking-widest text-[#4b4863] dark:text-[#a5a2bf]">Smart Academic Hub</p>
+              <h1 className="font-heading text-xl font-bold text-content tracking-tight">StudySync</h1>
+              <p className="text-[11px] font-medium text-content-dim">Smart Productivity</p>
             </div>
           </div>
         </div>
 
-        {/* User Stats Card */}
-        <div className="mx-4 mb-5 p-3 rounded-2xl bg-white dark:bg-surface-container-high border border-outline-variant/30 shadow-sm flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full border-2 border-primary/25 bg-primary-fixed flex items-center justify-center font-bold text-primary text-sm shadow-inner shrink-0">
-            {user.name.split(' ').map(n => n[0]).join('')}
+        {/* User Mini Card */}
+        <div className="mx-4 mb-4 p-3 rounded-xl bg-surface-alt border border-edge flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-lavender dark:bg-purple/20 text-purple font-semibold text-xs flex items-center justify-center border border-purple/20 shrink-0">
+            {user.name.split(' ').map((n) => n[0]).join('')}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-bold text-sm text-[#0f0d1a] dark:text-white truncate">{user.name}</p>
-            <p className="text-xs font-semibold text-[#4b4863] dark:text-[#cfccdf]">Level {user.level} Scholar • <span className="text-primary dark:text-primary-fixed font-bold">{user.xp} XP</span></p>
+            <p className="font-semibold text-xs text-content truncate">{user.name}</p>
+            <div className="flex items-center gap-1.5 text-[11px] text-content-sub">
+              <span>Lvl {user.level}</span>
+              <span>•</span>
+              <span className="font-semibold text-purple">{user.xp} XP</span>
+            </div>
           </div>
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 overflow-y-auto px-2 space-y-1">
+        <nav className="flex-1 overflow-y-auto px-3 space-y-1">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `rounded-xl mx-2 flex items-center gap-3 px-3.5 py-2.5 transition-all duration-200 text-sm font-semibold ${
+                `rounded-lg flex items-center gap-3 px-3 py-2 text-xs font-medium transition-all ${
                   isActive
-                    ? 'bg-primary text-white shadow-md shadow-primary/25 translate-x-1'
-                    : 'text-[#2b2840] dark:text-[#e4e1f5] hover:text-primary dark:hover:text-white hover:bg-surface-container-high'
+                    ? 'bg-lavender dark:bg-purple/25 text-purple dark:text-purple font-bold shadow-2xs'
+                    : 'text-content-sub hover:text-content hover:bg-surface-alt'
                 }`
               }
             >
-              <span className="material-symbols-outlined text-xl">{item.icon}</span>
+              <span className="material-symbols-outlined text-[19px]">{item.icon}</span>
               <span className="truncate">{item.name}</span>
             </NavLink>
           ))}
         </nav>
 
-        {/* Start Focus Session Button & Logout */}
-        <div className="px-4 pt-3 mt-auto border-t border-outline-variant/20">
+        {/* Start Focus & Sign Out */}
+        <div className="px-4 pt-3 mt-auto border-t border-edge space-y-2">
           <button
             onClick={() => navigate('/pomodoro')}
-            className="w-full bg-primary hover:bg-primary-container text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 mb-2 shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+            className="w-full bg-purple hover:bg-purple-hover text-white py-2.5 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-[0.99] cursor-pointer"
           >
-            <span className="material-symbols-outlined text-lg">bolt</span>
+            <span className="material-symbols-outlined text-base">timer</span>
             Start Focus Session
           </button>
           
           <button
             onClick={logout}
-            className="w-full text-[#4b4863] dark:text-[#cfccdf] hover:text-error hover:bg-error/10 flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 text-left font-semibold text-xs"
+            className="w-full text-content-sub hover:text-danger hover:bg-danger-soft/40 flex items-center gap-2.5 px-3 py-2 rounded-lg transition-colors text-xs font-medium cursor-pointer"
           >
-            <span className="material-symbols-outlined text-lg">logout</span>
+            <span className="material-symbols-outlined text-base">logout</span>
             <span>Sign Out</span>
           </button>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 md:ml-72 min-h-screen pb-20 md:pb-6 flex flex-col">
-        {/* Header */}
-        <header className="h-20 px-6 md:px-8 flex justify-between items-center bg-white/90 dark:bg-surface/90 backdrop-blur-xl sticky top-0 z-40 border-b border-outline-variant/30">
-          <div className="flex items-center gap-3">
-            <div className="md:hidden w-9 h-9 rounded-xl bg-primary/10 dark:bg-primary/20 border border-primary/20 flex items-center justify-center p-1.5 shadow-sm">
-              <Logo className="w-full h-full" />
+      {/* Mobile Drawer (When Opened) */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          <div
+            className="fixed inset-0 bg-plum/50 backdrop-blur-xs"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <div className="relative w-72 max-w-[80%] bg-card h-full p-5 flex flex-col z-10 border-r border-edge shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-lavender dark:bg-purple/20 border border-purple/20 flex items-center justify-center p-1.5">
+                  <Logo className="w-full h-full" />
+                </div>
+                <h2 className="font-heading font-bold text-lg text-content">StudySync</h2>
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1 rounded-lg hover:bg-surface-alt text-content-sub"
+              >
+                <span className="material-symbols-outlined text-xl">close</span>
+              </button>
             </div>
-            <div>
-              <h2 className="font-headline-lg text-lg md:text-2xl text-primary font-semibold">
-                Welcome, {user.name}
+
+            <nav className="flex-1 overflow-y-auto space-y-1">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `rounded-lg flex items-center gap-3 px-3 py-2 text-xs font-medium transition-all ${
+                      isActive
+                        ? 'bg-lavender dark:bg-purple/25 text-purple dark:text-purple font-bold'
+                        : 'text-content-sub hover:text-content hover:bg-surface-alt'
+                    }`
+                  }
+                >
+                  <span className="material-symbols-outlined text-lg">{item.icon}</span>
+                  <span>{item.name}</span>
+                </NavLink>
+              ))}
+            </nav>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                logout();
+              }}
+              className="mt-4 pt-3 border-t border-edge w-full text-content-sub hover:text-danger flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium"
+            >
+              <span className="material-symbols-outlined text-base">logout</span>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content Area */}
+      <div className="flex-1 md:ml-72 min-h-screen pb-20 md:pb-8 flex flex-col">
+        {/* Header */}
+        <header className="h-16 px-5 md:px-8 flex justify-between items-center bg-card/85 backdrop-blur-md sticky top-0 z-30 border-b border-edge transition-colors duration-200">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="md:hidden p-1.5 rounded-lg text-content-sub hover:bg-surface-alt cursor-pointer"
+              aria-label="Open menu"
+            >
+              <span className="material-symbols-outlined text-2xl">menu</span>
+            </button>
+            <div className="flex items-baseline gap-2">
+              <h2 className="font-heading text-base md:text-lg font-bold text-content">
+                Welcome back, {user.name.split(' ')[0]}
               </h2>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+
+          <div className="flex items-center gap-2 md:gap-3">
             <button
               onClick={() => setQuickAddOpen(true)}
-              className="hidden sm:flex items-center gap-2 bg-surface-container-high hover:bg-surface-container-highest text-primary font-semibold px-4 py-2 rounded-xl text-xs transition-colors"
-              title="Quick Add Task"
+              className="hidden sm:inline-flex items-center gap-1.5 bg-lavender dark:bg-purple/15 text-purple dark:text-violet hover:bg-purple hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer"
             >
-              <span className="material-symbols-outlined text-base">add_task</span>
+              <span className="material-symbols-outlined text-base">add</span>
               <span>New Task</span>
             </button>
+
+            {/* Theme Toggle */}
             <button
               onClick={() => {
                 const next = theme === 'dark' ? 'light' : 'dark';
                 setTheme(next);
               }}
-              className="p-2 text-[#3b3852] dark:text-[#f4f2fc] hover:bg-surface-container-low rounded-full cursor-pointer transition-colors"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-content-sub hover:text-content hover:bg-surface-alt transition-colors cursor-pointer"
               title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
               aria-label="Toggle theme mode"
             >
-              <span className="material-symbols-outlined text-xl">
+              <span className="material-symbols-outlined text-lg">
                 {theme === 'dark' ? 'light_mode' : 'dark_mode'}
               </span>
             </button>
-            <div className="relative">
-              <span className="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full cursor-pointer transition-colors">
-                notifications
-              </span>
-              <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-ping"></span>
-              <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
-            </div>
+
+            {/* Study Now CTA */}
             <button
               onClick={() => navigate('/pomodoro')}
-              className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-xs tracking-wider uppercase hover:scale-95 transition-transform shadow-sm flex items-center gap-1.5"
+              className="bg-purple hover:bg-purple-hover text-white px-3.5 py-1.5 rounded-lg font-semibold text-xs tracking-wide shadow-2xs hover:shadow-xs transition-all flex items-center gap-1 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-sm">bolt</span>
-              Study Now
+              <span className="material-symbols-outlined text-sm">play_arrow</span>
+              <span>Study Now</span>
             </button>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 px-4 md:px-8 py-6 max-w-7-xl mx-auto w-full motion-page">
+        {/* Page Content Container */}
+        <main className="flex-1 px-4 md:px-8 py-6 max-w-7xl mx-auto w-full">
           {children}
         </main>
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/95 dark:bg-surface-container/95 backdrop-blur-md flex justify-around items-center px-4 z-50 border-t border-outline-variant/30 shadow-lg">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/95 backdrop-blur-md flex justify-around items-center px-2 z-40 border-t border-edge shadow-lg">
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 ${isActive ? 'text-primary font-bold' : 'text-[#4b4863] dark:text-[#c4c1dc]'}`
+            `flex flex-col items-center gap-0.5 py-1 px-2 ${isActive ? 'text-purple font-semibold' : 'text-content-sub'}`
           }
         >
           <span className="material-symbols-outlined text-xl">dashboard</span>
-          <span className="text-[10px] font-semibold">Home</span>
+          <span className="text-[10px]">Home</span>
         </NavLink>
         
         <NavLink
           to="/smart-plan"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 ${isActive ? 'text-primary font-bold' : 'text-[#4b4863] dark:text-[#c4c1dc]'}`
+            `flex flex-col items-center gap-0.5 py-1 px-2 ${isActive ? 'text-purple font-semibold' : 'text-content-sub'}`
           }
         >
           <span className="material-symbols-outlined text-xl">auto_awesome</span>
-          <span className="text-[10px] font-semibold">Plan</span>
+          <span className="text-[10px]">Plan</span>
         </NavLink>
         
-        {/* Quick Add Action Button */}
+        {/* Quick Add FAB */}
         <button
           onClick={() => setQuickAddOpen(true)}
-          className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center -translate-y-4 shadow-lg shadow-primary/30 active:scale-90 transition-transform"
+          className="w-11 h-11 bg-purple hover:bg-purple-hover text-white rounded-full flex items-center justify-center -translate-y-3 shadow-md shadow-purple/30 active:scale-95 transition-all cursor-pointer"
           aria-label="Quick Add Task"
         >
           <span className="material-symbols-outlined text-2xl">add</span>
@@ -199,85 +263,97 @@ export const Layout = ({ children }) => {
         <NavLink
           to="/pomodoro"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 ${isActive ? 'text-primary font-bold' : 'text-[#4b4863] dark:text-[#c4c1dc]'}`
+            `flex flex-col items-center gap-0.5 py-1 px-2 ${isActive ? 'text-purple font-semibold' : 'text-content-sub'}`
           }
         >
           <span className="material-symbols-outlined text-xl">timer</span>
-          <span className="text-[10px] font-semibold">Focus</span>
+          <span className="text-[10px]">Focus</span>
         </NavLink>
 
         <NavLink
           to="/tasks"
           className={({ isActive }) =>
-            `flex flex-col items-center gap-1 ${isActive ? 'text-primary font-bold' : 'text-[#4b4863] dark:text-[#c4c1dc]'}`
+            `flex flex-col items-center gap-0.5 py-1 px-2 ${isActive ? 'text-purple font-semibold' : 'text-content-sub'}`
           }
         >
           <span className="material-symbols-outlined text-xl">format_list_bulleted</span>
-          <span className="text-[10px] font-semibold">Tasks</span>
+          <span className="text-[10px]">Tasks</span>
         </NavLink>
       </nav>
 
       {/* Quick Add Modal */}
       {quickAddOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-inverse-surface rounded-2xl p-6 w-full max-w-md shadow-xl border border-outline-variant/30">
+        <div className="fixed inset-0 bg-plum/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-card rounded-2xl p-6 w-full max-w-md shadow-xl border border-edge animate-in fade-in zoom-in-95 duration-150">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-primary">Quick Add Task</h3>
-              <button onClick={() => setQuickAddOpen(false)} className="text-on-surface-variant">
-                <span className="material-symbols-outlined">close</span>
+              <h3 className="font-heading text-base font-bold text-content">Quick Add Task</h3>
+              <button
+                onClick={() => setQuickAddOpen(false)}
+                className="text-content-dim hover:text-content p-1 rounded-lg hover:bg-surface-alt transition-colors"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
               </button>
             </div>
-            <form onSubmit={handleQuickAddTaskSubmit} className="space-y-4">
+            <form onSubmit={handleQuickAddTaskSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-semibold text-on-surface-variant mb-1">Task Title</label>
+                <label className="block text-xs font-medium text-content-sub mb-1">Task Title</label>
                 <input
                   type="text"
                   required
                   value={taskTitle}
                   onChange={(e) => setTaskTitle(e.target.value)}
-                  placeholder="e.g. Solve Math Homework"
-                  className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary focus:ring-4 focus:ring-primary/5 rounded-xl px-4 py-2 text-sm outline-none"
+                  placeholder="e.g. Finish Calculus chapter 4"
+                  className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3.5 py-2 text-xs text-content outline-none transition-all placeholder:text-content-dim"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-on-surface-variant mb-1">Subject</label>
+                  <label className="block text-xs font-medium text-content-sub mb-1">Subject</label>
                   <input
                     type="text"
                     value={taskSubject}
                     onChange={(e) => setTaskSubject(e.target.value)}
                     placeholder="e.g. Math"
-                    className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary focus:ring-4 focus:ring-primary/5 rounded-xl px-4 py-2 text-sm outline-none"
+                    className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3.5 py-2 text-xs text-content outline-none transition-all placeholder:text-content-dim"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-on-surface-variant mb-1">Priority</label>
+                  <label className="block text-xs font-medium text-content-sub mb-1">Priority</label>
                   <select
                     value={taskPriority}
                     onChange={(e) => setTaskPriority(e.target.value)}
-                    className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary focus:ring-4 focus:ring-primary/5 rounded-xl px-4 py-2 text-sm outline-none"
+                    className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3 py-2 text-xs text-content outline-none transition-all cursor-pointer"
                   >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-on-surface-variant mb-1">Deadline</label>
+                <label className="block text-xs font-medium text-content-sub mb-1">Deadline</label>
                 <input
                   type="date"
                   value={taskDeadline}
                   onChange={(e) => setTaskDeadline(e.target.value)}
-                  className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary focus:ring-4 focus:ring-primary/5 rounded-xl px-4 py-2 text-sm outline-none"
+                  className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3.5 py-2 text-xs text-content outline-none transition-all"
                 />
               </div>
-              <button
-                type="submit"
-                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:scale-95 transition-transform"
-              >
-                Create Task
-              </button>
+              <div className="pt-2 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setQuickAddOpen(false)}
+                  className="px-4 py-2 text-xs font-medium text-content-sub hover:text-content hover:bg-surface-alt rounded-xl transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-purple hover:bg-purple-hover text-white px-5 py-2 rounded-xl font-semibold text-xs transition-all shadow-xs cursor-pointer"
+                >
+                  Create Task
+                </button>
+              </div>
             </form>
           </div>
         </div>

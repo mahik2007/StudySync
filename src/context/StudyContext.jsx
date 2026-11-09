@@ -1,11 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
+import { formatLocalDate, getIsoDateOffset as isoDate } from '../utils/dateUtils';
 
 const StudyContext = createContext(null);
-const isoDate = (daysAgo = 0) => {
-  const date = new Date();
-  date.setDate(date.getDate() - daysAgo);
-  return date.toISOString().split('T')[0];
-};
 const readStorage = (key, fallback) => {
   try {
     const stored = localStorage.getItem(key);
@@ -99,38 +95,78 @@ export const StudyProvider = ({ children }) => {
     localStorage.setItem('studysync_badges', JSON.stringify(badges));
   }, [badges]);
 
+  const [usersDb, setUsersDb] = useState(() =>
+    readStorage('studysync_users_db', [])
+  );
+
+  useEffect(() => {
+    localStorage.setItem('studysync_users_db', JSON.stringify(usersDb));
+  }, [usersDb]);
+
   // Actions
-  const loginUser = (email, password) => {
-    // Simple client side validation & simulation
-    if (email && password) {
-      const mockUser = {
-        name: 'Alex Rivera',
-        email: email,
-        xp: 450,
-        level: 3,
-        streak: 5,
-        avatar: null
-      };
-      setUser(mockUser);
-      return true;
+  const registerUser = (name, email, password) => {
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanName = name.trim();
+
+    if (!cleanName || !cleanEmail || !password) {
+      return { success: false, error: 'All fields are required.' };
     }
-    return false;
+    if (password.length < 6) {
+      return { success: false, error: 'Password must be at least 6 characters.' };
+    }
+
+    const exists = usersDb.find(u => u.email === cleanEmail);
+    if (exists) {
+      return { success: false, error: 'An account with this email already exists. Please sign in.' };
+    }
+
+    const newUser = {
+      id: 'user_' + Date.now(),
+      name: cleanName,
+      email: cleanEmail,
+      password: password,
+      xp: 100,
+      level: 1,
+      streak: 1,
+      avatar: null,
+      createdAt: new Date().toISOString()
+    };
+
+    setUsersDb(prev => [...prev, newUser]);
+    return { success: true };
   };
 
-  const registerUser = (name, email, password) => {
-    if (name && email && password) {
-      const mockUser = {
-        name: name,
-        email: email,
-        xp: 100,
-        level: 1,
-        streak: 1,
-        avatar: null
-      };
-      setUser(mockUser);
-      return true;
+  const loginUser = (email, password) => {
+    const cleanEmail = email.trim().toLowerCase();
+    
+    if (!cleanEmail || !password) {
+      return { success: false, error: 'Email and password are required.' };
     }
-    return false;
+
+    const found = usersDb.find(u => u.email === cleanEmail);
+    if (!found) {
+      return { 
+        success: false, 
+        error: 'No account found with this email. Please create an account first.' 
+      };
+    }
+
+    if (found.password !== password) {
+      return { success: false, error: 'Incorrect password. Please try again.' };
+    }
+
+    const sessionUser = {
+      id: found.id,
+      name: found.name,
+      email: found.email,
+      xp: found.xp || 100,
+      level: found.level || 1,
+      streak: found.streak || 1,
+      avatar: found.avatar || null
+    };
+
+    setUser(sessionUser);
+    return { success: true };
   };
 
   const logout = () => {
@@ -159,7 +195,7 @@ export const StudyProvider = ({ children }) => {
   const unlockBadge = (badgeId) => {
     setBadges(prev => prev.map(badge => {
       if (badge.id === badgeId && !badge.unlocked) {
-        return { ...badge, unlocked: true, unlockedAt: new Date().toISOString().split('T')[0] };
+        return { ...badge, unlocked: true, unlockedAt: formatLocalDate() };
       }
       return badge;
     }));
@@ -207,8 +243,8 @@ export const StudyProvider = ({ children }) => {
         // Simple sequential date checker
         const sortedDates = [...newDates].sort((a, b) => new Date(b) - new Date(a));
         if (sortedDates.length > 0) {
-          const today = new Date().toISOString().split('T')[0];
-          const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+          const today = formatLocalDate();
+          const yesterday = isoDate(1);
           
           const start = sortedDates[0];
           if (start === today || start === yesterday) {
@@ -263,7 +299,7 @@ export const StudyProvider = ({ children }) => {
 
   // Tasks Operations
   const addTask = (title, priority = 'medium', subject = 'General', deadline = null, estimatedDuration = 25) => {
-    const finalDeadline = deadline || new Date().toISOString().split('T')[0];
+    const finalDeadline = deadline || formatLocalDate();
     const newTask = {
       id: Date.now().toString(),
       title,
@@ -341,7 +377,7 @@ export const StudyProvider = ({ children }) => {
 
   // Pomodoro
   const addPomodoroSession = (minutes) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDate();
     const isLate = new Date().getHours() >= 22;
 
     setPomodoro(prev => {
@@ -372,6 +408,7 @@ export const StudyProvider = ({ children }) => {
   const updateProfile = (name, email) => {
     if (user) {
       setUser(prev => ({ ...prev, name, email }));
+      setUsersDb(prev => prev.map(u => u.id === user.id ? { ...u, name, email } : u));
     }
   };
 

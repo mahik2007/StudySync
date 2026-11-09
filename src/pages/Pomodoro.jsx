@@ -18,20 +18,21 @@ export default function Pomodoro() {
     return 25 * 60;
   });
   const [isRunning, setIsRunning] = useState(false);
-  const [sessionName, setSessionName] = useState(() => activeFocusTask?.title || 'Deep Work: Academic Focus');
+  const [sessionName, setSessionName] = useState(() => activeFocusTask?.title || 'Academic Focus Sprint');
   const [sessionSubject, setSessionSubject] = useState(() => activeFocusTask?.subject || 'General');
   const [showNotification, setShowNotification] = useState(false);
 
   // Custom durations presets (in minutes)
   const [focusLength, setFocusLength] = useState(25);
-  const [shortBreakLength, setShortBreakLength] = useState(5);
-  const [longBreakLength, setLongBreakLength] = useState(15);
+  const shortBreakLength = 5;
+  const longBreakLength = 15;
 
   const timerRef = useRef(null);
 
   // Sync if activeFocusTask changes
   useEffect(() => {
     if (activeFocusTask) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSessionName(activeFocusTask.title);
       setSessionSubject(activeFocusTask.subject || 'General');
       if (activeFocusTask.durationMinutes) {
@@ -52,17 +53,17 @@ export default function Pomodoro() {
       const gainNode = audioCtx.createGain();
 
       oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-      oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3); // A5
+      oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3);
       oscillator.connect(gainNode);
       gainNode.connect(audioCtx.destination);
       
-      gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
       oscillator.start();
       oscillator.stop(audioCtx.currentTime + 0.8);
     } catch {
-      // Audio is optional enhancement
+      // Audio optional
     }
   }, []);
 
@@ -102,19 +103,7 @@ export default function Pomodoro() {
     }
 
     return () => clearInterval(timerRef.current);
-  }, [handleSessionComplete, isRunning]);
-
-  const startTimer = () => setIsRunning(true);
-  const pauseTimer = () => setIsRunning(false);
-  
-  const resetTimer = () => {
-    setIsRunning(false);
-    let target = focusLength * 60;
-    if (mode === 'shortBreak') target = shortBreakLength * 60;
-    if (mode === 'longBreak') target = longBreakLength * 60;
-    setTimeLeft(target);
-    setDuration(target);
-  };
+  }, [isRunning, handleSessionComplete]);
 
   const switchMode = (newMode) => {
     setIsRunning(false);
@@ -122,246 +111,207 @@ export default function Pomodoro() {
     let target = focusLength * 60;
     if (newMode === 'shortBreak') target = shortBreakLength * 60;
     if (newMode === 'longBreak') target = longBreakLength * 60;
-    setTimeLeft(target);
     setDuration(target);
+    setTimeLeft(target);
   };
 
-  const setCustomMinutes = (mins) => {
-    if (mins <= 0) return;
+  const handleSelectPreset = (mins) => {
     setIsRunning(false);
+    setFocusLength(mins);
     if (mode === 'focus') {
-      setFocusLength(mins);
-      setDuration(mins * 60);
-      setTimeLeft(mins * 60);
-    } else if (mode === 'shortBreak') {
-      setShortBreakLength(mins);
-      setDuration(mins * 60);
-      setTimeLeft(mins * 60);
-    } else {
-      setLongBreakLength(mins);
       setDuration(mins * 60);
       setTimeLeft(mins * 60);
     }
   };
 
-  const formatTime = (secs) => {
-    const m = Math.floor(secs / 60).toString().padStart(2, '0');
-    const s = (secs % 60).toString().padStart(2, '0');
-    return `${m}:${s}`;
+  const startTimer = () => setIsRunning(true);
+  const pauseTimer = () => setIsRunning(false);
+  const resetTimer = () => {
+    setIsRunning(false);
+    setTimeLeft(duration);
   };
 
-  // Radial SVG calculation
-  const radius = 45;
-  const circumference = 2 * Math.PI * radius;
-  const progressRatio = duration > 0 ? (timeLeft / duration) : 0;
-  const strokeDashoffset = circumference - progressRatio * circumference;
+  const formatTime = (secs) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const strokeDashoffset = duration > 0 ? ((duration - timeLeft) / duration) * 283 : 0;
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-edge">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-primary text-xs font-bold uppercase tracking-wider mb-2">
-            <span className="material-symbols-outlined text-sm">timelapse</span>
-            Academic Flow State
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-lavender dark:bg-purple/20 text-purple dark:text-violet text-xs font-semibold mb-1">
+            <span className="material-symbols-outlined text-xs">timer</span>
+            <span>Focus Timer</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#1b1b24] dark:text-white tracking-tight">
-            Focus Pomodoro Timer
-          </h2>
-          <p className="text-sm font-medium text-[#4b4863] dark:text-[#bbb8d0]">
-            Elevate cognitive retention with science-backed focus intervals and structured breaks.
-          </p>
+          <h1 className="font-heading text-xl md:text-2xl font-bold text-content tracking-tight">Pomodoro</h1>
+          <p className="text-xs text-content-sub">Work in dedicated focus sprints with structured rest intervals.</p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex flex-col items-end">
-            <span className="text-xs uppercase tracking-wider font-extrabold text-primary">
-              {mode === 'focus' ? 'Deep Work Cycle' : 'Restoration Phase'}
-            </span>
-            <div className="flex items-center gap-1.5 text-tertiary font-bold">
-              <span className={`w-2.5 h-2.5 rounded-full bg-tertiary ${isRunning ? 'animate-ping' : ''}`}></span>
-              <span className="text-xs">{isRunning ? 'Clock Running' : 'Session Standby'}</span>
-            </div>
-          </div>
+        {/* Quick presets */}
+        <div className="flex items-center gap-1.5 bg-surface-alt p-1 rounded-xl border border-edge self-start sm:self-auto">
+          {[15, 25, 30, 45, 60].map((mins) => (
+            <button
+              key={mins}
+              onClick={() => handleSelectPreset(mins)}
+              className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                focusLength === mins && mode === 'focus'
+                  ? 'bg-purple text-white shadow-2xs font-semibold'
+                  : 'text-content-sub hover:text-content'
+              }`}
+            >
+              {mins}m
+            </button>
+          ))}
         </div>
       </div>
 
+      {/* Completion Toast Notification */}
       {showNotification && (
-        <div className="p-4 bg-tertiary-fixed/30 border border-tertiary/30 text-tertiary rounded-2xl flex items-center justify-between shadow-sm motion-page">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined">celebration</span>
-            <span className="text-xs font-bold">Focus block completed and logged! You gained +40 XP.</span>
+        <div className="p-4 rounded-xl bg-success-soft border border-success/30 text-success flex items-center justify-between shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-medium">
+            <span className="material-symbols-outlined text-base">check_circle</span>
+            <span>Focus session completed! XP rewarded and rest interval started.</span>
           </div>
-          <button onClick={() => setShowNotification(false)} className="text-xs font-extrabold hover:underline">
+          <button 
+            onClick={() => setShowNotification(false)}
+            className="text-xs hover:underline cursor-pointer"
+          >
             Dismiss
           </button>
         </div>
       )}
 
-      {/* Bento Grid Layout */}
+      {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Main Timer Display */}
-        <div className="lg:col-span-8 flex flex-col items-center justify-center p-8 md:p-12 rounded-3xl bg-white dark:bg-surface-container border border-outline-variant/30 shadow-sm relative overflow-hidden">
-          {/* Top Mode Selector Tabs */}
-          <div className="flex gap-2 mb-8 bg-surface-container-low p-1.5 rounded-2xl border border-outline-variant/20">
-            <button 
+        {/* Left Column: Big Circular Timer */}
+        <div className="lg:col-span-8 bg-card border border-edge rounded-2xl p-6 md:p-10 shadow-xs flex flex-col items-center justify-center transition-colors">
+          {/* Mode Switcher Tabs */}
+          <div className="flex items-center gap-1 bg-surface-alt p-1 rounded-xl border border-edge mb-8">
+            <button
               onClick={() => switchMode('focus')}
-              className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-                mode === 'focus' 
-                  ? 'bg-primary text-white shadow-md shadow-primary/25' 
-                  : 'text-[#3b3852] dark:text-[#bbb8d0] hover:bg-surface-container'
+              className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                mode === 'focus' ? 'bg-purple text-white shadow-2xs font-semibold' : 'text-content-sub hover:text-content'
               }`}
             >
-              Focus ({focusLength}m)
+              Focus Sprint
             </button>
-            <button 
+            <button
               onClick={() => switchMode('shortBreak')}
-              className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-                mode === 'shortBreak' 
-                  ? 'bg-primary text-white shadow-md shadow-primary/25' 
-                  : 'text-[#3b3852] dark:text-[#bbb8d0] hover:bg-surface-container'
+              className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                mode === 'shortBreak' ? 'bg-purple text-white shadow-2xs font-semibold' : 'text-content-sub hover:text-content'
               }`}
             >
-              Short Break ({shortBreakLength}m)
+              Short Break
             </button>
-            <button 
+            <button
               onClick={() => switchMode('longBreak')}
-              className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-                mode === 'longBreak' 
-                  ? 'bg-primary text-white shadow-md shadow-primary/25' 
-                  : 'text-[#3b3852] dark:text-[#bbb8d0] hover:bg-surface-container'
+              className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                mode === 'longBreak' ? 'bg-purple text-white shadow-2xs font-semibold' : 'text-content-sub hover:text-content'
               }`}
             >
-              Long Break ({longBreakLength}m)
+              Long Break
             </button>
           </div>
 
-          {/* Radial Countdown Circle */}
-          <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
-            <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
-              {/* Background Track */}
+          {/* SVG Circular Progress Timer */}
+          <div className="relative w-64 h-64 md:w-72 md:h-72 flex items-center justify-center">
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+              {/* Background circle track */}
               <circle
                 cx="50"
                 cy="50"
-                r={radius}
-                className="text-surface-container-high"
-                strokeWidth="5"
-                stroke="currentColor"
+                r="45"
+                className="stroke-surface-alt"
+                strokeWidth="4"
                 fill="transparent"
               />
-              {/* Animated Progress Indicator */}
+              {/* Animated progress circle */}
               <circle
                 cx="50"
                 cy="50"
-                r={radius}
-                className="text-primary transition-all duration-1000 ease-linear"
-                strokeWidth="5.5"
-                strokeDasharray={circumference}
-                strokeDashoffset={strokeDashoffset}
+                r="45"
+                className="stroke-purple transition-all duration-300"
+                strokeWidth="4"
+                strokeDasharray="283"
+                strokeDashoffset={283 - strokeDashoffset}
                 strokeLinecap="round"
-                stroke="currentColor"
                 fill="transparent"
               />
             </svg>
 
-            {/* Time Digital Overlay */}
-            <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-5xl md:text-6xl font-extrabold tracking-tighter text-[#1b1b24] dark:text-white tabular-nums">
+            {/* Inner countdown text */}
+            <div className="absolute flex flex-col items-center justify-center text-center">
+              <span className="font-heading text-5xl md:text-6xl font-bold text-content tracking-tight tabular-nums">
                 {formatTime(timeLeft)}
               </span>
-              <span className="text-xs font-bold uppercase tracking-widest text-primary mt-2">
-                {mode === 'focus' ? 'Concentration Sprint' : 'Rest & Breathe'}
-              </span>
-              <span className="text-[11px] font-semibold text-[#5e5b79] dark:text-[#a5a2bf] max-w-[200px] truncate mt-1">
-                {sessionName}
+              <span className="text-xs font-medium text-content-dim mt-1">
+                {mode === 'focus' ? 'Deep Work' : 'Recharge Break'}
               </span>
             </div>
           </div>
 
-          {/* Quick Duration Adjuster Buttons */}
-          <div className="flex items-center gap-2 mt-6">
-            <span className="text-[11px] font-bold text-[#5e5b79] dark:text-[#a5a2bf]">Quick Duration:</span>
-            {[15, 25, 30, 45, 60].map(mins => (
-              <button
-                key={mins}
-                onClick={() => setCustomMinutes(mins)}
-                className={`px-2.5 py-1 text-xs rounded-lg font-bold border transition-all ${
-                  (mode === 'focus' && focusLength === mins) || (mode === 'shortBreak' && shortBreakLength === mins)
-                    ? 'border-primary bg-primary text-white shadow-sm'
-                    : 'border-outline-variant/30 text-[#3b3852] dark:text-[#c4c1dc] hover:border-primary'
-                }`}
-              >
-                {mins}m
-              </button>
-            ))}
-          </div>
-
-          {/* Primary Timer Controls */}
-          <div className="mt-8 flex items-center gap-4">
+          {/* Controls */}
+          <div className="mt-8 flex items-center gap-3">
             <button 
               onClick={resetTimer}
-              className="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-all text-[#3b3852] dark:text-white"
+              className="w-10 h-10 rounded-xl border border-edge bg-surface-alt hover:bg-lavender dark:hover:bg-purple/20 text-content-sub hover:text-purple flex items-center justify-center transition-colors cursor-pointer"
               title="Reset Timer"
               aria-label="Reset Timer"
             >
-              <span className="material-symbols-outlined text-xl">restart_alt</span>
+              <span className="material-symbols-outlined text-lg">restart_alt</span>
             </button>
-            
+
             {isRunning ? (
               <button 
                 onClick={pauseTimer}
-                className="px-8 py-3.5 rounded-2xl bg-primary hover:bg-primary-container text-white font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-primary/25 hover:scale-105 active:scale-95 transition-all"
+                className="px-6 py-2.5 rounded-xl bg-purple hover:bg-purple-hover text-white font-semibold text-xs flex items-center gap-2 shadow-xs transition-all active:scale-[0.99] cursor-pointer"
               >
-                <span className="material-symbols-outlined">pause</span>
-                Pause Session
+                <span className="material-symbols-outlined text-base">pause</span>
+                <span>Pause</span>
               </button>
             ) : (
               <button 
                 onClick={startTimer}
-                className="px-8 py-3.5 rounded-2xl bg-primary hover:bg-primary-container text-white font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-primary/25 hover:scale-105 active:scale-95 transition-all"
+                className="px-6 py-2.5 rounded-xl bg-purple hover:bg-purple-hover text-white font-semibold text-xs flex items-center gap-2 shadow-xs transition-all active:scale-[0.99] cursor-pointer"
               >
-                <span className="material-symbols-outlined fill-current">play_arrow</span>
-                Start Focus Session
+                <span className="material-symbols-outlined text-base">play_arrow</span>
+                <span>Start Session</span>
               </button>
             )}
 
             <button 
               onClick={handleSessionComplete}
-              className="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-all text-[#3b3852] dark:text-white"
-              title="Fast Complete Session"
-              aria-label="Skip to Next Cycle"
+              className="w-10 h-10 rounded-xl border border-edge bg-surface-alt hover:bg-lavender dark:hover:bg-purple/20 text-content-sub hover:text-purple flex items-center justify-center transition-colors cursor-pointer"
+              title="Complete Session"
+              aria-label="Next Session"
             >
-              <span className="material-symbols-outlined text-xl">skip_next</span>
+              <span className="material-symbols-outlined text-lg">skip_next</span>
             </button>
           </div>
         </div>
 
-        {/* Right Side Stats & Target Session Card */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Current Task & Objective Card */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-surface-container border border-outline-variant/30 shadow-sm space-y-4">
+        {/* Right Column: Objective & Stats */}
+        <div className="lg:col-span-4 space-y-5">
+          {/* Objective Card */}
+          <div className="bg-card border border-edge p-5 rounded-2xl shadow-xs space-y-3.5 transition-colors">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-primary-fixed text-primary flex items-center justify-center">
-                  <span className="material-symbols-outlined text-xl">track_changes</span>
-                </div>
-                <div>
-                  <h3 className="text-xs uppercase tracking-wider font-extrabold text-primary">
-                    Session Objective
-                  </h3>
-                  <span className="text-[10px] font-bold text-[#5e5b79] dark:text-[#a5a2bf]">
-                    Subject: {sessionSubject}
-                  </span>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-purple text-lg">track_changes</span>
+                <h2 className="font-heading text-sm font-bold text-content">Active Objective</h2>
               </div>
               {activeFocusTask && (
                 <button
                   onClick={() => {
                     setActiveFocusTask(null);
-                    setSessionName('Deep Work: Academic Focus');
+                    setSessionName('Academic Focus Sprint');
                     setSessionSubject('General');
                   }}
-                  className="text-[10px] text-error font-bold hover:underline"
+                  className="text-[11px] text-danger hover:underline cursor-pointer"
                 >
                   Clear Task
                 </button>
@@ -369,55 +319,47 @@ export default function Pomodoro() {
             </div>
 
             <div>
-              <label className="block text-[11px] font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">
-                Active Topic / Problem Set
-              </label>
+              <label className="block text-xs font-medium text-content-sub mb-1">Topic or Problem Set</label>
               <input 
                 value={sessionName}
                 onChange={(e) => setSessionName(e.target.value)}
-                className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2.5 text-sm font-bold outline-none focus:border-primary text-[#1b1b24] dark:text-white"
-                placeholder="What are you working on right now?"
+                className="w-full bg-surface-alt border border-edge rounded-xl px-3.5 py-2 text-xs font-medium outline-none focus:border-purple text-content placeholder:text-content-dim"
+                placeholder="What are you focusing on?"
               />
             </div>
 
-            <div className="p-3 rounded-xl bg-primary-fixed/20 border border-primary/20 flex items-center justify-between text-xs">
-              <span className="font-semibold text-primary">Interval Target:</span>
-              <span className="font-extrabold text-[#1b1b24] dark:text-white">{Math.round(duration / 60)} minutes</span>
+            <div className="p-3 rounded-xl bg-surface-alt border border-edge flex items-center justify-between text-xs">
+              <span className="text-content-sub">Subject / Target:</span>
+              <span className="font-semibold text-purple">{sessionSubject} • {Math.round(duration / 60)}m</span>
             </div>
           </div>
 
-          {/* Daily Productivity Bento */}
+          {/* Productivity Stats Bento */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-5 rounded-3xl bg-white dark:bg-surface-container border border-outline-variant/30 shadow-sm text-center">
-              <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#5e5b79] dark:text-[#a5a2bf] mb-1">
-                Today's Focus
+            <div className="bg-card border border-edge p-4.5 rounded-2xl shadow-xs text-center transition-colors">
+              <p className="text-xs font-medium text-content-sub mb-1">Today's Focus</p>
+              <p className="font-heading text-2xl font-bold text-content">
+                {(pomodoro.todayMinutes / 60).toFixed(1)} <span className="text-xs font-normal text-content-sub">hrs</span>
               </p>
-              <p className="text-3xl font-extrabold text-primary">
-                {(pomodoro.todayMinutes / 60).toFixed(1)}<span className="text-sm font-semibold">h</span>
-              </p>
-              <p className="text-[10px] text-[#5e5b79] dark:text-[#a5a2bf] font-medium mt-1">Logged today</p>
+              <p className="text-[10px] text-content-dim mt-0.5">Logged today</p>
             </div>
-            <div className="p-5 rounded-3xl bg-white dark:bg-surface-container border border-outline-variant/30 shadow-sm text-center">
-              <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#5e5b79] dark:text-[#a5a2bf] mb-1">
-                Sessions
-              </p>
-              <p className="text-3xl font-extrabold text-primary">
+            <div className="bg-card border border-edge p-4.5 rounded-2xl shadow-xs text-center transition-colors">
+              <p className="text-xs font-medium text-content-sub mb-1">Sessions</p>
+              <p className="font-heading text-2xl font-bold text-content">
                 {pomodoro.sessionsCompleted}
               </p>
-              <p className="text-[10px] text-[#5e5b79] dark:text-[#a5a2bf] font-medium mt-1">Total finished</p>
+              <p className="text-[10px] text-content-dim mt-0.5">Finished today</p>
             </div>
           </div>
 
-          {/* Evidence-Based Study Tip */}
-          <div className="p-5 rounded-3xl bg-surface-container-low border border-outline-variant/25 relative overflow-hidden space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary text-base">lightbulb</span>
-              <span className="text-xs font-bold text-primary uppercase tracking-wider">
-                Productivity Science
-              </span>
+          {/* Principle Card */}
+          <div className="bg-lavender/40 dark:bg-card border border-purple/20 p-4 rounded-2xl shadow-xs space-y-1.5 transition-colors">
+            <div className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-purple text-base">lightbulb</span>
+              <span className="text-xs font-semibold text-purple">Focus Science</span>
             </div>
-            <p className="text-xs text-[#3b3852] dark:text-[#c4c1dc] leading-relaxed">
-              Research demonstrates that taking deliberate, screen-free 5-minute pauses between 25-minute sprints improves factual retention by up to 28%.
+            <p className="text-xs text-content-sub leading-relaxed">
+              Screen-free 5-minute pauses between 25-minute sprints restore working memory and prevent cognitive fatigue.
             </p>
           </div>
         </div>

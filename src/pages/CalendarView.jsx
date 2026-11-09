@@ -4,8 +4,15 @@ import { useStudy } from '../context/useStudy';
 export default function CalendarView() {
   const { tasks, pomodoro, toggleTask } = useStudy();
   
+  const formatYMD = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+
   const [currentDate, setCurrentDate] = useState(() => new Date());
-  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(() => formatYMD(new Date()));
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -24,36 +31,31 @@ export default function CalendarView() {
   // Previous month overflow days
   for (let i = startDayOfWeek - 1; i >= 0; i--) {
     const d = new Date(year, month - 1, prevMonthDays - i);
-    const dateStr = d.toISOString().split('T')[0];
     gridCells.push({
       day: prevMonthDays - i,
       month: 'prev',
-      dateStr
+      dateStr: formatYMD(d)
     });
   }
 
   // Current month days
   for (let i = 1; i <= daysInMonth; i++) {
-    const monthStr = (month + 1).toString().padStart(2, '0');
-    const dayStr = i.toString().padStart(2, '0');
-    const dateStr = `${year}-${monthStr}-${dayStr}`;
+    const d = new Date(year, month, i);
     gridCells.push({
       day: i,
       month: 'current',
-      dateStr
+      dateStr: formatYMD(d)
     });
   }
 
-  // Next month overflow days to pad to 42 cells (6 rows)
+  // Next month overflow days
   const remainingCells = 42 - gridCells.length;
   for (let i = 1; i <= remainingCells; i++) {
-    const nextMonth = month === 11 ? 1 : month + 2;
-    const nextYear = month === 11 ? year + 1 : year;
-    const dateStr = `${nextYear}-${nextMonth.toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+    const d = new Date(year, month + 1, i);
     gridCells.push({
       day: i,
       month: 'next',
-      dateStr
+      dateStr: formatYMD(d)
     });
   }
 
@@ -66,8 +68,8 @@ export default function CalendarView() {
   };
 
   const getDayContent = (dateStr) => {
-    const dayTasks = tasks.filter(t => t.deadline === dateStr);
-    const dayStudy = pomodoro.history.find(h => h.date === dateStr);
+    const dayTasks = tasks.filter((t) => t.deadline === dateStr);
+    const dayStudy = pomodoro?.history?.find((h) => h.date === dateStr);
     return { tasks: dayTasks, study: dayStudy };
   };
 
@@ -76,100 +78,97 @@ export default function CalendarView() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-edge">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-primary text-xs font-bold uppercase tracking-wider mb-2">
-            <span className="material-symbols-outlined text-sm">calendar_month</span>
-            Schedule Overview
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-lavender dark:bg-purple/20 text-purple dark:text-violet text-xs font-semibold mb-1">
+            <span className="material-symbols-outlined text-xs">event</span>
+            <span>Monthly View</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#1b1b24] dark:text-white tracking-tight">
-            Academic Calendar
-          </h2>
-          <p className="text-sm font-medium text-[#4b4863] dark:text-[#bbb8d0]">
-            Track exam dates, assignment deadlines, and historical study hours.
-          </p>
+          <h1 className="font-heading text-xl md:text-2xl font-bold text-content tracking-tight">Calendar</h1>
+          <p className="text-xs text-content-sub">Keep track of assignment deadlines, exams, and daily study records.</p>
         </div>
 
-        {/* Month Navigation Controls */}
-        <div className="flex items-center gap-3 bg-white dark:bg-surface-container border border-outline-variant/30 rounded-2xl px-4 py-2 shadow-sm w-fit">
+        {/* Month Navigation */}
+        <div className="flex items-center gap-2 bg-card border border-edge rounded-xl px-3 py-1.5 shadow-2xs self-start sm:self-auto transition-colors">
           <button 
             onClick={handlePrevMonth} 
-            className="p-1 hover:bg-surface-container-high rounded-lg text-[#3b3852] dark:text-white transition-colors"
+            className="p-1 hover:bg-surface-alt rounded-lg text-content-sub hover:text-content transition-colors cursor-pointer"
             aria-label="Previous Month"
           >
-            <span className="material-symbols-outlined text-base">arrow_back_ios_new</span>
+            <span className="material-symbols-outlined text-sm">arrow_back_ios_new</span>
           </button>
-          <span className="text-sm font-extrabold text-[#1b1b24] dark:text-white min-w-36 text-center">
+          <span className="text-xs font-semibold text-content min-w-32 text-center">
             {monthNames[month]} {year}
           </span>
           <button 
             onClick={handleNextMonth} 
-            className="p-1 hover:bg-surface-container-high rounded-lg text-[#3b3852] dark:text-white transition-colors"
+            className="p-1 hover:bg-surface-alt rounded-lg text-content-sub hover:text-content transition-colors cursor-pointer"
             aria-label="Next Month"
           >
-            <span className="material-symbols-outlined text-base">arrow_forward_ios</span>
+            <span className="material-symbols-outlined text-sm">arrow_forward_ios</span>
           </button>
         </div>
       </div>
 
       {/* Main Grid Calendar */}
-      <div className="bg-white dark:bg-surface-container border border-outline-variant/30 rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-card border border-edge rounded-2xl overflow-hidden shadow-xs transition-colors">
         {/* Weekday headers */}
-        <div className="grid grid-cols-7 border-b border-outline-variant/25 bg-surface-container-low py-3 text-center text-xs font-extrabold text-[#5e5b79] dark:text-[#a5a2bf]">
-          <div>SUN</div>
-          <div>MON</div>
-          <div>TUE</div>
-          <div>WED</div>
-          <div>THU</div>
-          <div>FRI</div>
-          <div>SAT</div>
+        <div className="grid grid-cols-7 border-b border-edge bg-surface-alt py-2.5 text-center text-[11px] font-semibold text-content-sub">
+          <div>Sun</div>
+          <div>Mon</div>
+          <div>Tue</div>
+          <div>Wed</div>
+          <div>Thu</div>
+          <div>Fri</div>
+          <div>Sat</div>
         </div>
 
         {/* Days grid */}
         <div className="grid grid-cols-7 grid-rows-6">
           {gridCells.map((cell, idx) => {
             const { tasks: cellTasks, study: cellStudy } = getDayContent(cell.dateStr);
-            const isToday = cell.dateStr === new Date().toISOString().split('T')[0];
+            const isToday = cell.dateStr === formatYMD(new Date());
             const isSelected = selectedDate === cell.dateStr;
 
             return (
               <div 
                 key={idx} 
                 onClick={() => setSelectedDate(cell.dateStr)}
-                className={`min-h-[105px] p-2.5 border-r border-b border-outline-variant/20 flex flex-col justify-between cursor-pointer transition-all hover:bg-surface-container-low ${
-                  cell.month === 'current' ? 'text-[#1b1b24] dark:text-white' : 'text-[#8c89a4] dark:text-[#6a6784] opacity-50'
-                } ${isToday ? 'bg-primary-fixed/20' : ''} ${isSelected ? 'ring-2 ring-primary ring-inset bg-primary-fixed/30' : ''}`}
+                className={`min-h-[85px] md:min-h-[100px] p-2 border-r border-b border-edge flex flex-col justify-between cursor-pointer transition-colors hover:bg-surface-alt/70 ${
+                  cell.month === 'current' ? 'text-content' : 'text-content-dim opacity-40'
+                } ${isToday ? 'bg-lavender/30 dark:bg-purple/10' : ''} ${
+                  isSelected ? 'ring-2 ring-purple ring-inset bg-lavender/40 dark:bg-purple/15' : ''
+                }`}
               >
                 <div className="flex justify-between items-start">
-                  <span className={`text-xs font-extrabold ${isToday ? 'bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center shadow-sm' : ''}`}>
+                  <span className={`text-xs font-medium ${isToday ? 'bg-purple text-white w-5 h-5 rounded-full flex items-center justify-center font-bold text-[11px]' : ''}`}>
                     {cell.day}
                   </span>
                   
-                  {/* Study session indicator */}
                   {cellStudy && cellStudy.minutes > 0 && (
                     <span 
-                      className="w-2.5 h-2.5 rounded-full bg-tertiary" 
-                      title={`Studied for ${cellStudy.minutes} mins on this date`}
+                      className="w-2 h-2 rounded-full bg-success" 
+                      title={`${cellStudy.minutes} mins studied`}
                     />
                   )}
                 </div>
 
-                {/* Deadlines list preview */}
-                <div className="space-y-1 mt-2">
-                  {cellTasks.slice(0, 2).map(t => (
+                {/* Deadlines preview */}
+                <div className="space-y-1 mt-1.5">
+                  {cellTasks.slice(0, 2).map((t) => (
                     <div 
                       key={t.id} 
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md truncate ${
+                      className={`text-[9px] font-medium px-1.5 py-0.5 rounded truncate ${
                         t.completed 
-                          ? 'bg-surface-container text-[#5e5b79] dark:text-[#a5a2bf] line-through' 
-                          : 'bg-primary-fixed text-primary border border-primary/20'
+                          ? 'bg-surface-alt text-content-dim line-through' 
+                          : 'bg-lavender dark:bg-purple/20 text-purple border border-purple/20'
                       }`}
                     >
                       {t.title}
                     </div>
                   ))}
                   {cellTasks.length > 2 && (
-                    <div className="text-[9px] text-primary font-bold">
+                    <div className="text-[9px] text-purple font-semibold pl-1">
                       +{cellTasks.length - 2} more
                     </div>
                   )}
@@ -180,45 +179,45 @@ export default function CalendarView() {
         </div>
       </div>
 
-      {/* Selected Day Panel Details */}
+      {/* Selected Day Details Panel */}
       {selectedDate && (
-        <div className="bg-white dark:bg-surface-container p-6 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-outline-variant/20">
-            <div>
-              <h3 className="text-base font-bold text-[#1b1b24] dark:text-white flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary">event</span>
-                Schedule for {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-              </h3>
-            </div>
+        <div className="bg-card p-5 rounded-2xl border border-edge shadow-xs space-y-3.5 transition-colors">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-edge">
+            <h2 className="font-heading text-sm font-bold text-content flex items-center gap-2">
+              <span className="material-symbols-outlined text-purple text-base">event</span>
+              <span>
+                Schedule for {new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}
+              </span>
+            </h2>
             {selectedDayData.study && selectedDayData.study.minutes > 0 && (
-              <span className="text-xs font-bold text-tertiary bg-tertiary-fixed/40 px-3 py-1 rounded-full w-fit">
-                ⏱️ {selectedDayData.study.minutes} mins studied
+              <span className="text-xs font-semibold text-success bg-success-soft px-2.5 py-0.5 rounded-full w-fit">
+                {selectedDayData.study.minutes} mins studied
               </span>
             )}
           </div>
 
           {selectedDayData.tasks.length > 0 ? (
-            <div className="space-y-2.5">
-              {selectedDayData.tasks.map(task => (
+            <div className="space-y-2">
+              {selectedDayData.tasks.map((task) => (
                 <div 
                   key={task.id}
-                  className="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-outline-variant/20"
+                  className="flex items-center justify-between p-3 rounded-xl bg-surface-alt border border-edge"
                 >
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => toggleTask(task.id)}
-                      className={`w-5 h-5 rounded-md border flex items-center justify-center ${
-                        task.completed ? 'bg-primary text-white border-primary' : 'border-outline-variant/50'
+                      className={`w-4 h-4 rounded border flex items-center justify-center cursor-pointer ${
+                        task.completed ? 'bg-purple text-white border-purple' : 'border-edge bg-card'
                       }`}
                     >
                       {task.completed && <span className="material-symbols-outlined text-xs">check</span>}
                     </button>
                     <div>
-                      <h4 className={`text-xs md:text-sm font-bold ${task.completed ? 'line-through text-[#5e5b79] dark:text-[#a5a2bf]' : 'text-[#1b1b24] dark:text-white'}`}>
+                      <p className={`text-xs font-semibold ${task.completed ? 'line-through text-content-dim' : 'text-content'}`}>
                         {task.title}
-                      </h4>
-                      <p className="text-[10px] text-[#5e5b79] dark:text-[#a5a2bf] font-medium">
-                        {task.subject} • Priority: <span className="uppercase font-bold">{task.priority}</span>
+                      </p>
+                      <p className="text-[10px] text-content-dim">
+                        {task.subject} • Priority: <span className="font-semibold uppercase">{task.priority}</span>
                       </p>
                     </div>
                   </div>
@@ -226,8 +225,8 @@ export default function CalendarView() {
               ))}
             </div>
           ) : (
-            <p className="text-xs text-[#5e5b79] dark:text-[#a5a2bf]">
-              No deadlines or tasks scheduled for this day.
+            <p className="text-xs text-content-sub">
+              No tasks or deadlines scheduled for this date.
             </p>
           )}
         </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStudy } from '../context/useStudy';
+import { formatLocalDate } from '../utils/dateUtils';
 
 export default function TaskManager() {
   const { tasks, addTask, editTask, deleteTask, toggleTask, setActiveFocusTask } = useStudy();
@@ -24,14 +25,14 @@ export default function TaskManager() {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   // Extract unique subjects
-  const subjects = ['All', ...new Set(tasks.map(t => t.subject || 'General'))];
+  const subjects = ['All', ...new Set(tasks.map((t) => t.subject || 'General'))];
 
   const handleOpenAdd = () => {
     setEditingTask(null);
     setTaskTitle('');
     setTaskSubject('CS 101');
     setTaskPriority('medium');
-    setTaskDeadline(new Date().toISOString().split('T')[0]);
+    setTaskDeadline(formatLocalDate());
     setTaskEstDuration(25);
     setModalOpen(true);
   };
@@ -41,7 +42,7 @@ export default function TaskManager() {
     setTaskTitle(task.title);
     setTaskSubject(task.subject || 'General');
     setTaskPriority(task.priority);
-    setTaskDeadline(task.deadline || new Date().toISOString().split('T')[0]);
+    setTaskDeadline(task.deadline || formatLocalDate());
     setTaskEstDuration(task.estimatedDuration || 25);
     setModalOpen(true);
   };
@@ -50,7 +51,7 @@ export default function TaskManager() {
     e.preventDefault();
     if (!taskTitle.trim()) return;
 
-    const deadline = taskDeadline || new Date().toISOString().split('T')[0];
+    const deadline = taskDeadline || formatLocalDate();
 
     if (editingTask) {
       editTask(editingTask.id, {
@@ -82,7 +83,7 @@ export default function TaskManager() {
   };
 
   // Filter & Search Logic
-  const filteredTasks = tasks.filter(task => {
+  const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesSubject = filterSubject === 'All' || task.subject === filterSubject;
     const matchesPriority = filterPriority === 'All' || task.priority === filterPriority;
@@ -98,76 +99,63 @@ export default function TaskManager() {
   const sortedTasks = [...filteredTasks].sort((a, b) => {
     if (sortBy === 'deadline-asc') {
       return new Date(a.deadline) - new Date(b.deadline);
-    } else if (sortBy === 'deadline-desc') {
+    }
+    if (sortBy === 'deadline-desc') {
       return new Date(b.deadline) - new Date(a.deadline);
-    } else if (sortBy === 'priority-desc') {
-      const priorityWeights = { high: 3, medium: 2, low: 1 };
-      return priorityWeights[b.priority] - priorityWeights[a.priority];
-    } else if (sortBy === 'priority-asc') {
-      const priorityWeights = { high: 3, medium: 2, low: 1 };
-      return priorityWeights[a.priority] - priorityWeights[b.priority];
+    }
+    if (sortBy === 'priority-high') {
+      const pWeights = { high: 3, medium: 2, low: 1 };
+      return (pWeights[b.priority] || 0) - (pWeights[a.priority] || 0);
     }
     return 0;
   });
 
-  const getPriorityBadge = (priority) => {
-    if (priority === 'high') {
-      return 'bg-error/15 text-error border border-error/20';
-    }
-    if (priority === 'medium') {
-      return 'bg-amber-100 text-amber-900 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-300/30';
-    }
-    return 'bg-secondary-fixed/50 text-secondary border border-secondary/20';
-  };
-
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-edge">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-primary text-xs font-bold uppercase tracking-wider mb-2">
-            <span className="material-symbols-outlined text-sm">checklist</span>
-            Academic Task Flow
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-lavender dark:bg-purple/20 text-purple dark:text-violet text-xs font-semibold mb-1">
+            <span className="material-symbols-outlined text-xs">format_list_bulleted</span>
+            <span>Task Management</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-[#1b1b24] dark:text-white tracking-tight">
-            Task Manager
-          </h2>
-          <p className="text-sm font-medium text-[#4b4863] dark:text-[#bbb8d0]">
-            Stay organized with coursework, problem sets, and upcoming deliverables.
-          </p>
+          <h1 className="font-heading text-xl md:text-2xl font-bold text-content tracking-tight">Task Manager</h1>
+          <p className="text-xs text-content-sub">Track, prioritize, and focus on academic assignments.</p>
         </div>
-        <button 
+
+        <button
           onClick={handleOpenAdd}
-          className="flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl font-bold text-xs uppercase tracking-wider active:scale-95 transition-all shadow-md w-fit"
+          className="flex items-center gap-1.5 px-4 py-2 bg-purple hover:bg-purple-hover text-white rounded-xl text-xs font-semibold shadow-xs transition-all active:scale-[0.99] self-start sm:self-auto cursor-pointer"
         >
-          <span className="material-symbols-outlined text-sm">add</span> Add New Task
+          <span className="material-symbols-outlined text-base">add</span>
+          <span>Add Task</span>
         </button>
       </div>
 
-      {/* Controls: Search, Filters, and Sorting */}
-      <div className="bg-white dark:bg-surface-container p-4 md:p-5 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
+      {/* Filter and Search Controls */}
+      <div className="bg-card p-4 rounded-2xl border border-edge shadow-xs space-y-3 transition-colors">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-          {/* Search bar */}
+          {/* Search Input */}
           <div className="md:col-span-5 relative">
-            <span className="material-symbols-outlined absolute left-3.5 top-2.5 text-[#5e5b79] dark:text-[#bbb8d0] text-lg">search</span>
+            <span className="material-symbols-outlined absolute left-3 top-2.5 text-content-dim text-base">search</span>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search tasks, topics, homework..."
-              className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl pl-10 pr-4 py-2 text-xs md:text-sm outline-none focus:border-primary text-[#1b1b24] dark:text-white font-medium"
+              placeholder="Search tasks..."
+              className="w-full bg-surface-alt border border-edge focus:border-purple rounded-xl pl-9 pr-3.5 py-2 text-xs text-content placeholder:text-content-dim outline-none transition-all"
             />
           </div>
 
           {/* Filters */}
-          <div className="md:col-span-7 flex flex-wrap gap-2 justify-start md:justify-end">
+          <div className="md:col-span-7 flex flex-wrap sm:flex-nowrap gap-2">
             <select
               value={filterSubject}
               onChange={(e) => setFilterSubject(e.target.value)}
-              className="px-3 py-2 border border-outline-variant/30 bg-surface-container-low rounded-xl text-xs font-bold text-[#3b3852] dark:text-white outline-none focus:border-primary cursor-pointer"
+              className="flex-1 min-w-[100px] bg-surface-alt border border-edge rounded-xl px-2.5 py-2 text-xs text-content outline-none cursor-pointer"
             >
               <option value="All">All Subjects</option>
-              {subjects.slice(1).map(sub => (
+              {subjects.filter((s) => s !== 'All').map((sub) => (
                 <option key={sub} value={sub}>{sub}</option>
               ))}
             </select>
@@ -175,229 +163,232 @@ export default function TaskManager() {
             <select
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
-              className="px-3 py-2 border border-outline-variant/30 bg-surface-container-low rounded-xl text-xs font-bold text-[#3b3852] dark:text-white outline-none focus:border-primary cursor-pointer"
+              className="flex-1 min-w-[100px] bg-surface-alt border border-edge rounded-xl px-2.5 py-2 text-xs text-content outline-none cursor-pointer"
             >
               <option value="All">All Priorities</option>
-              <option value="high">High Priority</option>
-              <option value="medium">Medium Priority</option>
-              <option value="low">Low Priority</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
             </select>
 
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-3 py-2 border border-outline-variant/30 bg-surface-container-low rounded-xl text-xs font-bold text-[#3b3852] dark:text-white outline-none focus:border-primary cursor-pointer"
+              className="flex-1 min-w-[100px] bg-surface-alt border border-edge rounded-xl px-2.5 py-2 text-xs text-content outline-none cursor-pointer"
             >
               <option value="All">All Status</option>
-              <option value="Active">Pending</option>
+              <option value="Active">Active</option>
               <option value="Completed">Completed</option>
             </select>
 
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2 border border-outline-variant/30 bg-surface-container-low rounded-xl text-xs font-bold text-[#3b3852] dark:text-white outline-none focus:border-primary cursor-pointer"
+              className="flex-1 min-w-[110px] bg-surface-alt border border-edge rounded-xl px-2.5 py-2 text-xs text-content outline-none cursor-pointer"
             >
-              <option value="deadline-asc">Due Date (Earliest)</option>
-              <option value="deadline-desc">Due Date (Latest)</option>
-              <option value="priority-desc">Priority (High to Low)</option>
-              <option value="priority-asc">Priority (Low to High)</option>
+              <option value="deadline-asc">Deadline ↑</option>
+              <option value="deadline-desc">Deadline ↓</option>
+              <option value="priority-high">Priority High</option>
             </select>
           </div>
         </div>
       </div>
 
       {/* Task List */}
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {sortedTasks.length > 0 ? (
           sortedTasks.map((task) => (
-            <div 
-              key={task.id} 
-              className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
-                task.completed 
-                  ? 'bg-surface-container-low/70 border-outline-variant/20 opacity-70' 
-                  : 'bg-white dark:bg-surface-container border-outline-variant/30 shadow-sm hover:border-primary/40'
+            <div
+              key={task.id}
+              className={`bg-card p-4 rounded-xl border border-edge shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors ${
+                task.completed ? 'opacity-60 bg-surface-alt/50' : 'hover:border-purple/30'
               }`}
             >
-              <div className="flex items-start gap-3.5 flex-1 min-w-0">
-                <button 
+              <div className="flex items-center gap-3 min-w-0">
+                <button
                   onClick={() => toggleTask(task.id)}
-                  aria-label={task.completed ? 'Mark task pending' : 'Complete task'}
-                  className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-all mt-0.5 shrink-0 ${
+                  className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors cursor-pointer ${
                     task.completed 
-                      ? 'bg-primary text-white border-primary shadow-sm' 
-                      : 'border-outline-variant/50 hover:border-primary text-transparent'
+                      ? 'bg-purple border-purple text-white' 
+                      : 'border-edge hover:border-purple bg-surface-alt'
                   }`}
+                  title={task.completed ? "Mark incomplete" : "Mark complete"}
                 >
-                  <span className="material-symbols-outlined text-sm font-bold">check</span>
+                  {task.completed && <span className="material-symbols-outlined text-xs">check</span>}
                 </button>
 
-                <div className="space-y-1.5 min-w-0 flex-1">
-                  <h4 className={`text-sm font-bold truncate ${
-                    task.completed ? 'line-through text-[#5e5b79] dark:text-[#a5a2bf]' : 'text-[#1b1b24] dark:text-white'
-                  }`}>
+                <div className="min-w-0 flex-1">
+                  <p className={`text-xs font-semibold text-content truncate ${task.completed ? 'line-through text-content-dim' : ''}`}>
                     {task.title}
-                  </h4>
-                  <div className="flex flex-wrap gap-2 items-center text-xs">
-                    <span className="bg-surface-container-high px-2 py-0.5 rounded-lg text-[10px] font-bold text-[#3b3852] dark:text-[#d3d0e8]">
-                      {task.subject}
-                    </span>
-                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase ${getPriorityBadge(task.priority)}`}>
-                      {task.priority}
-                    </span>
-                    <span className="text-[10px] font-semibold text-[#5e5b79] dark:text-[#a5a2bf] flex items-center gap-1">
-                      <span className="material-symbols-outlined text-xs">calendar_today</span>
-                      {task.deadline}
-                    </span>
-                    <span className="text-[10px] font-bold text-primary flex items-center gap-0.5">
-                      <span className="material-symbols-outlined text-xs">timer</span>
-                      {task.estimatedDuration || 25}m
-                    </span>
+                  </p>
+                  <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-content-dim">
+                    <span className="font-medium px-2 py-0.5 rounded bg-surface-alt text-content-sub">{task.subject || 'General'}</span>
+                    <span>•</span>
+                    <span>Due: {task.deadline || 'No date'}</span>
+                    <span>•</span>
+                    <span>{task.estimatedDuration || 25}m</span>
                   </div>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2 self-end sm:self-center">
+              {/* Actions & Badges */}
+              <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                {/* Priority Badge */}
+                <span className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded-md ${
+                  task.priority === 'high' 
+                    ? 'bg-danger-soft text-danger' 
+                    : task.priority === 'medium'
+                    ? 'bg-warning-soft text-warning'
+                    : 'bg-surface-alt text-content-dim'
+                }`}>
+                  {task.priority}
+                </span>
+
+                {/* Focus Button */}
                 {!task.completed && (
                   <button
                     onClick={() => handleStartFocus(task)}
-                    className="flex items-center gap-1 px-2.5 py-1.5 bg-primary-fixed hover:bg-primary-fixed-dim text-primary rounded-xl text-xs font-bold transition-all"
-                    title="Start Pomodoro with this task"
+                    className="p-1.5 text-purple hover:bg-lavender dark:hover:bg-purple/20 rounded-lg transition-colors cursor-pointer"
+                    title="Focus on this task in Pomodoro"
                   >
-                    <span className="material-symbols-outlined text-sm">play_arrow</span>
-                    <span>Focus</span>
+                    <span className="material-symbols-outlined text-base">play_arrow</span>
                   </button>
                 )}
-                <button 
+
+                {/* Edit */}
+                <button
                   onClick={() => handleOpenEdit(task)}
-                  className="p-1.5 hover:bg-surface-container-high rounded-xl text-[#5e5b79] dark:text-[#bbb8d0] hover:text-primary transition-colors"
-                  title="Edit Task"
+                  className="p-1.5 text-content-dim hover:text-content hover:bg-surface-alt rounded-lg transition-colors cursor-pointer"
+                  title="Edit task"
                 >
-                  <span className="material-symbols-outlined text-lg">edit</span>
+                  <span className="material-symbols-outlined text-base">edit</span>
                 </button>
-                <button 
+
+                {/* Delete */}
+                <button
                   onClick={() => setConfirmDeleteId(task.id)}
-                  className="p-1.5 hover:bg-error/10 rounded-xl text-[#5e5b79] dark:text-[#bbb8d0] hover:text-error transition-colors"
-                  title="Delete Task"
+                  className="p-1.5 text-content-dim hover:text-danger hover:bg-danger-soft/40 rounded-lg transition-colors cursor-pointer"
+                  title="Delete task"
                 >
-                  <span className="material-symbols-outlined text-lg">delete</span>
+                  <span className="material-symbols-outlined text-base">delete</span>
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <div className="text-center py-12 bg-white dark:bg-surface-container rounded-2xl border border-outline-variant/30 text-xs text-[#5e5b79] dark:text-[#a5a2bf] space-y-2">
-            <span className="material-symbols-outlined text-3xl text-primary">fact_check</span>
-            <p className="font-semibold">No tasks match your filters.</p>
-            <button
-              onClick={handleOpenAdd}
-              className="text-primary font-bold hover:underline"
-            >
-              Add a new task now
-            </button>
+          <div className="bg-card p-10 rounded-2xl border border-edge text-center space-y-2">
+            <span className="material-symbols-outlined text-3xl text-content-dim">task_alt</span>
+            <p className="text-xs font-semibold text-content">No tasks match your filters</p>
+            <p className="text-[11px] text-content-dim">Create a new task or modify search filters.</p>
           </div>
         )}
       </div>
 
       {/* Delete Confirmation Modal */}
       {confirmDeleteId && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-surface-container rounded-2xl p-6 w-full max-w-sm shadow-xl border border-outline-variant/30 space-y-4">
-            <div className="flex items-center gap-3 text-error">
-              <span className="material-symbols-outlined text-2xl">warning</span>
-              <h3 className="text-base font-bold text-[#1b1b24] dark:text-white">Delete Task?</h3>
+        <div className="fixed inset-0 bg-plum/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-card rounded-2xl p-6 w-full max-w-sm shadow-xl border border-edge space-y-4">
+            <div className="flex items-center gap-2 text-danger">
+              <span className="material-symbols-outlined text-xl">warning</span>
+              <h3 className="font-heading text-sm font-bold text-content">Delete Task</h3>
             </div>
-            <p className="text-xs text-[#4b4863] dark:text-[#bbb8d0]">
+            <p className="text-xs text-content-sub">
               Are you sure you want to remove this task? This action cannot be undone.
             </p>
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex justify-end gap-2 pt-1">
               <button
                 onClick={() => setConfirmDeleteId(null)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] hover:bg-surface-container"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-content-sub hover:bg-surface-alt transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleConfirmDelete(confirmDeleteId)}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-error text-white hover:opacity-90"
+                className="px-4 py-1.5 rounded-xl text-xs font-semibold bg-danger hover:bg-danger/90 text-white shadow-xs cursor-pointer"
               >
-                Confirm Delete
+                Delete
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Task Add/Edit Modal */}
+      {/* Add / Edit Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-surface-container rounded-2xl p-6 w-full max-w-md shadow-xl border border-outline-variant/30">
+        <div className="fixed inset-0 bg-plum/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-card rounded-2xl p-6 w-full max-w-md shadow-xl border border-edge">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-primary">{editingTask ? 'Edit Task' : 'New Task'}</h3>
-              <button onClick={() => setModalOpen(false)} className="text-[#5e5b79] dark:text-[#bbb8d0]">
-                <span className="material-symbols-outlined">close</span>
+              <h3 className="font-heading text-base font-bold text-content">
+                {editingTask ? 'Edit Task' : 'New Task'}
+              </h3>
+              <button 
+                onClick={() => setModalOpen(false)} 
+                className="text-content-dim hover:text-content p-1 rounded-lg hover:bg-surface-alt"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
+
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Task Title</label>
+                <label className="block text-xs font-medium text-content-sub mb-1">Task Title</label>
                 <input
                   type="text"
                   required
                   value={taskTitle}
                   onChange={(e) => setTaskTitle(e.target.value)}
                   placeholder="e.g. Solve physics problems 1-12"
-                  className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none text-[#1b1b24] dark:text-white"
+                  className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3.5 py-2 text-xs text-content placeholder:text-content-dim outline-none"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Subject</label>
+                  <label className="block text-xs font-medium text-content-sub mb-1">Subject</label>
                   <input
                     type="text"
                     required
                     value={taskSubject}
                     onChange={(e) => setTaskSubject(e.target.value)}
-                    placeholder="e.g. Math, CS, Bio"
-                    className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2 text-sm outline-none text-[#1b1b24] dark:text-white"
+                    placeholder="e.g. Math, CS"
+                    className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3.5 py-2 text-xs text-content placeholder:text-content-dim outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Priority</label>
+                  <label className="block text-xs font-medium text-content-sub mb-1">Priority</label>
                   <select
                     value={taskPriority}
                     onChange={(e) => setTaskPriority(e.target.value)}
-                    className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2 text-sm outline-none text-[#1b1b24] dark:text-white cursor-pointer"
+                    className="w-full bg-surface-alt border border-edge focus:border-purple rounded-xl px-3 py-2 text-xs text-content outline-none cursor-pointer"
                   >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
                   </select>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Deadline</label>
+                  <label className="block text-xs font-medium text-content-sub mb-1">Deadline</label>
                   <input
                     type="date"
                     required
                     value={taskDeadline}
                     onChange={(e) => setTaskDeadline(e.target.value)}
-                    className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2 text-sm outline-none text-[#1b1b24] dark:text-white"
+                    className="w-full bg-surface-alt border border-edge focus:border-purple rounded-xl px-3 py-2 text-xs text-content outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Est. Duration</label>
+                  <label className="block text-xs font-medium text-content-sub mb-1">Est. Duration</label>
                   <select
                     value={taskEstDuration}
                     onChange={(e) => setTaskEstDuration(Number(e.target.value))}
-                    className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2 text-sm outline-none text-[#1b1b24] dark:text-white cursor-pointer"
+                    className="w-full bg-surface-alt border border-edge focus:border-purple rounded-xl px-3 py-2 text-xs text-content outline-none cursor-pointer"
                   >
                     <option value={15}>15 mins</option>
                     <option value={25}>25 mins</option>
+                    <option value={30}>30 mins</option>
                     <option value={45}>45 mins</option>
                     <option value={60}>60 mins</option>
                     <option value={90}>90 mins</option>
@@ -405,12 +396,21 @@ export default function TaskManager() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary-container text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md hover:scale-[0.99] transition-transform"
-              >
-                {editingTask ? 'Save Changes' : 'Create Task'}
-              </button>
+              <div className="pt-2 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-4 py-2 text-xs font-medium text-content-sub hover:text-content hover:bg-surface-alt rounded-xl transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-purple hover:bg-purple-hover text-white px-5 py-2 rounded-xl font-semibold text-xs transition-all shadow-xs cursor-pointer"
+                >
+                  {editingTask ? 'Save Changes' : 'Create Task'}
+                </button>
+              </div>
             </form>
           </div>
         </div>

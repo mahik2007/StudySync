@@ -10,7 +10,7 @@ export default function Settings() {
   const [email, setEmail] = useState(user?.email || '');
   const [showNotifyMessage, setShowNotifyMessage] = useState(false);
 
-  // Notification settings
+  // Notification preferences
   const [emailNotify, setEmailNotify] = useState(true);
   const [soundNotify, setSoundNotify] = useState(true);
   const [streakNotify, setStreakNotify] = useState(true);
@@ -35,128 +35,124 @@ export default function Settings() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-primary text-xs font-bold uppercase tracking-wider mb-2">
-          <span className="material-symbols-outlined text-sm">tune</span>
-          Preferences & Account
+      <div className="pb-2 border-b border-edge">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-lavender dark:bg-purple/20 text-purple dark:text-violet text-xs font-semibold mb-1">
+          <span className="material-symbols-outlined text-xs">settings</span>
+          <span>Account Preferences</span>
         </div>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-[#1b1b24] dark:text-white tracking-tight">
-          Settings
-        </h2>
-        <p className="text-sm font-medium text-[#4b4863] dark:text-[#bbb8d0]">
-          Manage your student profile, theme mode, and study notifications.
-        </p>
+        <h1 className="font-heading text-xl md:text-2xl font-bold text-content tracking-tight">Settings</h1>
+        <p className="text-xs text-content-sub">Manage your profile, theme mode, and session preferences.</p>
       </div>
 
       {showNotifyMessage && (
-        <div className="p-3 bg-tertiary-fixed/30 border border-tertiary/30 text-tertiary rounded-xl text-xs font-bold flex items-center gap-2 motion-page">
-          <span className="material-symbols-outlined text-sm">check_circle</span>
-          Profile settings updated successfully!
+        <div className="p-3 bg-success-soft border border-success/30 text-success rounded-xl text-xs font-medium flex items-center gap-2">
+          <span className="material-symbols-outlined text-base">check_circle</span>
+          <span>Profile updated successfully!</span>
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Profile Details Panel */}
-        <div className="md:col-span-8 bg-white dark:bg-surface-container p-6 rounded-2xl border border-outline-variant/30 shadow-sm space-y-5">
-          <h3 className="text-base font-bold text-[#1b1b24] dark:text-white">Profile Information</h3>
+        {/* Profile Panel */}
+        <div className="md:col-span-8 bg-card p-6 rounded-2xl border border-edge shadow-xs space-y-4 transition-colors">
+          <h2 className="font-heading text-sm font-bold text-content">Profile Information</h2>
           <form onSubmit={handleProfileSave} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Full Name</label>
+                <label className="block text-xs font-medium text-content-sub mb-1">Full Name</label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none text-[#1b1b24] dark:text-white font-medium"
+                  className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3.5 py-2 text-xs text-content outline-none transition-all"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-[#3b3852] dark:text-[#bbb8d0] mb-1">Email Address</label>
+                <label className="block text-xs font-medium text-content-sub mb-1">Email Address</label>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-surface-container-low border border-outline-variant/30 focus:border-primary rounded-xl px-4 py-2.5 text-sm outline-none text-[#1b1b24] dark:text-white font-medium"
+                  className="w-full bg-surface-alt border border-edge focus:border-purple focus:ring-2 focus:ring-purple/15 rounded-xl px-3.5 py-2 text-xs text-content outline-none transition-all"
                 />
               </div>
             </div>
             <button
               type="submit"
-              className="bg-primary hover:bg-primary-container text-white text-xs uppercase tracking-wider font-bold px-6 py-2.5 rounded-xl shadow-md hover:scale-[0.99] transition-all w-fit"
+              className="bg-purple hover:bg-purple-hover text-white text-xs font-semibold px-5 py-2 rounded-xl shadow-xs transition-all cursor-pointer"
             >
               Save Profile
             </button>
           </form>
         </div>
 
-        {/* Preferences Panel */}
-        <div className="md:col-span-4 space-y-6">
+        {/* Preferences Sidebar */}
+        <div className="md:col-span-4 space-y-5">
           {/* Theme switcher */}
-          <div className="bg-white dark:bg-surface-container p-6 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
-            <h3 className="text-base font-bold text-[#1b1b24] dark:text-white">Appearance</h3>
+          <div className="bg-card p-5 rounded-2xl border border-edge shadow-xs space-y-3 transition-colors">
+            <h2 className="font-heading text-sm font-bold text-content">Appearance</h2>
             <div className="flex justify-between items-center">
               <div>
-                <span className="text-xs font-bold text-[#3b3852] dark:text-white">Dark Theme</span>
-                <p className="text-[10px] text-[#5e5b79] dark:text-[#a5a2bf]">Optimized for night study</p>
+                <span className="text-xs font-medium text-content">Dark Mode</span>
+                <p className="text-[10px] text-content-dim">Optimized contrast for nighttime study</p>
               </div>
               <button 
                 onClick={handleThemeChange}
-                className={`w-12 h-6 rounded-full p-1 transition-all ${
-                  theme === 'dark' ? 'bg-primary' : 'bg-surface-container-high'
+                className={`w-11 h-6 rounded-full p-1 transition-colors cursor-pointer ${
+                  theme === 'dark' ? 'bg-purple' : 'bg-edge'
                 }`}
                 aria-label="Toggle Dark Mode"
               >
                 <div className={`w-4 h-4 bg-white rounded-full transition-transform ${
-                  theme === 'dark' ? 'translate-x-6' : ''
-                }`}></div>
+                  theme === 'dark' ? 'translate-x-5' : ''
+                }`} />
               </button>
             </div>
           </div>
 
-          {/* Notifications config */}
-          <div className="bg-white dark:bg-surface-container p-6 rounded-2xl border border-outline-variant/30 shadow-sm space-y-4">
-            <h3 className="text-base font-bold text-[#1b1b24] dark:text-white">Preferences</h3>
-            <div className="space-y-3">
+          {/* Notifications */}
+          <div className="bg-card p-5 rounded-2xl border border-edge shadow-xs space-y-3 transition-colors">
+            <h2 className="font-heading text-sm font-bold text-content">Study Alerts</h2>
+            <div className="space-y-2.5">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-semibold text-[#3b3852] dark:text-[#c4c1dc]">Email alerts</span>
+                <span className="text-xs text-content-sub">Email digest</span>
                 <input 
                   type="checkbox" 
                   checked={emailNotify} 
                   onChange={(e) => setEmailNotify(e.target.checked)}
-                  className="w-4 h-4 rounded accent-primary cursor-pointer"
+                  className="w-3.5 h-3.5 rounded accent-purple cursor-pointer"
                 />
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-xs font-semibold text-[#3b3852] dark:text-[#c4c1dc]">Pomodoro sound alerts</span>
+                <span className="text-xs text-content-sub">Pomodoro completion chime</span>
                 <input 
                   type="checkbox" 
                   checked={soundNotify} 
                   onChange={(e) => setSoundNotify(e.target.checked)}
-                  className="w-4 h-4 rounded accent-primary cursor-pointer"
+                  className="w-3.5 h-3.5 rounded accent-purple cursor-pointer"
                 />
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-xs font-semibold text-[#3b3852] dark:text-[#c4c1dc]">Daily streak reminders</span>
+                <span className="text-xs text-content-sub">Streak preservation reminders</span>
                 <input 
                   type="checkbox" 
                   checked={streakNotify} 
                   onChange={(e) => setStreakNotify(e.target.checked)}
-                  className="w-4 h-4 rounded accent-primary cursor-pointer"
+                  className="w-3.5 h-3.5 rounded accent-purple cursor-pointer"
                 />
               </div>
             </div>
           </div>
 
-          {/* Logout Section */}
-          <div className="bg-white dark:bg-surface-container p-6 rounded-2xl border border-outline-variant/30 shadow-sm">
+          {/* Sign Out */}
+          <div className="bg-card p-5 rounded-2xl border border-edge shadow-xs transition-colors">
             <button 
               onClick={handleLogout}
-              className="w-full bg-error text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-sm"
+              className="w-full bg-danger-soft hover:bg-danger text-danger hover:text-white font-semibold text-xs py-2.5 rounded-xl transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-sm">logout</span>
-              Sign Out
+              <span className="material-symbols-outlined text-base">logout</span>
+              <span>Sign Out</span>
             </button>
           </div>
         </div>
